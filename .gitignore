@@ -1,0 +1,15 @@
+# Local environment and secrets
+.env
+*.env.local
+
+# Runtime artifacts
+*.log
+*.db
+*.db-wal
+*.db-shm
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+[project]
+name = "united-by-football"
+version = "0.1.0"
+description = "Football match discovery + source aggregation backend"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]

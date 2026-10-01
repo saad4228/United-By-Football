@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens ---------- */
+:root,
+[data-theme="dark"] {
+  --bg: #000000;
+  --bg-elev: #070707;
+  --surface: #0b0b0b;
+  --surface-2: #111111;
+  --surface-3: #1a1a1a;
+  --line: #242424;
+  --line-strong: #383838;
+  --fg: #ffffff;
+  --fg-2: #d6d6d6;
+  --fg-muted: #a1a1a1;
+  --fg-faint: #7a7a7a;
+  --live: #ff2b2b;
+  --ok: #25c77a;
+  --warn: #f5c542;
+  --off: #d0625e;
+  --inverse: #f2f2f2;
+  --on-inverse: #000000;
+  /* A hairline light edge keeps all-black crests (Juventus) readable on a black page. */
+  --crest-edge: drop-shadow(0 0 0.75px rgba(255, 255, 255, 0.8));
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #f6f6f4;
+  --bg-elev: #efefec;
+  --surface: #ffffff;
+  --surface-2: #fafaf9;
+  --surface-3: #ececea;
+  --line: #e0e0dc;
+  --line-strong: #c9c9c4;
+  --fg: #0a0a0a;
+  --fg-2: #2b2b2b;
+  --fg-muted: #5c5c58;
+  --fg-faint: #7a7a75;
+  --live: #e01b1b;
+  --ok: #0d8a50;
+  --warn: #946b00;
+  --off: #b0403b;
+  --inverse: #0a0a0a;
+  --on-inverse: #ffffff;
+  --crest-edge: drop-shadow(0 0 0 transparent);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-elev: var(--bg-elev);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-muted: var(--fg-muted);
+  --color-faint: var(--fg-faint);
+  --color-live: var(--live);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-off: var(--off);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: var(--fg);
+    color: var(--bg);
+  }
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  [data-theme] {
+    color: var(--fg);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Condensed display type: the hero headline and scorelines only. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.95;
+    letter-spacing: -0.005em;
+  }
+  .container-x {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1280px) {
+    .container-x {
+      padding-inline: 4rem;
+    }
+  }
+  .crest-edge {
+    filter: var(--crest-edge);
+  }
+  .crest-lift {
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.28));
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------- Motion ---------- */
+@keyframes live-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+.live-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: currentColor;
+  flex: none;
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: live-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
+  animation: spin 0.8s linear infinite;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-dot::after,
+  .skeleton,
+  .spinner {
+    animation: none;
+  }
+}

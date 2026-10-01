@@ -1,0 +1,30 @@
+{
+  "_note": "Sample rights-holder registry. Broadcast rights change by season and region — verify and edit before relying on it. Keys are competition codes.",
+  "PL": [
+    {"name": "Peacock", "url": "https://www.peacocktv.com/sports/premier-league", "region": "US", "language": "English"},
+    {"name": "Sky Sports", "url": "https://www.skysports.com/watch", "region": "UK", "language": "English"}
+  ],
+  "CL": [
+    {"name": "Paramount+", "url": "https://www.paramountplus.com/", "region": "US", "language": "English"},
+    {"name": "TNT Sports", "url": "https://www.tntsports.co.uk/", "region": "UK", "language": "English"}
+  ],
+  "EL": [
+    {"name": "Paramount+", "url": "https://www.paramountplus.com/", "region": "US", "language": "English"},
+    {"name": "TNT Sports", "url": "https://www.tntsports.co.uk/", "region": "UK", "language": "English"}
+  ],
+  "PD": [
+    {"name": "ESPN", "url": "https://www.espn.com/watch/", "region": "US", "language": "English"}
+  ],
+  "BL1": [
+    {"name": "Sky Sports", "url": "https://www.skysports.com/watch", "region": "UK", "language": "English"}
+  ],
+  "SA": [
+    {"name": "Paramount+", "url": "https://www.paramountplus.com/", "region": "US", "language": "English"}
+  ],
+  "FL1": [
+    {"name": "beIN SPORTS", "url": "https://www.beinsports.com/", "region": "US", "language": "English"}
+  ],
+  "MLS": [
+    {"name": "Apple TV", "url": "https://tv.apple.com/", "region": "Global", "language": "English"}
+  ]
+}
