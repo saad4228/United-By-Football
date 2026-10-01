@@ -45,12 +45,9 @@ def _fold(line: str) -> str:
     return "\r\n ".join(parts)
 
 
-def build_calendar(events: list[CalendarEvent], name: str, now: datetime, refresh_hours: int | None = None) -> str:
+def build_calendar(events: list[CalendarEvent], name: str, now: datetime) -> str:
     lines = ["BEGIN:VCALENDAR", "VERSION:2.0", f"PRODID:{PRODID}", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
              f"X-WR-CALNAME:{_escape(name)}"]
-    if refresh_hours:
-        # Hints for subscribed feeds; calendar apps decide how often they really refresh.
-        lines += [f"REFRESH-INTERVAL;VALUE=DURATION:PT{refresh_hours}H", f"X-PUBLISHED-TTL:PT{refresh_hours}H"]
     for event in events:
         lines += [
             "BEGIN:VEVENT",

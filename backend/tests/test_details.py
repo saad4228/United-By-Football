@@ -183,10 +183,6 @@ async def test_calendar_endpoints(client):
     assert r.status_code == 200 and r.headers["content-type"].startswith("text/calendar")
     assert "attachment" in r.headers["content-disposition"] and "BEGIN:VALARM" in r.text
     assert f"/match/{match['slug']}" in r.text.replace("\r\n ", "")
-    feed = await client.get("/api/calendar/teams.ics", params={"teams": match["home"]["slug"]})
-    assert feed.status_code == 200 and feed.text.count("BEGIN:VEVENT") >= 1 and "BEGIN:VALARM" not in feed.text
-    assert "content-disposition" not in feed.headers  # subscribable, not a download
-    assert (await client.get("/api/calendar/teams.ics", params={"teams": "!!"})).status_code == 400
 
 
 async def test_details_and_table_are_unavailable_without_espn(client):

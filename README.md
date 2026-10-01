@@ -93,8 +93,6 @@ minute and the previous copy is served meanwhile, so a blip never empties the pa
   in your browser only, with no account, and their matches lead the home page and get their own page.
 - **Add to calendar:** every upcoming match offers Google Calendar or an `.ics` file with a reminder 15
   minutes before kick-off.
-- **Subscribe:** `My teams` gives a `webcal://` feed of every fixture for the teams you follow. Calendar
-  apps re-read it on their own, so kick-off changes, results and postponements arrive automatically.
 - **Internationals:** a filter for national-team competitions (Nations League, friendlies, qualifiers),
   which are also kept out of the "Other" bucket.
 
@@ -266,7 +264,6 @@ GET /api/matches/{id|slug}
 GET /api/matches/{id|slug}/sources sorted: working (fastest, official first) → checking → unverified → offline
 GET /api/matches/{id|slug}/details line-ups, timeline, team stats, recent form (from ESPN, when available)
 GET /api/matches/{id|slug}/calendar.ics  ?alarm=15     one match, with a reminder
-GET /api/calendar/teams.ics        ?teams=arsenal,real-madrid &alarm=0   subscribable fixture feed
 GET /api/competitions/{slug}/table league table: groups, qualification notes, our team links
 GET /api/links/{id}/go             click-through redirect
 GET /api/competitions · /api/competitions/{slug}

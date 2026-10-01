@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { Link } from "react-router";
 import { FollowButton } from "../components/FollowButton";
-import { CalendarPlusIcon, CheckIcon, CopyIcon, StarIcon } from "../components/Icons";
+import { StarIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
 import { TeamCrest } from "../components/TeamCrest";
 import { TeamTile } from "../components/TeamTile";
-import { Button, EmptyState, ErrorState, PageTitle, SectionHeader } from "../components/UI";
-import { api, teamsCalendarUrl, type MatchQuery } from "../lib/api";
+import { EmptyState, ErrorState, PageTitle, SectionHeader } from "../components/UI";
+import { api, type MatchQuery } from "../lib/api";
 import { useCountry } from "../lib/country";
 import { useDocumentMeta } from "../lib/hooks";
 import { t } from "../lib/i18n";
@@ -41,42 +40,6 @@ export function MyTeamsMatches({ title, query, empty, action }: { title: string;
         <EmptyState title={empty!} />
       )}
     </section>
-  );
-}
-
-function CalendarCard({ slugs }: { slugs: string[] }) {
-  const [copied, setCopied] = useState(false);
-  const https = teamsCalendarUrl(slugs);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(https);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2500);
-    } catch {
-      window.prompt(t("myTeams.copyLink"), https);
-    }
-  };
-  return (
-    <div className="flex flex-col gap-5 rounded-lg border border-line bg-surface p-5 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex items-start gap-4">
-        <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-surface-3">
-          <CalendarPlusIcon size={21} />
-        </span>
-        <div>
-          <div className="text-[18px] font-bold">{t("myTeams.subscribe")}</div>
-          <p className="mt-1 max-w-md text-[15px] text-muted">{t("myTeams.subscribeHint")}</p>
-        </div>
-      </div>
-      <div className="flex shrink-0 flex-wrap gap-3">
-        <Button href={teamsCalendarUrl(slugs, "webcal")} size="sm">
-          <CalendarPlusIcon size={16} /> {t("myTeams.subscribe")}
-        </Button>
-        <Button variant="secondary" size="sm" onClick={copy}>
-          {copied ? <CheckIcon size={16} className="text-ok" /> : <CopyIcon size={16} />}
-          <span aria-live="polite">{copied ? t("myTeams.copied") : t("myTeams.copyLink")}</span>
-        </Button>
-      </div>
-    </div>
   );
 }
 
@@ -122,7 +85,6 @@ export function MyTeamsPage() {
               ))}
             </ul>
             <p className="text-[14px] text-faint">{t("myTeams.storedHint")}</p>
-            <CalendarCard slugs={slugs} />
           </div>
           <MyTeamsMatches title={t("myTeams.live")} query={{ status: "live" }} />
           <MyTeamsMatches title={t("myTeams.upcoming")} query={{ status: "upcoming", limit: 12 }} empty={t("myTeams.noMatches")} />

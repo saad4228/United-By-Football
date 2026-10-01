@@ -368,26 +368,6 @@ async def match_calendar(
     return _ics(build_calendar([event], event.summary, utcnow()), f"{match.slug}.ics", download=True)
 
 
-@router.get("/calendar/teams.ics", include_in_schema=False, dependencies=[rate_limit("matches")])
-async def teams_calendar(
-    teams: str = Query(..., max_length=2500, description="Comma-separated team slugs"),
-    alarm: int = Query(0, ge=0, le=1440),
-    session: AsyncSession = Depends(get_session),
-    settings: Settings = Depends(get_settings_dep),
-) -> Response:
-    """A subscribable feed of every known fixture for the given teams (recent results included)."""
-    slugs = team_slugs(teams)
-    if not slugs:
-        raise HTTPException(400, "No valid team slugs")
-    now = utcnow()
-    items, _ = await list_matches(session, teams=slugs, date_from=now - timedelta(days=14), limit=300)
-    names = (await session.scalars(select(Team.name).where(Team.slug.in_(slugs)).order_by(Team.name))).all()
-    title = f"{names[0]} fixtures" if len(names) == 1 else "My teams"
-    body = build_calendar([_calendar_event(m, settings, alarm or None) for m in items],
-                          f"{title} · United By Football", now, refresh_hours=6)
-    return _ics(body, "my-teams.ics", download=False)
-
-
 @router.get("/competitions/{slug}/table", response_model=TableOut, dependencies=[rate_limit("matches")])
 async def competition_table(
     slug: str,

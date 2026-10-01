@@ -75,12 +75,6 @@ export const api = {
 /** Downloadable .ics for one match, with a reminder before kick-off. */
 export const matchCalendarUrl = (slug: string) => `/api/matches/${encodeURIComponent(slug)}/calendar.ics`;
 
-/** Subscribable feed of every fixture for these teams (webcal:// opens the calendar app). */
-export function teamsCalendarUrl(slugs: string[], scheme: "https" | "webcal" = "https"): string {
-  const url = new URL(`/api/calendar/teams.ics?teams=${slugs.map(encodeURIComponent).join(",")}`, window.location.origin);
-  return scheme === "webcal" ? url.href.replace(/^https?:/, "webcal:") : url.href;
-}
-
 export function adminApi(token: string) {
   const headers = { "X-Admin-Token": token, "Content-Type": "application/json" };
   const get = <T>(path: string, params?: Params) => request<T>(path, params, { headers });

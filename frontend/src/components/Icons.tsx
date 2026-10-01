@@ -170,12 +170,6 @@ export const CalendarPlusIcon = (p: IconProps) => (
     <path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5" />
   </Icon>
 );
-export const CopyIcon = (p: IconProps) => (
-  <Icon {...p}>
-    <rect x="8" y="8" width="12" height="12" rx="2" />
-    <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
-  </Icon>
-);
 export const ArrowUpIcon = (p: IconProps) => (
   <Icon {...p}>
     <path d="M12 19V5M6 11l6-6 6 6" />

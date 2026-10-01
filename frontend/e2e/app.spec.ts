@@ -37,7 +37,7 @@ test("a match page lists its sources and offers a calendar file", async ({ page,
   expect(body).toContain("TRIGGER:-PT15M");
 });
 
-test("following a team adds it to My teams and its calendar feed", async ({ page, request }) => {
+test("following a team adds it to My teams", async ({ page }) => {
   await page.goto("/my-teams");
   await expect(page.getByRole("heading", { name: "You're not following any teams yet" })).toBeVisible();
 
@@ -47,12 +47,6 @@ test("following a team adds it to My teams and its calendar feed", async ({ page
 
   await page.goto("/my-teams");
   await expect(page.locator("main").getByRole("link", { name: "Arsenal", exact: true })).toBeVisible();
-  const subscribe = page.getByRole("link", { name: "Subscribe in calendar" });
-  await expect(subscribe).toHaveAttribute("href", /^webcal:\/\/.+teams\.ics\?teams=arsenal$/);
-  const feed = await request.get((await subscribe.getAttribute("href"))!.replace(/^webcal:/, "http:"));
-  expect(feed.ok()).toBe(true);
-  expect(await feed.text()).toContain("X-WR-CALNAME:Arsenal fixtures");
-
   // Home leads with the followed team's matches.
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "My teams" })).toBeVisible();
