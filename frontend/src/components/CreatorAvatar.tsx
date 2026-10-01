@@ -1,6 +1,18 @@
 import { useState } from "react";
 
-/** Mohammad Saad's profile picture, with his initials as a fallback if the image fails. */
+/** Photo credit for /creator.webp, a crop of a CC BY-SA 4.0 image. The licence requires showing it. */
+export const CREATOR_PHOTO = {
+  subject: "Lionel Messi, Argentina v Egypt, 2026 FIFA World Cup",
+  author: "Bryan Berlin",
+  license: "CC BY-SA 4.0",
+  licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  page: "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+};
+
+/**
+ * Mohammad Saad's profile picture, with initials as a fallback if the image fails.
+ * Decorative: the name is always shown next to it.
+ */
 export function CreatorAvatar({ size = 56, className = "" }: { size?: number; className?: string }) {
   const [failed, setFailed] = useState(false);
   if (failed) {
@@ -17,7 +29,7 @@ export function CreatorAvatar({ size = 56, className = "" }: { size?: number; cl
   return (
     <img
       src="/creator.webp"
-      alt="Mohammad Saad"
+      alt=""
       width={size}
       height={size}
       loading="lazy"

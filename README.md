@@ -4,6 +4,8 @@
 
 Designed and built by **Mohammad Saad**.
 
+<sub>Profile picture: [Lionel Messi, Argentina v Egypt, 2026 FIFA World Cup](https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg) by Bryan Berlin, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), cropped. The cropped file `frontend/public/creator.webp` is shared under the same licence.</sub>
+
 ```
                  UNITED BY FOOTBALL
           ┌──────────────┴──────────────┐
@@ -39,7 +41,7 @@ Or build the frontend once (`npm run build`) and the backend serves it at **http
 
 **Admin dashboard:** `/admin`. Set `UBF_ADMIN_TOKEN` in `.env`; if you don't, a random token is printed in the server log at startup.
 
-**Tests:** `cd backend && .venv/Scripts/python -m pytest` (90 tests, no network access needed).
+**Tests:** `cd backend && .venv/Scripts/python -m pytest` (106 tests, no network access needed).
 
 ### Match data (default: real)
 

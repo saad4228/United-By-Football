@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { BallIcon, SearchIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
-import { CreatorAvatar } from "../components/CreatorAvatar";
+import { CREATOR_PHOTO, CreatorAvatar } from "../components/CreatorAvatar";
 import { TeamBanner, TeamBannerSkeleton } from "../components/TeamBanner";
 import { TeamCrest } from "../components/TeamCrest";
 import { Chips, CompetitionBadge, COMPETITION_FILTERS, EmptyState, ErrorState, PageTitle, SectionHeader, Stripes } from "../components/UI";
@@ -288,9 +288,20 @@ export function AboutPage() {
         className="mb-12 flex max-w-3xl scroll-mt-28 items-center gap-5 rounded-lg border border-line bg-surface p-5"
       >
         <CreatorAvatar size={72} />
-        <span>
+        <span className="min-w-0">
           <span className="block text-[14px] font-semibold text-faint">Designed &amp; built by</span>
           <span className="block text-[22px] font-bold leading-tight">Mohammad Saad</span>
+          <span className="mt-1.5 block text-[12px] leading-snug text-faint">
+            Photo:{" "}
+            <a href={CREATOR_PHOTO.page} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:text-fg-2 hover:underline">
+              {CREATOR_PHOTO.subject}
+            </a>{" "}
+            by {CREATOR_PHOTO.author},{" "}
+            <a href={CREATOR_PHOTO.licenseUrl} target="_blank" rel="noopener noreferrer license" className="underline-offset-2 hover:text-fg-2 hover:underline">
+              {CREATOR_PHOTO.license}
+            </a>
+            , cropped
+          </span>
         </span>
       </section>
       <div className="max-w-3xl space-y-12">
