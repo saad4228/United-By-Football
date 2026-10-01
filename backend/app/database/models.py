@@ -89,6 +89,10 @@ class Competition(TimestampMixin, Base):
     logo_url: Mapped[str | None] = mapped_column(Text)
     priority: Mapped[int] = mapped_column(Integer, default=10)
     is_major: Mapped[bool] = mapped_column(Boolean, default=False)
+    # National-team competitions (Nations League, friendlies, qualifiers), for the Internationals filter.
+    national_teams: Mapped[bool | None] = mapped_column(Boolean, default=False)
+    # ESPN league slug (e.g. "eng.1"), used to fetch the league table.
+    espn_league: Mapped[str | None] = mapped_column(String(40))
 
 
 class Team(TimestampMixin, Base):

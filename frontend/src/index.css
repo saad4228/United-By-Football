@@ -15,6 +15,7 @@
   --fg-muted: #a1a1a1;
   --fg-faint: #7a7a7a;
   --live: #ff2b2b;
+  --live-solid: #dc1f1f; /* badge background: white text at 4.9:1 */
   --ok: #25c77a;
   --warn: #f5c542;
   --off: #d0625e;
@@ -36,8 +37,9 @@
   --fg: #0a0a0a;
   --fg-2: #2b2b2b;
   --fg-muted: #5c5c58;
-  --fg-faint: #7a7a75;
+  --fg-faint: #686863; /* 4.7:1 or better on every light surface (WCAG AA) */
   --live: #e01b1b;
+  --live-solid: #dc1f1f;
   --ok: #0d8a50;
   --warn: #946b00;
   --off: #b0403b;
@@ -60,6 +62,7 @@
   --color-muted: var(--fg-muted);
   --color-faint: var(--fg-faint);
   --color-live: var(--live);
+  --color-live-solid: var(--live-solid);
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-off: var(--off);

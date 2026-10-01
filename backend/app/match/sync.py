@@ -51,20 +51,25 @@ class FixtureSyncer:
                 self.by_pair[(match.home_team_id, match.away_team_id)].append(match)
         self.slugs = set((await self.session.scalars(select(Match.slug))).all())
 
+    @staticmethod
+    def _refresh(comp: Competition, ref: CompetitionRef) -> Competition:
+        if ref.logo_url and not comp.logo_url and ref.logo_url.startswith("https://"):
+            comp.logo_url = ref.logo_url
+        if ref.espn_league and comp.espn_league != ref.espn_league:
+            comp.espn_league = ref.espn_league
+        if bool(comp.national_teams) != ref.national_teams and (ref.national_teams or ref.espn_league):
+            comp.national_teams = ref.national_teams
+        return comp
+
     def competition_for(self, ref: CompetitionRef) -> Competition:
         if ref.code and ref.code in self.comps_by_code:
-            comp = self.comps_by_code[ref.code]
-            if ref.logo_url and not comp.logo_url and ref.logo_url.startswith("https://"):
-                comp.logo_url = ref.logo_url
-            return comp
+            return self._refresh(self.comps_by_code[ref.code], ref)
         slug = slugify(ref.name)
         if slug in self.comps_by_slug:
             comp = self.comps_by_slug[slug]
             if not comp.is_major and ref.priority is not None:
                 comp.priority = ref.priority
-            if ref.logo_url and not comp.logo_url and ref.logo_url.startswith("https://"):
-                comp.logo_url = ref.logo_url
-            return comp
+            return self._refresh(comp, ref)
         comp = Competition(
             slug=slug,
             code=ref.code if ref.code and ref.code not in self.comps_by_code else None,
@@ -73,6 +78,8 @@ class FixtureSyncer:
             logo_url=ref.logo_url if ref.logo_url and ref.logo_url.startswith("https://") else None,
             priority=ref.priority if ref.priority is not None else 10,
             is_major=False,
+            national_teams=ref.national_teams,
+            espn_league=ref.espn_league,
         )
         self.session.add(comp)
         self.comps_by_slug[slug] = comp

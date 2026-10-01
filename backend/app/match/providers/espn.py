@@ -47,6 +47,7 @@ class League:
     country: str | None  # None for international/continental competitions
     priority: int
     women: bool = False
+    national: bool = False  # national teams rather than clubs
 
 
 LEAGUES: dict[str, League] = {
@@ -58,11 +59,11 @@ LEAGUES: dict[str, League] = {
     "fra.1": League("FL1", "France", 80),
     "uefa.europa": League("EL", None, 75),
     "usa.1": League("MLS", "USA", 70),
-    "uefa.nations": League(None, None, 82),
+    "uefa.nations": League(None, None, 82, national=True),
     "conmebol.libertadores": League(None, None, 72),
     "uefa.europa.conf": League(None, None, 65),
-    "concacaf.nations.league": League(None, None, 62),
-    "fifa.friendly": League(None, None, 60),
+    "concacaf.nations.league": League(None, None, 62, national=True),
+    "fifa.friendly": League(None, None, 60, national=True),
     "conmebol.sudamericana": League(None, None, 58),
     "por.1": League(None, "Portugal", 58),
     "bra.1": League(None, "Brazil", 58),
@@ -165,6 +166,8 @@ def parse_scoreboard(payload: dict, slug: str, league: League, provider: str = "
         country=league.country,
         logo_url=logo,
         priority=league.priority,
+        national_teams=league.national,
+        espn_league=slug,
     )
     fixtures = []
     for event in payload.get("events", []):

@@ -37,6 +37,7 @@ export type Competition = {
   country: string | null;
   logo_url: string | null;
   is_major: boolean;
+  national_teams: boolean;
 };
 
 export type CompetitionWithCounts = Competition & { live_count: number; upcoming_count: number };
@@ -147,4 +148,75 @@ export type Meta = {
   demo_mode: boolean;
   server_time: string;
   refresh_seconds: Record<string, number>;
+};
+
+export type Player = {
+  name: string;
+  short_name: string | null;
+  number: string | null;
+  position: string | null;
+  subbed_in: boolean;
+  subbed_out: boolean;
+  goals: number;
+  yellow: boolean;
+  red: boolean;
+};
+
+export type Lineup = {
+  formation: string | null;
+  /** Goalkeeper first, each line left to right from the team's point of view. */
+  lines: Player[][] | null;
+  starters: Player[];
+  subs: Player[];
+};
+
+export type MatchEvent = {
+  kind: "goal" | "own_goal" | "penalty_goal" | "missed_penalty" | "yellow" | "red" | "sub" | "period";
+  minute: string | null;
+  side: "home" | "away" | null;
+  player: string | null;
+  assist: string | null;
+  label: "halftime" | "fulltime" | "extra_time" | "end_extra_time" | "penalties" | null;
+  score: string | null;
+};
+
+export type StatKey =
+  | "possession" | "shots" | "shots_on_target" | "corners" | "passes" | "pass_accuracy"
+  | "fouls" | "offsides" | "saves" | "yellow_cards" | "red_cards";
+
+export type FormGame = { result: "W" | "D" | "L"; score: string | null; opponent: string; home: boolean; date: string | null };
+
+export type MatchDetails = {
+  available: boolean;
+  lineups: { home: Lineup; away: Lineup } | null;
+  events: MatchEvent[];
+  stats: { key: StatKey; home: number; away: number; unit: "" | "%" }[];
+  form: { home?: FormGame[]; away?: FormGame[] } | null;
+  attendance: number | null;
+};
+
+export type TableNote = { label: string; color: string | null };
+
+export type TableRow = {
+  rank: number;
+  name: string;
+  short_name: string | null;
+  logo_url: string | null;
+  team: Team | null;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goals_for: number;
+  goals_against: number;
+  goal_difference: number;
+  points: number;
+  note: TableNote | null;
+};
+
+export type LeagueTable = {
+  available: boolean;
+  season: string | null;
+  groups: { name: string | null; rows: TableRow[] }[];
+  legend: TableNote[];
 };

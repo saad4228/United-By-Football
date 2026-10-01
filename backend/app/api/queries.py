@@ -198,6 +198,10 @@ def apply_status_filter(query: Select, status: str | None, now: datetime) -> Sel
     return query
 
 
+# Pseudo competition slug for every national-team competition.
+INTERNATIONALS = "internationals"
+
+
 async def list_matches(
     session: AsyncSession,
     *,
@@ -206,6 +210,7 @@ async def list_matches(
     date_to: datetime | None = None,
     competition: str | None = None,
     team: str | None = None,
+    teams: list[str] | None = None,
     limit: int = 50,
     offset: int = 0,
 ) -> tuple[list[Match], int]:
@@ -219,13 +224,18 @@ async def list_matches(
     if competition:
         comp_ids = select(Competition.id)
         if competition == "other":
-            comp_ids = comp_ids.where(Competition.is_major.is_(False))
+            comp_ids = comp_ids.where(Competition.is_major.is_(False), Competition.national_teams.isnot(True))
+        elif competition == INTERNATIONALS:
+            comp_ids = comp_ids.where(Competition.national_teams.is_(True))
         else:
             comp_ids = comp_ids.where(Competition.slug == competition)
         filters = filters.where(Match.competition_id.in_(comp_ids))
     if team:
         team_id = select(Team.id).where(Team.slug == team).scalar_subquery()
         filters = filters.where(or_(Match.home_team_id == team_id, Match.away_team_id == team_id))
+    if teams:
+        team_ids = select(Team.id).where(Team.slug.in_(teams))
+        filters = filters.where(or_(Match.home_team_id.in_(team_ids), Match.away_team_id.in_(team_ids)))
 
     total = await session.scalar(select(func.count()).select_from(filters.order_by(None).subquery()))
     order = Match.kickoff_time.desc() if status == "finished" else Match.kickoff_time.asc()

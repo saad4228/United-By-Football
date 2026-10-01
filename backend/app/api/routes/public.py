@@ -1,8 +1,9 @@
+import re
 from datetime import datetime, timedelta
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
@@ -30,6 +31,7 @@ from app.api.schemas import (
     CompetitionWithCounts,
     Featured,
     HomeOut,
+    MatchDetailsOut,
     MatchOut,
     MatchPage,
     MatchSources,
@@ -39,6 +41,9 @@ from app.api.schemas import (
     SourceLinkOut,
     PhotoOut,
     SourceSummary,
+    TableGroup,
+    TableOut,
+    TableRow,
     TeamDetailOut,
     TeamMediaOut,
     TeamOut,
@@ -51,12 +56,15 @@ from app.database.models import (
     LinkClick,
     LinkStatus,
     Match,
+    MatchExternalRef,
     MatchStatus,
     StreamLink,
     Team,
     TeamAlias,
+    TeamExternalRef,
 )
 from app.match.normalize import normalize_name
+from app.utils.ics import CalendarEvent, build_calendar
 from app.utils.time import utcnow
 
 router = APIRouter(prefix="/api")
@@ -70,6 +78,18 @@ def viewer_country(request: Request, country: str | None = Query(None, pattern="
     header = request.headers.get("cf-ipcountry") or request.headers.get("x-country-code")
     return header.upper() if header and len(header) == 2 and header.isalpha() else None
 StatusFilter = Literal["live", "upcoming", "finished", "all"]
+SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,79}$")
+MAX_TEAMS = 30
+
+
+def team_slugs(raw: str | None) -> list[str] | None:
+    """A comma-separated list of team slugs (from "My teams"), validated and de-duplicated."""
+    if not raw:
+        return None
+    slugs = list(dict.fromkeys(s.strip().lower() for s in raw.split(",") if SLUG.match(s.strip().lower())))
+    if len(slugs) > MAX_TEAMS:
+        raise HTTPException(400, f"At most {MAX_TEAMS} teams")
+    return slugs or None
 HEALTH_ORDER = {"working": 0, "checking": 1, "unverified": 2, "offline": 3}
 
 
@@ -150,14 +170,18 @@ async def matches(
     date_to: datetime | None = None,
     competition: str | None = Query(None, max_length=80),
     team: str | None = Query(None, max_length=80),
+    teams: str | None = Query(None, max_length=2500, description="Comma-separated team slugs"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0, le=10_000),
     session: AsyncSession = Depends(get_session),
     country: str | None = Depends(viewer_country),
 ) -> MatchPage:
+    team_list = team_slugs(teams)
+    if teams and not team_list:
+        return MatchPage(items=[], total=0, limit=limit, offset=offset)
     items, total = await list_matches(
         session, status=None if status == "all" else status, date_from=date_from, date_to=date_to,
-        competition=competition, team=team, limit=limit, offset=offset,
+        competition=competition, team=team, teams=team_list, limit=limit, offset=offset,
     )
     return MatchPage(items=await matches_out(session, items, country), total=total, limit=limit, offset=offset)
 
@@ -282,6 +306,116 @@ async def go(link_id: int, session: AsyncSession = Depends(get_session)) -> Redi
     session.add(LinkClick(link_id=link.id, match_id=link.match_id, link_status=link.status))
     await session.commit()
     return RedirectResponse(target, status_code=302, headers={"Referrer-Policy": "no-referrer"})
+
+
+def _espn_available(settings: Settings) -> bool:
+    return settings.espn_enabled and not settings.demo_mode
+
+
+@router.get("/matches/{ref}/details", response_model=MatchDetailsOut, dependencies=[rate_limit("matches")])
+async def match_details(
+    ref: str,
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings_dep),
+    engine: Engine = Depends(get_engine),
+) -> MatchDetailsOut:
+    """Line-ups, key events, team stats and recent form, when the fixture feed has them."""
+    match = await _get_match(session, ref)
+    if not _espn_available(settings):
+        return MatchDetailsOut(available=False)
+    event_id = await session.scalar(select(MatchExternalRef.external_id).where(
+        MatchExternalRef.match_id == match.id, MatchExternalRef.provider == "espn"))
+    data = await engine.details.match(event_id, match.status, match.kickoff_time, utcnow()) if event_id else None
+    return MatchDetailsOut(**data) if data else MatchDetailsOut(available=False)
+
+
+def _calendar_event(match: Match, settings: Settings, alarm: int | None = None) -> CalendarEvent:
+    home, away = match.home_team.name, match.away_team.name
+    summary = f"{home} vs {away}"
+    if match.status == MatchStatus.FINISHED and match.score_home is not None and match.score_away is not None:
+        summary = f"{home} {match.score_home}-{match.score_away} {away}"
+    elif match.status == MatchStatus.POSTPONED:
+        summary = f"Postponed: {summary}"
+    url = f"{settings.public_base_url.rstrip('/')}/match/{match.slug}"
+    competition = match.competition.name if match.competition else "Football"
+    return CalendarEvent(
+        uid=f"match-{match.id}@unitedbyfootball",
+        start=match.kickoff_time,
+        summary=summary,
+        description=f"{competition}\nLive score and where to watch: {url}",
+        location=match.venue,
+        url=url,
+        cancelled=match.status == MatchStatus.CANCELLED,
+        alarm_minutes=alarm if match.status == MatchStatus.SCHEDULED else None,
+    )
+
+
+def _ics(body: str, filename: str, download: bool) -> Response:
+    headers = {"Cache-Control": "public, max-age=300"}
+    if download:
+        headers["Content-Disposition"] = f'attachment; filename="{filename}"'
+    return Response(body, media_type="text/calendar; charset=utf-8", headers=headers)
+
+
+@router.get("/matches/{ref}/calendar.ics", include_in_schema=False, dependencies=[rate_limit("matches")])
+async def match_calendar(
+    ref: str,
+    alarm: int = Query(15, ge=0, le=1440, description="Reminder this many minutes before kick-off (0 for none)"),
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings_dep),
+) -> Response:
+    match = await _get_match(session, ref)
+    event = _calendar_event(match, settings, alarm or None)
+    return _ics(build_calendar([event], event.summary, utcnow()), f"{match.slug}.ics", download=True)
+
+
+@router.get("/calendar/teams.ics", include_in_schema=False, dependencies=[rate_limit("matches")])
+async def teams_calendar(
+    teams: str = Query(..., max_length=2500, description="Comma-separated team slugs"),
+    alarm: int = Query(0, ge=0, le=1440),
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings_dep),
+) -> Response:
+    """A subscribable feed of every known fixture for the given teams (recent results included)."""
+    slugs = team_slugs(teams)
+    if not slugs:
+        raise HTTPException(400, "No valid team slugs")
+    now = utcnow()
+    items, _ = await list_matches(session, teams=slugs, date_from=now - timedelta(days=14), limit=300)
+    names = (await session.scalars(select(Team.name).where(Team.slug.in_(slugs)).order_by(Team.name))).all()
+    title = f"{names[0]} fixtures" if len(names) == 1 else "My teams"
+    body = build_calendar([_calendar_event(m, settings, alarm or None) for m in items],
+                          f"{title} · United By Football", now, refresh_hours=6)
+    return _ics(body, "my-teams.ics", download=False)
+
+
+@router.get("/competitions/{slug}/table", response_model=TableOut, dependencies=[rate_limit("matches")])
+async def competition_table(
+    slug: str,
+    session: AsyncSession = Depends(get_session),
+    settings: Settings = Depends(get_settings_dep),
+    engine: Engine = Depends(get_engine),
+) -> TableOut:
+    comp = await session.scalar(select(Competition).where(Competition.slug == slug))
+    if comp is None:
+        raise HTTPException(404, "Competition not found")
+    if not _espn_available(settings) or not comp.espn_league:
+        return TableOut(available=False)
+    data = await engine.details.standings(comp.espn_league)
+    if not data or not data["available"]:
+        return TableOut(available=False)
+    ext_ids = {r["external_id"] for g in data["groups"] for r in g["rows"] if r["external_id"]}
+    known = await session.execute(
+        select(TeamExternalRef.external_id, Team).join(Team, Team.id == TeamExternalRef.team_id)
+        .where(TeamExternalRef.provider == "espn", TeamExternalRef.external_id.in_(ext_ids)))
+    teams = {ext: team_out(team) for ext, team in known.all()}
+    groups = [
+        TableGroup(name=g["name"], rows=[
+            TableRow(**{k: v for k, v in r.items() if k != "external_id"}, team=teams.get(r["external_id"]))
+            for r in g["rows"]])
+        for g in data["groups"]
+    ]
+    return TableOut(available=True, season=data["season"], groups=groups, legend=data["legend"])
 
 
 @router.get("/competitions", response_model=list[CompetitionWithCounts], dependencies=[rate_limit("matches")])

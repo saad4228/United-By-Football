@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { t } from "../../lib/i18n";
 
 function Ball({ size = 22 }: { size?: number }) {
   return (
@@ -21,7 +22,7 @@ export function Logo({ onClick }: { onClick?: () => void }) {
     <Link
       to="/"
       onClick={onClick}
-      aria-label="United By Football — home"
+      aria-label={`United By Football — ${t("nav.home")}`}
       className="group inline-flex h-11 items-center gap-2 rounded-md border-2 border-fg px-2.5 transition-colors hover:bg-fg hover:text-bg"
     >
       <span className="transition-transform duration-500 group-hover:rotate-[72deg]">

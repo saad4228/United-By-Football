@@ -2,7 +2,9 @@ import type {
   Competition,
   CompetitionWithCounts,
   Home,
+  LeagueTable,
   Match,
+  MatchDetails,
   MatchPage,
   MatchSources,
   Meta,
@@ -47,6 +49,8 @@ export type MatchQuery = {
   date_to?: string;
   competition?: string;
   team?: string;
+  /** Several team slugs, comma-separated (My teams). */
+  teams?: string;
   limit?: number;
   offset?: number;
 };
@@ -59,12 +63,23 @@ export const api = {
     request<Match>(`/api/matches/${encodeURIComponent(ref)}`, { country }),
   sources: (ref: string, country?: string | null) =>
     request<MatchSources>(`/api/matches/${encodeURIComponent(ref)}/sources`, { country }),
+  details: (ref: string) => request<MatchDetails>(`/api/matches/${encodeURIComponent(ref)}/details`),
+  table: (slug: string) => request<LeagueTable>(`/api/competitions/${encodeURIComponent(slug)}/table`),
   competitions: () => request<CompetitionWithCounts[]>("/api/competitions"),
   competition: (slug: string) => request<Competition>(`/api/competitions/${encodeURIComponent(slug)}`),
   teams: (competition?: string) => request<Team[]>("/api/teams", { competition }),
   team: (slug: string) => request<TeamDetail>(`/api/teams/${encodeURIComponent(slug)}`),
   search: (q: string, country?: string | null) => request<SearchResult>("/api/search", { q, country }),
 };
+
+/** Downloadable .ics for one match, with a reminder before kick-off. */
+export const matchCalendarUrl = (slug: string) => `/api/matches/${encodeURIComponent(slug)}/calendar.ics`;
+
+/** Subscribable feed of every fixture for these teams (webcal:// opens the calendar app). */
+export function teamsCalendarUrl(slugs: string[], scheme: "https" | "webcal" = "https"): string {
+  const url = new URL(`/api/calendar/teams.ics?teams=${slugs.map(encodeURIComponent).join(",")}`, window.location.origin);
+  return scheme === "webcal" ? url.href.replace(/^https?:/, "webcal:") : url.href;
+}
 
 export function adminApi(token: string) {
   const headers = { "X-Admin-Token": token, "Content-Type": "application/json" };

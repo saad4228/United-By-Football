@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
 import { useId, useRef, useState } from "react";
 import { Link } from "react-router";
-import { shortDayLabel, startOfDay } from "../lib/time";
+import { t } from "../lib/i18n";
+import { readableOn } from "../lib/colors";
+import { sizedLogo } from "../lib/images";
+import { dayOfMonth, shortDayLabel, startOfDay } from "../lib/time";
 import { ArrowRight, ChevronLeft, ChevronRight, RefreshIcon } from "./Icons";
 
 export function SectionHeader({
@@ -26,7 +29,7 @@ export function SectionHeader({
       </h2>
       {action && (
         <Link to={action.to} className="group inline-flex shrink-0 items-center gap-1.5 text-[16px] font-semibold text-fg-2 transition-colors hover:text-fg">
-          {action.label ?? "View more"}
+          {action.label ?? t("common.viewMore")}
           <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
       )}
@@ -95,12 +98,12 @@ export function EmptyState({ title, body, action, icon }: { title: string; body?
 export function ErrorState({ message, onRetry }: { message?: string; onRetry?: () => void }) {
   return (
     <EmptyState
-      title="Couldn't load this right now"
-      body={message ?? "The server didn't respond. This is usually temporary."}
+      title={t("common.errorTitle")}
+      body={message ?? t("common.errorBody")}
       action={
         onRetry && (
           <Button variant="secondary" onClick={onRetry}>
-            <RefreshIcon size={16} /> Try again
+            <RefreshIcon size={16} /> {t("common.tryAgain")}
           </Button>
         )
       }
@@ -108,8 +111,9 @@ export function ErrorState({ message, onRetry }: { message?: string; onRetry?: (
   );
 }
 
-export const COMPETITION_FILTERS = [
-  { slug: "", label: "All" },
+// League names are proper nouns and stay as they are; the generic chips are translated.
+export const COMPETITION_FILTERS: { slug: string; label: string | (() => string) }[] = [
+  { slug: "", label: () => t("common.all") },
   { slug: "premier-league", label: "Premier League" },
   { slug: "la-liga", label: "La Liga" },
   { slug: "bundesliga", label: "Bundesliga" },
@@ -118,8 +122,11 @@ export const COMPETITION_FILTERS = [
   { slug: "champions-league", label: "Champions League" },
   { slug: "europa-league", label: "Europa League" },
   { slug: "mls", label: "MLS" },
-  { slug: "other", label: "Other" },
+  { slug: "internationals", label: () => t("common.internationals") },
+  { slug: "other", label: () => t("common.other") },
 ];
+
+export const filterLabel = (f: (typeof COMPETITION_FILTERS)[number]) => (typeof f.label === "function" ? f.label() : f.label);
 
 export function Chips<T extends string>({
   options,
@@ -158,8 +165,8 @@ export function Chips<T extends string>({
 export function CompetitionChips({ value, onChange }: { value: string; onChange: (slug: string) => void }) {
   return (
     <Chips
-      label="Competition"
-      options={COMPETITION_FILTERS.map((c) => ({ value: c.slug, label: c.label }))}
+      label={t("common.competition")}
+      options={COMPETITION_FILTERS.map((c) => ({ value: c.slug, label: filterLabel(c) }))}
       value={value}
       onChange={onChange}
     />
@@ -175,10 +182,10 @@ export function DateTabs({ value, onChange, days = 7 }: { value: number; onChang
     "flex size-10 shrink-0 items-center justify-center rounded-lg text-fg-2 transition-colors hover:bg-fg/6 hover:text-fg disabled:pointer-events-none disabled:opacity-25";
   return (
     <div className="flex items-center gap-1 border-b border-line">
-      <button type="button" aria-label="Previous day" onClick={() => step(-1)} className={arrow} disabled={value === 0}>
+      <button type="button" aria-label={t("common.prevDay")} onClick={() => step(-1)} className={arrow} disabled={value === 0}>
         <ChevronLeft />
       </button>
-      <div ref={scroller} role="tablist" aria-label="Day" className="no-scrollbar flex flex-1 overflow-x-auto">
+      <div ref={scroller} role="tablist" aria-label={t("common.day")} className="no-scrollbar flex flex-1 overflow-x-auto">
         {Array.from({ length: days }, (_, i) => {
           const date = startOfDay(today, i);
           const active = i === value;
@@ -194,13 +201,13 @@ export function DateTabs({ value, onChange, days = 7 }: { value: number; onChang
               }`}
             >
               {shortDayLabel(date)}
-              {i > 1 && <span className="ml-1 tabular-nums">{date.getDate()}</span>}
+              {i > 1 && <span className="ml-1 tabular-nums">{dayOfMonth(date)}</span>}
               <span className={`absolute inset-x-3 -bottom-px h-[3px] rounded-full bg-fg transition-opacity duration-150 ${active ? "opacity-100" : "opacity-0"}`} />
             </button>
           );
         })}
       </div>
-      <button type="button" aria-label="Next day" onClick={() => step(1)} className={arrow} disabled={value === days - 1}>
+      <button type="button" aria-label={t("common.nextDay")} onClick={() => step(1)} className={arrow} disabled={value === days - 1}>
         <ChevronRight />
       </button>
     </div>
@@ -274,7 +281,7 @@ export function CompetitionBadge({ comp, size = 40 }: { comp: BadgeComp; size?: 
         style={{ width: size, height: size, borderRadius: radius, padding: size * 0.12 }}
       >
         <img
-          src={comp.logo_url}
+          src={sizedLogo(comp.logo_url, size)}
           alt=""
           loading="lazy"
           decoding="async"
@@ -292,11 +299,12 @@ export function CompetitionBadge({ comp, size = 40 }: { comp: BadgeComp; size?: 
   return (
     <span
       aria-hidden
-      className="inline-flex shrink-0 items-center justify-center font-display font-bold leading-none text-white"
+      className="inline-flex shrink-0 items-center justify-center font-display font-bold leading-none"
       style={{
         width: size,
         height: size,
         background: style.bg,
+        color: readableOn(style.bg, size * (style.text.length > 2 ? 0.36 : 0.46) >= 19),
         borderRadius: radius,
         fontSize: size * (style.text.length > 2 ? 0.36 : 0.46),
       }}

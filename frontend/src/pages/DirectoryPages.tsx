@@ -4,12 +4,15 @@ import { Link, useParams, useSearchParams } from "react-router";
 import { BallIcon, SearchIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
 import { CREATOR_PHOTO, CreatorAvatar } from "../components/CreatorAvatar";
+import { LeagueTable } from "../components/LeagueTable";
 import { TeamBanner, TeamBannerSkeleton } from "../components/TeamBanner";
 import { TeamCrest } from "../components/TeamCrest";
-import { Chips, CompetitionBadge, COMPETITION_FILTERS, EmptyState, ErrorState, PageTitle, SectionHeader, Stripes } from "../components/UI";
+import { TeamTile } from "../components/TeamTile";
+import { Chips, CompetitionBadge, COMPETITION_FILTERS, EmptyState, ErrorState, filterLabel, PageTitle, SectionHeader, Stripes } from "../components/UI";
 import { ApiError, api, type MatchQuery } from "../lib/api";
 import { useCountry } from "../lib/country";
 import { useDebounced, useDocumentMeta } from "../lib/hooks";
+import { t } from "../lib/i18n";
 import type { CompetitionWithCounts } from "../lib/types";
 
 /** A titled grid of matches for one filter, hidden entirely when empty unless `showEmpty`. */
@@ -40,7 +43,7 @@ function MatchList({ title, query, showEmpty, emptyText, action }: {
           ))}
         </MatchGrid>
       ) : (
-        <EmptyState title={emptyText ?? "Nothing here yet"} />
+        <EmptyState title={emptyText ?? ""} />
       )}
     </section>
   );
@@ -56,12 +59,12 @@ function CompetitionRow({ c }: { c: CompetitionWithCounts }) {
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[20px] font-bold">{c.name}</span>
         <span className="mt-0.5 block text-[15px] text-muted">
-          {[c.country, `${c.upcoming_count} upcoming this week`].filter(Boolean).join(" · ")}
+          {[c.country, t("comps.upcomingWeek", { n: c.upcoming_count })].filter(Boolean).join(" · ")}
         </span>
       </span>
       {c.live_count > 0 && (
         <span className="flex shrink-0 items-center gap-1.5 text-[15px] font-semibold text-live">
-          <span className="live-dot" /> {c.live_count} live
+          <span className="live-dot" /> {t("header.liveCount", { n: c.live_count })}
         </span>
       )}
     </Link>
@@ -69,11 +72,11 @@ function CompetitionRow({ c }: { c: CompetitionWithCounts }) {
 }
 
 export function CompetitionsPage() {
-  useDocumentMeta("Competitions", "Every competition on United By Football, with live and upcoming match counts.");
+  useDocumentMeta(t("comps.title"), t("comps.metaDesc"));
   const comps = useQuery({ queryKey: ["competitions"], queryFn: api.competitions, refetchInterval: 60_000 });
   return (
     <div className="container-x pt-12 sm:pt-16">
-      <PageTitle sub="Leagues and cups we track, with what's live now and what's coming up this week.">Competitions</PageTitle>
+      <PageTitle sub={t("comps.sub")}>{t("comps.title")}</PageTitle>
       {comps.isError ? (
         <ErrorState onRetry={() => comps.refetch()} />
       ) : !comps.data ? (
@@ -96,11 +99,11 @@ export function CompetitionsPage() {
 export function CompetitionPage() {
   const { slug = "" } = useParams();
   const comp = useQuery({ queryKey: ["competition", slug], queryFn: () => api.competition(slug), retry: false });
-  useDocumentMeta(comp.data?.name ?? "Competition", comp.data ? `${comp.data.name} fixtures, live scores and viewing sources.` : undefined);
+  useDocumentMeta(comp.data?.name ?? t("common.competition"), comp.data ? t("comp.metaDesc", { name: comp.data.name }) : undefined);
   if (comp.error instanceof ApiError && comp.error.status === 404) {
     return (
       <div className="container-x pt-14">
-        <EmptyState title="Competition not found" />
+        <EmptyState title={t("comp.notFound")} />
       </div>
     );
   }
@@ -111,22 +114,23 @@ export function CompetitionPage() {
         <div className="container-x relative flex items-center gap-6 py-14 sm:py-20">
           {comp.data ? <CompetitionBadge comp={comp.data} size={88} /> : <div className="skeleton size-22 rounded-xl" />}
           <div>
-            <div className="text-[16px] font-semibold text-muted">{comp.data ? comp.data.country ?? "International" : " "}</div>
+            <div className="text-[16px] font-semibold text-muted">{comp.data ? comp.data.country ?? t("common.international") : " "}</div>
             <h1 className="mt-1 text-[clamp(2.25rem,5vw,3.75rem)] font-bold leading-[1.05] tracking-[-0.015em]">{comp.data?.name ?? " "}</h1>
           </div>
         </div>
       </section>
       <div className="container-x space-y-16 pt-14">
-        <MatchList title="Live now" query={{ status: "live", competition: slug }} />
+        <MatchList title={t("comp.live")} query={{ status: "live", competition: slug }} />
         <MatchList
-          title="Upcoming"
+          title={t("comp.upcoming")}
           query={{ status: "upcoming", competition: slug, limit: 12 }}
           showEmpty
-          emptyText="No upcoming matches scheduled yet"
+          emptyText={t("comp.noUpcoming")}
           action={{ to: `/upcoming?competition=${slug}` }}
         />
+        <LeagueTable slug={slug} />
         <MatchList
-          title="Recent results"
+          title={t("comp.results")}
           query={{ status: "finished", competition: slug, limit: 8 }}
           action={{ to: `/matches?status=finished&date=week&competition=${slug}` }}
         />
@@ -136,7 +140,7 @@ export function CompetitionPage() {
 }
 
 export function TeamsPage() {
-  useDocumentMeta("Teams", "Find your team's next match and where to watch it.");
+  useDocumentMeta(t("teams.title"), t("teams.metaDesc"));
   const [params, setParams] = useSearchParams();
   const competition = params.get("competition") ?? "";
   const [filter, setFilter] = useState("");
@@ -146,20 +150,20 @@ export function TeamsPage() {
     () => (teams.data ?? []).filter((t) => !q || t.name.toLowerCase().includes(q) || t.short_name?.toLowerCase().includes(q)),
     [teams.data, q],
   );
-  const options = COMPETITION_FILTERS.filter((c) => c.slug !== "other").map((c) => ({ value: c.slug, label: c.label }));
+  const options = COMPETITION_FILTERS.filter((c) => c.slug !== "other" && c.slug !== "internationals").map((c) => ({ value: c.slug, label: filterLabel(c) }));
   return (
     <div className="container-x pt-12 sm:pt-16">
-      <PageTitle sub="Pick a club to see its live, upcoming and recent matches.">Teams</PageTitle>
+      <PageTitle sub={t("teams.sub")}>{t("teams.title")}</PageTitle>
       <div className="mb-8 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-        <Chips label="Competition" options={options} value={competition} onChange={(v) => setParams(v ? { competition: v } : {}, { replace: true })} />
+        <Chips label={t("common.competition")} options={options} value={competition} onChange={(v) => setParams(v ? { competition: v } : {}, { replace: true })} />
         <label className="flex h-11 w-full items-center gap-2.5 rounded-lg border border-line bg-surface px-4 text-[16px] xl:w-80">
           <SearchIcon size={17} className="text-faint" />
           <input
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder="Filter teams"
+            placeholder={t("teams.filter")}
             className="flex-1 bg-transparent outline-none placeholder:text-faint"
-            aria-label="Filter teams"
+            aria-label={t("teams.filter")}
           />
         </label>
       </div>
@@ -173,24 +177,12 @@ export function TeamsPage() {
         </div>
       ) : shown.length ? (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-6">
-          {shown.map((t) => (
-            <Link
-              key={t.id}
-              to={`/team/${t.slug}`}
-              className="group flex flex-col items-center gap-4 rounded-lg border border-line bg-surface px-3 pb-5 pt-6 text-center transition-colors hover:border-line-strong"
-            >
-              <span className="transition-transform duration-300 group-hover:-translate-y-1">
-                <TeamCrest team={t} size={64} />
-              </span>
-              <span>
-                <span className="block text-[16px] font-bold leading-tight">{t.name}</span>
-                <span className="mt-1 block text-[14px] text-faint">{t.country}</span>
-              </span>
-            </Link>
+          {shown.map((team) => (
+            <TeamTile key={team.id} team={team} sub={team.country} />
           ))}
         </div>
       ) : (
-        <EmptyState title="No teams match" body="Try a different name or competition." />
+        <EmptyState title={t("teams.noMatch")} body={t("teams.noMatchBody")} />
       )}
     </div>
   );
@@ -205,22 +197,22 @@ export function TeamPage() {
     // The banner lookup may still be running on first visit; check back until it lands.
     refetchInterval: (q) => (q.state.data?.media.status === "pending" ? 3000 : false),
   });
-  useDocumentMeta(team.data?.name ?? "Team", team.data ? `${team.data.name}: live, upcoming and recent matches, and where to watch.` : undefined);
+  useDocumentMeta(team.data?.name ?? t("nav.teams"), team.data ? t("team.metaDesc", { name: team.data.name }) : undefined);
   if (team.error instanceof ApiError && team.error.status === 404) {
     return (
       <div className="container-x pt-14">
-        <EmptyState title="Team not found" />
+        <EmptyState title={t("team.notFound")} />
       </div>
     );
   }
-  const t = team.data;
+  const detail = team.data;
   return (
     <>
-      <div className="container-x pt-8">{t ? <TeamBanner team={t} /> : <TeamBannerSkeleton />}</div>
+      <div className="container-x pt-8">{detail ? <TeamBanner team={detail} /> : <TeamBannerSkeleton />}</div>
       <div className="container-x space-y-16 pt-14">
-        <MatchList title="Live now" query={{ status: "live", team: slug }} />
-        <MatchList title="Upcoming" query={{ status: "upcoming", team: slug, limit: 8 }} showEmpty emptyText="No upcoming matches scheduled" />
-        <MatchList title="Recent results" query={{ status: "finished", team: slug, limit: 8 }} />
+        <MatchList title={t("comp.live")} query={{ status: "live", team: slug }} />
+        <MatchList title={t("comp.upcoming")} query={{ status: "upcoming", team: slug, limit: 8 }} showEmpty emptyText={t("team.noUpcoming")} />
+        <MatchList title={t("comp.results")} query={{ status: "finished", team: slug, limit: 8 }} />
       </div>
     </>
   );
@@ -229,21 +221,21 @@ export function TeamPage() {
 export function SearchPage() {
   const [params] = useSearchParams();
   const q = (params.get("q") ?? "").trim();
-  useDocumentMeta(q ? `Search: ${q}` : "Search");
+  useDocumentMeta(q ? t("search.metaTitle", { q }) : t("search.title"));
   const { country } = useCountry();
   const result = useQuery({ queryKey: ["search", q, country], queryFn: () => api.search(q, country), enabled: q.length >= 2 });
   const data = result.data;
   return (
     <div className="container-x pt-12 sm:pt-16">
-      <PageTitle sub={q ? <>Results for “{q}”</> : "Search teams, matches and competitions with the search button above."}>Search</PageTitle>
+      <PageTitle sub={q ? t("search.resultsFor", { q }) : t("search.sub")}>{t("search.title")}</PageTitle>
       {q.length === 1 ? (
-        <EmptyState title="Keep typing" body="Use at least two characters." />
+        <EmptyState title={t("search.keepTyping")} body={t("search.keepTypingBody")} />
       ) : q.length < 2 ? null : result.isError ? (
         <ErrorState onRetry={() => result.refetch()} />
       ) : !data ? (
         <MatchGridSkeleton />
       ) : !data.teams.length && !data.matches.length && !data.competitions.length ? (
-        <EmptyState icon={<BallIcon />} title="Nothing found" body="Check the spelling, or try a nickname like “Spurs” or “Barça”." />
+        <EmptyState icon={<BallIcon />} title={t("search.nothing")} body={t("search.nothingBody")} />
       ) : (
         <div className="space-y-14">
           {(data.teams.length > 0 || data.competitions.length > 0) && (
@@ -262,7 +254,7 @@ export function SearchPage() {
           )}
           {data.matches.length > 0 && (
             <section>
-              <SectionHeader title="Matches" count={data.matches.length} />
+              <SectionHeader title={t("search.matches")} count={data.matches.length} />
               <MatchGrid>
                 {data.matches.map((match) => (
                   <MatchCard key={match.id} match={match} />
@@ -289,7 +281,7 @@ export function AboutPage() {
       >
         <CreatorAvatar size={72} />
         <span className="min-w-0">
-          <span className="block text-[14px] font-semibold text-faint">Designed &amp; built by</span>
+          <span className="block text-[14px] font-semibold text-faint">{t("footer.builtBy")}</span>
           <span className="block text-[22px] font-bold leading-tight">Mohammad Saad</span>
           <span className="mt-1.5 block text-[12px] leading-snug text-faint">
             Photo:{" "}
@@ -327,8 +319,9 @@ export function AboutPage() {
         <section id="data">
           <h2 className={h2}>Where the data comes from</h2>
           <p className={p}>
-            Fixtures, live scores, results, crests and competition logos come from ESPN's public scoreboard feed. Club
-            facts such as founding year, stadium and website come from TheSportsDB. Team banners are freely
+            Fixtures, live scores, results, line-ups, match events and stats, league tables, crests and competition
+            logos come from ESPN's public feeds. Club facts such as founding year, stadium and website come from
+            TheSportsDB. Team banners are freely
             licensed photographs from Wikimedia Commons; each one is credited with its author and licence in the
             corner of the banner, linking to the original file.
           </p>
@@ -347,7 +340,8 @@ export function AboutPage() {
           <p className={p}>
             There are no accounts. When you open a source we record which link was opened and when, so we can measure
             which sources actually work. We don't record who opened it. Your IP address is held briefly in memory for
-            rate limiting and is not stored. Theme preference is saved in your browser.
+            rate limiting and is not stored. Your theme, language, time zone, country and followed teams are saved in
+            your browser only. A calendar subscription asks us for the teams in its link, and nothing else.
           </p>
         </section>
       </div>
@@ -356,16 +350,16 @@ export function AboutPage() {
 }
 
 export function NotFoundPage() {
-  useDocumentMeta("Page not found");
+  useDocumentMeta(t("common.pageNotFound"));
   return (
     <div className="container-x pt-14">
       <EmptyState
         icon={<BallIcon />}
-        title="Off target"
-        body="That page doesn't exist. The next kick-off is only a click away."
+        title={t("common.notFoundTitle")}
+        body={t("common.notFoundBody")}
         action={
           <Link to="/" className="font-semibold underline underline-offset-4">
-            Back to home
+            {t("common.backHome")}
           </Link>
         }
       />

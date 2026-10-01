@@ -5,6 +5,7 @@ import { LiveBadge } from "../../components/Status";
 import { TeamCrest } from "../../components/TeamCrest";
 import { Button, Stripes } from "../../components/UI";
 import { useNow } from "../../lib/hooks";
+import { t, tn } from "../../lib/i18n";
 import { countdown, kickoffLabel } from "../../lib/time";
 import type { Home, Match, Team } from "../../lib/types";
 
@@ -22,8 +23,8 @@ function useRise() {
 function Crest({ team }: { team: Team }) {
   return (
     <Link to={`/team/${team.slug}`} aria-label={team.name} className="transition-transform duration-300 hover:-translate-y-1">
-      <TeamCrest team={team} size={108} className="hidden sm:block" />
-      <TeamCrest team={team} size={76} className="sm:hidden" />
+      <TeamCrest team={team} size={108} priority className="hidden sm:block" />
+      <TeamCrest team={team} size={76} priority className="sm:hidden" />
     </Link>
   );
 }
@@ -35,16 +36,16 @@ function SourceNote({ match }: { match: Match }) {
     return (
       <span className="flex items-center gap-2.5 text-[18px] font-semibold">
         <span className="size-2 rounded-full bg-ok" />
-        {working} source{working === 1 ? "" : "s"} available
+        {tn("hero.sourcesAvailable", working)}
       </span>
     );
   if (match.is_live)
     return (
       <span className="flex items-center gap-2.5 text-[18px] font-semibold text-fg-2">
-        <span className="spinner text-warn" /> Checking sources
+        <span className="spinner text-warn" /> {t("card.checkingSources")}
       </span>
     );
-  return <span className="text-[18px] font-semibold text-fg-2">Kick-off {countdown(match.kickoff_time, now)}</span>;
+  return <span className="text-[18px] font-semibold text-fg-2">{t("status.kickoffIn", { when: countdown(match.kickoff_time, now) })}</span>;
 }
 
 function FeaturedMatch({ match, mode }: { match: Match; mode: "live" | "next" }) {
@@ -58,7 +59,7 @@ function FeaturedMatch({ match, mode }: { match: Match; mode: "live" | "next" })
       </m.div>
 
       <m.div {...rise(0.18)} className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 text-[18px] sm:text-[20px]">
-        {live ? <LiveBadge minute={match.minute_display} /> : <span className="font-semibold text-fg-2">Next match</span>}
+        {live ? <LiveBadge minute={match.minute_display} /> : <span className="font-semibold text-fg-2">{t("hero.nextMatch")}</span>}
         <Link to={`/match/${match.slug}`} className="font-bold underline-offset-4 hover:underline">
           {match.home.name}
           {live && match.score ? (
@@ -66,7 +67,7 @@ function FeaturedMatch({ match, mode }: { match: Match; mode: "live" | "next" })
               {match.score.home} – {match.score.away}
             </span>
           ) : (
-            <span className="mx-2 font-semibold text-muted">vs</span>
+            <span className="mx-2 font-semibold text-muted">{t("common.vs")}</span>
           )}
           {match.away.name}
         </Link>
@@ -80,16 +81,16 @@ function FeaturedMatch({ match, mode }: { match: Match; mode: "live" | "next" })
         {match.sources.top?.one_click && match.sources.top.watch_url ? (
           <>
             <Button href={match.sources.top.watch_url} external size="lg">
-              Watch {match.sources.top.access === "subscription" ? "on" : "free on"} {match.sources.top.label}
+              {t(match.sources.top.access === "subscription" ? "hero.watchOn" : "hero.watchFreeOn", { label: match.sources.top.label })}
             </Button>
             <Link to={`/match/${match.slug}`} className="text-[18px] font-semibold text-fg-2 underline-offset-4 hover:text-fg hover:underline">
-              All sources
+              {t("hero.allSources")}
             </Link>
           </>
         ) : (
           <>
             <Button to={`/match/${match.slug}`} size="lg">
-              {live ? "Watch now" : "View match"}
+              {live ? t("hero.watchNow") : t("hero.viewMatch")}
             </Button>
             <SourceNote match={match} />
           </>
@@ -104,7 +105,7 @@ function AlwaysOn({ next }: { next: Match[] }) {
   return (
     <div className="mt-10">
       <m.p {...rise(0.12)} className="max-w-xl text-[20px] leading-relaxed text-fg-2">
-        No big kick-offs in the next day or so. Football is always on somewhere, though.
+        {t("hero.quiet")}
       </m.p>
       {next.length > 0 && (
         <m.ul {...rise(0.18)} className="mt-8 grid max-w-4xl gap-3 sm:grid-cols-3">
@@ -129,7 +130,7 @@ function AlwaysOn({ next }: { next: Match[] }) {
       )}
       <m.div {...rise(0.24)} className="mt-9">
         <Button to="/upcoming" size="lg">
-          See upcoming matches <ArrowRight size={18} />
+          {t("hero.seeUpcoming")} <ArrowRight size={18} />
         </Button>
       </m.div>
     </div>
@@ -140,11 +141,12 @@ export function Hero({ home }: { home: Home }) {
   const rise = useRise();
   const { mode, match } = home.featured;
   return (
-    <section className="relative overflow-hidden border-b border-line" aria-label="Featured match">
+    <section className="relative overflow-hidden border-b border-line" aria-label={t("hero.featured")}>
       <Stripes className="pointer-events-none absolute inset-y-0 right-0 h-full w-full text-fg md:w-[80%]" />
       <div className="container-x relative pb-20 pt-14 sm:pb-24 sm:pt-20">
         <m.h1 {...rise(0)} className="display text-[clamp(2.75rem,6.4vw,6.75rem)]">
-          United by football –<br className="hidden sm:block" /> never miss the kickoff.
+          {t("hero.title1")}
+          <br className="hidden sm:block" /> {t("hero.title2")}
         </m.h1>
         {match && mode !== "always_on" ? <FeaturedMatch match={match} mode={mode} /> : <AlwaysOn next={home.next_matches} />}
       </div>

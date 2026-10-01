@@ -3,14 +3,17 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, BallIcon, CalendarIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
-import { TeamCrest } from "../components/TeamCrest";
+import { TeamTile } from "../components/TeamTile";
 import { Button, CompetitionBadge, CompetitionChips, DateTabs, EmptyState, ErrorState, SectionHeader } from "../components/UI";
 import { api } from "../lib/api";
 import { useCountry } from "../lib/country";
 import { useDocumentMeta } from "../lib/hooks";
+import { t } from "../lib/i18n";
+import { useMyTeams } from "../lib/myteams";
 import { dayKey, dayLabel, startOfDay } from "../lib/time";
 import type { CompetitionWithCounts, Home, Match, Team } from "../lib/types";
 import { Hero, HeroSkeleton } from "./home/Hero";
+import { MyTeamsMatches } from "./MyTeamsPage";
 
 function scrollToUpcoming() {
   document.getElementById("upcoming")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -21,7 +24,7 @@ function LiveSection({ live }: { live: Match[] }) {
     <section className="container-x pt-16 sm:pt-20" aria-labelledby="live-heading">
       <SectionHeader
         id="live-heading"
-        title="Live matches"
+        title={t("home.liveMatches")}
         live={live.length > 0}
         count={live.length}
         action={live.length ? { to: "/live" } : undefined}
@@ -35,11 +38,11 @@ function LiveSection({ live }: { live: Match[] }) {
       ) : (
         <EmptyState
           icon={<BallIcon />}
-          title="No matches are live right now"
-          body="But football isn't going anywhere."
+          title={t("home.noLive")}
+          body={t("home.noLiveBody")}
           action={
             <Button variant="secondary" onClick={scrollToUpcoming}>
-              See upcoming matches <ArrowRight size={16} />
+              {t("hero.seeUpcoming")} <ArrowRight size={16} />
             </Button>
           }
         />
@@ -69,7 +72,7 @@ function UpcomingSection() {
 
   return (
     <section id="upcoming" className="container-x scroll-mt-24 pt-20 sm:pt-24" aria-labelledby="upcoming-heading">
-      <SectionHeader id="upcoming-heading" title="Upcoming matches" action={{ to: viewAll }} />
+      <SectionHeader id="upcoming-heading" title={t("home.upcoming")} action={{ to: viewAll }} />
       <div className="space-y-5">
         <DateTabs value={offset} onChange={setOffset} />
         <CompetitionChips value={competition} onChange={setCompetition} />
@@ -89,7 +92,11 @@ function UpcomingSection() {
             {total > query.data.items.length && (
               <div className="mt-10 flex justify-center">
                 <Button variant="secondary" to={viewAll}>
-                  See all {total} matches {label === "Today" || label === "Tomorrow" ? label.toLowerCase() : `on ${label}`}
+                  {offset === 0
+                    ? t("home.seeAllToday", { n: total })
+                    : offset === 1
+                      ? t("home.seeAllTomorrow", { n: total })
+                      : t("home.seeAllOn", { n: total, day: label })}
                   <ArrowRight size={16} />
                 </Button>
               </div>
@@ -98,10 +105,8 @@ function UpcomingSection() {
         ) : (
           <EmptyState
             icon={<CalendarIcon />}
-            title="Nothing scheduled here"
-            body={`No upcoming ${competition ? "matches in this competition" : "matches"} ${
-              label === "Today" ? "for the rest of today" : `on ${label}`
-            }. Try another day or competition.`}
+            title={t("home.nothingTitle")}
+            body={offset === 0 ? t("home.nothingToday") : t("home.nothingOn", { day: label })}
           />
         )}
       </div>
@@ -119,12 +124,12 @@ function CompetitionTile({ c }: { c: CompetitionWithCounts }) {
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[18px] font-bold">{c.name}</span>
         <span className="block text-[15px] text-muted">
-          {[c.country, `${c.upcoming_count} upcoming`].filter(Boolean).join(" · ")}
+          {[c.country, t("home.upcomingCount", { n: c.upcoming_count })].filter(Boolean).join(" · ")}
         </span>
       </span>
       {c.live_count > 0 && (
         <span className="flex shrink-0 items-center gap-1.5 text-[14px] font-semibold text-live">
-          <span className="live-dot" /> {c.live_count} live
+          <span className="live-dot" /> {t("header.liveCount", { n: c.live_count })}
         </span>
       )}
     </Link>
@@ -134,7 +139,7 @@ function CompetitionTile({ c }: { c: CompetitionWithCounts }) {
 function PopularCompetitions({ comps }: { comps: CompetitionWithCounts[] }) {
   return (
     <section className="container-x pt-20 sm:pt-24" aria-labelledby="comps-heading">
-      <SectionHeader id="comps-heading" title="Popular competitions" action={{ to: "/competitions" }} />
+      <SectionHeader id="comps-heading" title={t("home.popularComps")} action={{ to: "/competitions" }} />
       <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         {comps.map((c) => (
           <CompetitionTile key={c.id} c={c} />
@@ -147,22 +152,30 @@ function PopularCompetitions({ comps }: { comps: CompetitionWithCounts[] }) {
 function PopularTeams({ teams }: { teams: Team[] }) {
   return (
     <section className="container-x pt-20 sm:pt-24" aria-labelledby="teams-heading">
-      <SectionHeader id="teams-heading" title="Popular teams" action={{ to: "/teams" }} />
+      <SectionHeader id="teams-heading" title={t("home.popularTeams")} action={{ to: "/teams" }} />
       <div className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 sm:mx-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-0 lg:grid-cols-6">
-        {teams.map((t) => (
-          <Link
-            key={t.id}
-            to={`/team/${t.slug}`}
-            className="group flex w-36 shrink-0 flex-col items-center gap-4 rounded-lg border border-line bg-surface px-3 pb-5 pt-6 text-center transition-colors hover:border-line-strong sm:w-auto"
-          >
-            <span className="transition-transform duration-300 group-hover:-translate-y-1">
-              <TeamCrest team={t} size={64} />
-            </span>
-            <span className="text-[16px] font-bold leading-tight">{t.name}</span>
-          </Link>
+        {teams.map((team) => (
+          <TeamTile key={team.id} team={team} className="w-36 shrink-0 sm:w-auto" />
         ))}
       </div>
     </section>
+  );
+}
+
+function MyTeamsSection() {
+  const { slugs } = useMyTeams();
+  if (!slugs.length) return null;
+  // Live and next matches: everything from a couple of hours ago, soonest first.
+  const from = new Date(Math.floor(Date.now() / 600_000) * 600_000 - 2 * 3_600_000).toISOString();
+  return (
+    <div className="container-x pt-20 sm:pt-24">
+      <MyTeamsMatches
+        title={t("myTeams.title")}
+        query={{ status: "all", date_from: from, limit: 4 }}
+        empty={t("myTeams.noMatches")}
+        action={{ to: "/my-teams" }}
+      />
+    </div>
   );
 }
 
@@ -206,6 +219,7 @@ export function HomePage() {
           <LiveSection live={data.live} />
         </>
       )}
+      <MyTeamsSection />
       <UpcomingSection />
       <PopularCompetitions comps={data.competitions} />
       <PopularTeams teams={data.popular_teams} />

@@ -11,6 +11,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
 import { CountryProvider } from "./lib/country";
+import { initialLanguage, loadLanguage } from "./lib/i18n";
+import { MyTeamsProvider } from "./lib/myteams";
+import { initialTimeZone, PrefsProvider } from "./lib/prefs";
+import { setTimeZoneSetting } from "./lib/time";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,15 +27,24 @@ const queryClient = new QueryClient({
   },
 });
 
+// Apply the saved language and time zone before the first render, so nothing flashes in English.
+const zone = initialTimeZone();
+setTimeZoneSetting(zone);
+await loadLanguage(initialLanguage()).catch(() => loadLanguage("en"));
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <MotionConfig reducedMotion="user">
         {/* Animation features load after first paint; components use the lightweight `m`. */}
         <LazyMotion features={() => import("./lib/motion-features").then((r) => r.default)} strict>
-          <CountryProvider>
-            <App />
-          </CountryProvider>
+          <PrefsProvider initialZone={zone}>
+            <CountryProvider>
+              <MyTeamsProvider>
+                <App />
+              </MyTeamsProvider>
+            </CountryProvider>
+          </PrefsProvider>
         </LazyMotion>
       </MotionConfig>
     </QueryClientProvider>

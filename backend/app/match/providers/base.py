@@ -27,6 +27,8 @@ class CompetitionRef:
     country: str | None = None
     logo_url: str | None = None
     priority: int | None = None
+    national_teams: bool = False
+    espn_league: str | None = None
 
 
 @dataclass

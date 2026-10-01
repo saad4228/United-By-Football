@@ -53,4 +53,15 @@ export function blockColors(home: Team, away: Team): [string, string] {
   return [visible(h.primary), visible(awayColor)];
 }
 
-export const readableOn = (hex: string) => (luminance(hex) > 0.45 ? "#0a0a0a" : "#ffffff");
+/**
+ * Text colour on a `hex` background: whichever of white and near-black contrasts more, so it
+ * always clears WCAG AA (4.5:1). For large text (24px, or 19px bold) white is kept down to the
+ * large-text minimum of 3:1, which suits saturated club colours like Arsenal red.
+ */
+export function readableOn(hex: string, large = false): string {
+  const l = luminance(hex);
+  const white = 1.05 / (l + 0.05);
+  const dark = (l + 0.05) / (luminance("#0a0a0a") + 0.05);
+  if (large) return white >= 3 ? "#ffffff" : "#0a0a0a";
+  return white >= dark ? "#ffffff" : "#0a0a0a";
+}

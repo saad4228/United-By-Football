@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { readableOn, teamColors } from "../lib/colors";
+import { sizedLogo } from "../lib/images";
 import type { Team } from "../lib/types";
 
 function initials(team: Team): string {
@@ -17,23 +18,27 @@ export function TeamCrest({
   size = 48,
   className = "",
   shadow = false,
+  priority = false,
 }: {
   team: Team;
   size?: number;
   className?: string;
   /** On a team-colour block: lift the crest with a shadow instead of edging it. */
   shadow?: boolean;
+  /** Above the fold (page headers): load straight away rather than lazily. */
+  priority?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
   const lift = shadow ? "crest-lift" : "crest-edge";
   if (team.logo_url && !failed) {
     return (
       <img
-        src={team.logo_url}
+        src={sizedLogo(team.logo_url, size)}
         alt=""
         width={size}
         height={size}
-        loading="lazy"
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : undefined}
         decoding="async"
         referrerPolicy="no-referrer"
         draggable={false}
@@ -53,7 +58,7 @@ export function TeamCrest({
         width: size,
         height: size,
         background: primary,
-        color: readableOn(primary),
+        color: readableOn(primary, size * 0.36 >= 19),
         boxShadow: `inset 0 0 0 ${Math.max(2, size * 0.06)}px ${secondary}`,
         fontSize: size * (text.length > 2 ? 0.3 : 0.36),
         letterSpacing: "0.02em",

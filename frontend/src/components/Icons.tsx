@@ -159,19 +159,38 @@ export const PlayIcon = (p: IconProps) => (
 );
 
 /** Union Jack, simplified for 20px use. */
-export function UKFlag({ size = 22 }: { size?: number }) {
+export const StarIcon = ({ filled, ...p }: IconProps & { filled?: boolean }) => (
+  <Icon {...p} fill={filled ? "currentColor" : "none"}>
+    <path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z" />
+  </Icon>
+);
+export const CalendarPlusIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <rect x="3.5" y="5" width="17" height="15" rx="2" />
+    <path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5" />
+  </Icon>
+);
+export const CopyIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <rect x="8" y="8" width="12" height="12" rx="2" />
+    <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" />
+  </Icon>
+);
+export const ArrowUpIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 19V5M6 11l6-6 6 6" />
+  </Icon>
+);
+export const ArrowDownIcon = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M12 5v14M6 13l6 6 6-6" />
+  </Icon>
+);
+/** A referee's card, filled with the given colour. */
+export function CardIcon({ color, size = 14 }: { color: string; size?: number }) {
   return (
-    <svg width={size} height={(size * 2) / 3} viewBox="0 0 60 40" aria-hidden className="shrink-0 rounded-[2px]">
-      <clipPath id="ukf">
-        <rect width="60" height="40" />
-      </clipPath>
-      <g clipPath="url(#ukf)">
-        <rect width="60" height="40" fill="#012169" />
-        <path d="M0 0 60 40M60 0 0 40" stroke="#fff" strokeWidth="8" />
-        <path d="M0 0 60 40M60 0 0 40" stroke="#C8102E" strokeWidth="3" />
-        <path d="M30 0v40M0 20h60" stroke="#fff" strokeWidth="12" />
-        <path d="M30 0v40M0 20h60" stroke="#C8102E" strokeWidth="7" />
-      </g>
+    <svg width={size * 0.72} height={size} viewBox="0 0 10 14" aria-hidden="true">
+      <rect x="0.5" y="0.5" width="9" height="13" rx="1.5" fill={color} />
     </svg>
   );
 }

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 Health = Literal["working", "checking", "unverified", "offline"]
 
@@ -49,6 +49,12 @@ class CompetitionOut(BaseModel):
     country: str | None
     logo_url: str | None
     is_major: bool
+    national_teams: bool = False
+
+    @field_validator("national_teams", mode="before")
+    @classmethod
+    def _null_is_false(cls, value: object) -> bool:
+        return bool(value)
 
 
 class Score(BaseModel):
@@ -179,3 +185,96 @@ class MetaOut(BaseModel):
     demo_mode: bool
     server_time: datetime
     refresh_seconds: dict[str, int]
+
+
+# ---- Match details (line-ups, timeline, stats, form) ----
+
+class PlayerOut(BaseModel):
+    name: str
+    short_name: str | None = None
+    number: str | None = None
+    position: str | None = None
+    subbed_in: bool = False
+    subbed_out: bool = False
+    goals: int = 0
+    yellow: bool = False
+    red: bool = False
+
+
+class LineupOut(BaseModel):
+    formation: str | None
+    # Starters by line from the goalkeeper forward, each line left to right from the team's view.
+    # None when the formation and positions don't add up.
+    lines: list[list[PlayerOut]] | None
+    starters: list[PlayerOut]
+    subs: list[PlayerOut]
+
+
+class EventOut(BaseModel):
+    kind: Literal["goal", "own_goal", "penalty_goal", "missed_penalty", "yellow", "red", "sub", "period"]
+    minute: str | None
+    side: Literal["home", "away"] | None
+    player: str | None = None
+    assist: str | None = None  # the assist for goals, the player leaving for substitutions
+    label: str | None = None  # for period markers: halftime, fulltime, extra_time, penalties
+    score: str | None = None  # running score after a goal or at a period marker
+
+
+class StatOut(BaseModel):
+    key: str
+    home: float
+    away: float
+    unit: Literal["", "%"] = ""
+
+
+class FormGame(BaseModel):
+    result: Literal["W", "D", "L"]
+    score: str | None
+    opponent: str
+    home: bool
+    date: datetime | None
+
+
+class MatchDetailsOut(BaseModel):
+    available: bool
+    lineups: dict[Literal["home", "away"], LineupOut] | None = None
+    events: list[EventOut] = []
+    stats: list[StatOut] = []
+    form: dict[Literal["home", "away"], list[FormGame]] | None = None
+    attendance: int | None = None
+
+
+# ---- League table ----
+
+class TableNote(BaseModel):
+    label: str
+    color: str | None
+
+
+class TableRow(BaseModel):
+    rank: int
+    name: str
+    short_name: str | None
+    logo_url: str | None
+    team: TeamOut | None  # our team, when we know it (links to its page)
+    played: int
+    won: int
+    drawn: int
+    lost: int
+    goals_for: int
+    goals_against: int
+    goal_difference: int
+    points: int
+    note: TableNote | None = None
+
+
+class TableGroup(BaseModel):
+    name: str | None
+    rows: list[TableRow]
+
+
+class TableOut(BaseModel):
+    available: bool
+    season: str | None = None
+    groups: list[TableGroup] = []
+    legend: list[TableNote] = []

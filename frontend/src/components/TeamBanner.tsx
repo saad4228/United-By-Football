@@ -1,7 +1,9 @@
 import { m } from "motion/react";
 import { useState } from "react";
 import { readableOn, teamColors, visible } from "../lib/colors";
+import { formatNumber, t } from "../lib/i18n";
 import type { TeamDetail } from "../lib/types";
+import { FollowButton } from "./FollowButton";
 import { ExternalIcon, PinIcon } from "./Icons";
 import { TeamCrest } from "./TeamCrest";
 import { Stripes } from "./UI";
@@ -26,8 +28,8 @@ export function TeamBanner({ team }: { team: TeamDetail }) {
   const photo = !broken ? media.photo : null;
   const color = visible(teamColors(team).primary);
   const onPhoto = !!photo && loaded;
-  const ink = onPhoto ? "#ffffff" : readableOn(color);
-  const facts = [team.country, media.founded ? `Founded ${media.founded}` : null].filter(Boolean);
+  const ink = onPhoto ? "#ffffff" : readableOn(color, true);
+  const facts = [team.country, media.founded ? t("team.founded", { year: String(media.founded) }) : null].filter(Boolean);
 
   return (
     <section
@@ -38,12 +40,12 @@ export function TeamBanner({ team }: { team: TeamDetail }) {
         background: `linear-gradient(115deg, color-mix(in srgb, ${color} 94%, black) 0%, color-mix(in srgb, ${color} 72%, black) 100%)`,
         color: ink,
       }}
-      aria-label={`${team.name} banner`}
+      aria-label={t("team.banner", { team: team.name })}
     >
       {photo && (
         <m.img
           src={photo.url}
-          alt={photo.subject ? `${photo.subject}, home of ${team.name}` : ""}
+          alt={photo.subject ? t("team.photoAlt", { subject: photo.subject, team: team.name }) : ""}
           decoding="async"
           referrerPolicy="no-referrer"
           onLoad={() => setLoaded(true)}
@@ -80,7 +82,7 @@ export function TeamBanner({ team }: { team: TeamDetail }) {
                   <span className="inline-flex items-center gap-2">
                     <PinIcon size={17} />
                     {media.stadium}
-                    {media.capacity && <span className="opacity-70">· {media.capacity.toLocaleString()} seats</span>}
+                    {media.capacity && <span className="opacity-70">· {t("team.seats", { n: formatNumber(media.capacity) })}</span>}
                   </span>
                 )}
                 {media.website && (
@@ -99,6 +101,9 @@ export function TeamBanner({ team }: { team: TeamDetail }) {
         </div>
       </div>
 
+      <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
+        <FollowButton team={team} variant="overlay" />
+      </div>
       {/* The club colour, kept as an accent once a photo takes over the background. */}
       {onPhoto && <div aria-hidden className="absolute inset-x-0 bottom-0 h-1.5" style={{ background: color }} />}
 
@@ -110,7 +115,7 @@ export function TeamBanner({ team }: { team: TeamDetail }) {
           className="absolute bottom-4 right-4 max-w-[60%] truncate rounded-md bg-black/45 px-2 py-1 text-[12px] text-white/80 backdrop-blur-sm transition-colors hover:text-white"
           title={`${photo.subject ?? "Photo"} by ${photo.author ?? "unknown"}, ${photo.license ?? ""} via Wikimedia Commons`}
         >
-          Photo: {photo.author ?? "Wikimedia Commons"}
+          {t("team.photo", { author: photo.author ?? "Wikimedia Commons" })}
           {photo.license ? ` · ${photo.license}` : ""}
         </a>
       )}

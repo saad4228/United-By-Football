@@ -15,6 +15,7 @@ const SearchPage = lazy(() => directory().then((m) => ({ default: m.SearchPage }
 const NotFoundPage = lazy(() => directory().then((m) => ({ default: m.NotFoundPage })));
 const AboutPage = lazy(() => directory().then((m) => ({ default: m.AboutPage })));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
+const MyTeamsPage = lazy(() => import("./pages/MyTeamsPage").then((m) => ({ default: m.MyTeamsPage })));
 
 const fallback = <div className="container-x min-h-[60vh] pt-20" aria-busy="true" />;
 
@@ -38,6 +39,7 @@ export function App() {
           <Route path="competition/:slug" element={<CompetitionPage />} />
           <Route path="teams" element={<TeamsPage />} />
           <Route path="team/:slug" element={<TeamPage />} />
+          <Route path="my-teams" element={<MyTeamsPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="admin" element={<AdminPage />} />

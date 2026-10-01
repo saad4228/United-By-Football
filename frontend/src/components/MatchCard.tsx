@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { blockColors } from "../lib/colors";
-import { kickoffLabel } from "../lib/time";
+import { t, tn, tr } from "../lib/i18n";
+import { dayLabel, kickoffLabel } from "../lib/time";
 import type { Match } from "../lib/types";
 import { PlayIcon, ShieldIcon } from "./Icons";
-import { LiveBadge } from "./Status";
+import { LiveBadge, statusText } from "./Status";
 import { TeamCrest } from "./TeamCrest";
 import { CompetitionBadge } from "./UI";
 
@@ -15,22 +16,24 @@ export function MatchBlock({
   className = "",
   showScore = true,
   showLive = true,
+  priority = false,
 }: {
   match: Match;
   crest?: number;
   className?: string;
   showScore?: boolean;
   showLive?: boolean;
+  priority?: boolean;
 }) {
   const [home, away] = blockColors(match.home, match.away);
   const score = showScore && match.score;
   return (
     <div className={`relative grid grid-cols-2 overflow-hidden ${className}`}>
       <div className="flex items-center justify-center" style={{ background: home }}>
-        <TeamCrest team={match.home} size={crest} shadow className="transition-transform duration-300 group-hover:scale-[1.06]" />
+        <TeamCrest team={match.home} size={crest} shadow priority={priority} className="transition-transform duration-300 group-hover:scale-[1.06]" />
       </div>
       <div className="flex items-center justify-center" style={{ background: away }}>
-        <TeamCrest team={match.away} size={crest} shadow className="transition-transform duration-300 group-hover:scale-[1.06]" />
+        <TeamCrest team={match.away} size={crest} shadow priority={priority} className="transition-transform duration-300 group-hover:scale-[1.06]" />
       </div>
       {showLive && match.is_live && (
         <div className="absolute left-3 top-3">
@@ -52,11 +55,11 @@ function StatusLine({ match }: { match: Match }) {
   if (match.is_live)
     return (
       <span className="font-semibold text-live">
-        {match.status === "halftime" ? "Half-time" : "Live"} | {match.minute_display ?? "now"}
+        {match.status === "halftime" ? t("status.halftime") : t("status.live")} | {match.minute_display ?? t("status.now")}
       </span>
     );
-  if (match.status === "finished") return <span>Full time | {kickoffLabel(match.kickoff_time).split(" | ")[0]}</span>;
-  if (match.status !== "scheduled") return <span className="capitalize text-warn">{match.status}</span>;
+  if (match.status === "finished") return <span>{t("status.fullTime")} | {dayLabel(match.kickoff_time)}</span>;
+  if (match.status !== "scheduled") return <span className="text-warn">{statusText(match.status)}</span>;
   return <span className="tabular-nums">{kickoffLabel(match.kickoff_time)}</span>;
 }
 
@@ -65,13 +68,15 @@ function SourceFooter({ match }: { match: Match }) {
   let left: ReactNode;
   let tag: ReactNode = null;
   if (match.status === "finished") {
-    left = <span className="text-faint">Match over</span>;
+    left = <span className="text-faint">{t("card.matchOver")}</span>;
   } else if (s.top?.one_click && s.top.watch_url) {
     // Sits above the card's stretched link, so it opens the stream instead of the match page.
     return (
       <div className="flex items-center justify-between gap-3 pt-1">
         <span className="min-w-0 truncate text-[15px] text-fg-2">
-          {s.top.access === "subscription" ? "On" : "Free on"} <span className="font-semibold text-fg">{s.top.label}</span>
+          {tr(s.top.access === "subscription" ? "card.on" : "card.freeOn", {
+            label: <span className="font-semibold text-fg">{s.top.label}</span>,
+          })}
         </span>
         <a
           href={s.top.watch_url}
@@ -79,7 +84,7 @@ function SourceFooter({ match }: { match: Match }) {
           rel="noopener noreferrer nofollow"
           className="relative z-10 inline-flex shrink-0 items-center gap-1.5 rounded-md bg-inverse px-3 py-1.5 text-[14px] font-bold text-on-inverse transition-colors hover:bg-inverse/90"
         >
-          <PlayIcon size={15} /> Watch
+          <PlayIcon size={15} /> {t("card.watch")}
         </a>
       </div>
     );
@@ -90,17 +95,17 @@ function SourceFooter({ match }: { match: Match }) {
         <span className="truncate">{s.top.label}</span>
       </>
     );
-    tag = s.working > 0 ? `${s.working} source${s.working === 1 ? "" : "s"}` : null;
+    tag = s.working > 0 ? tn("card.sources", s.working) : null;
   } else if (s.checking > 0) {
     left = (
       <>
-        <span className="spinner text-warn" /> Checking sources
+        <span className="spinner text-warn" /> {t("card.checkingSources")}
       </>
     );
   } else if (s.unverified > 0) {
-    left = <span className="text-muted">{s.unverified} listed, not verified</span>;
+    left = <span className="text-muted">{t("card.unverified", { n: s.unverified })}</span>;
   } else {
-    left = <span className="text-faint">Sources appear near kick-off</span>;
+    left = <span className="text-faint">{t("card.sourcesSoon")}</span>;
   }
   return (
     <div className="flex items-center justify-between gap-3 pt-1">
@@ -122,7 +127,7 @@ export function MatchCard({ match }: { match: Match }) {
           <Link
             to={`/match/${match.slug}`}
             className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
-            aria-label={`${match.home.name} vs ${match.away.name}`}
+            aria-label={`${match.home.name} ${t("common.vs")} ${match.away.name}`}
           >
             {match.home.name}&nbsp;- {match.away.name}
           </Link>

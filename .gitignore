@@ -13,3 +13,12 @@
 .idea/
 .DS_Store
 Thumbs.db
+
+# Build caches
+frontend/tsconfig.tsbuildinfo
+frontend/dist/
+
+# Browser test output
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/

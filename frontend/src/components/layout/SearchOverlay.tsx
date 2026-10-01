@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { api } from "../../lib/api";
 import { useDebounced } from "../../lib/hooks";
+import { t } from "../../lib/i18n";
 import { kickoffLabel } from "../../lib/time";
 import { ArrowRight, CloseIcon, SearchIcon } from "../Icons";
 import { LiveBadge } from "../Status";
@@ -49,7 +50,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
           onMouseDown={(e) => e.target === e.currentTarget && onClose()}
           role="dialog"
           aria-modal="true"
-          aria-label="Search"
+          aria-label={t("nav.search")}
         >
           <m.div
             className="container-x pt-[9vh]"
@@ -76,24 +77,24 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   autoFocus
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search teams, matches, competitions"
+                  placeholder={t("search.placeholder")}
                   className="h-16 flex-1 bg-transparent text-lg text-fg outline-none placeholder:text-faint"
-                  aria-label="Search teams, matches, competitions"
+                  aria-label={t("search.placeholder")}
                   maxLength={60}
                 />
-                <button type="button" onClick={onClose} aria-label="Close search" className="rounded-full p-1.5 text-muted hover:text-fg">
+                <button type="button" onClick={onClose} aria-label={t("search.close")} className="rounded-full p-1.5 text-muted hover:text-fg">
                   <CloseIcon />
                 </button>
               </form>
 
               <div className="max-h-[60vh] overflow-y-auto p-2" onClick={(e) => (e.target as HTMLElement).closest("a") && onClose()}>
                 {query.length < 2 && (
-                  <p className="px-4 py-6 text-[16px] text-muted">Try “arsenal”, “la liga” or “inter”.</p>
+                  <p className="px-4 py-6 text-[16px] text-muted">{t("search.try")}</p>
                 )}
-                {results.isFetching && !data && <p className="px-4 py-6 text-[16px] text-muted">Searching…</p>}
-                {empty && <p className="px-4 py-6 text-[16px] text-muted">No teams, matches or competitions match “{query}”.</p>}
+                {results.isFetching && !data && <p className="px-4 py-6 text-[16px] text-muted">{t("search.searching")}</p>}
+                {empty && <p className="px-4 py-6 text-[16px] text-muted">{t("search.none", { q: query })}</p>}
                 {data && data.teams.length > 0 && (
-                  <Group title="Teams">
+                  <Group title={t("search.teams")}>
                     {data.teams.slice(0, 5).map((t) => (
                       <Row key={t.id} to={`/team/${t.slug}`}>
                         <TeamCrest team={t} size={26} />
@@ -104,17 +105,17 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   </Group>
                 )}
                 {data && data.matches.length > 0 && (
-                  <Group title="Matches">
+                  <Group title={t("search.matches")}>
                     {data.matches.slice(0, 6).map((m) => (
                       <Row key={m.id} to={`/match/${m.slug}`}>
                         <span className="min-w-0 flex-1 truncate font-medium">
-                          {m.home.name} <span className="text-faint">vs</span> {m.away.name}
+                          {m.home.name} <span className="text-faint">{t("common.vs")}</span> {m.away.name}
                         </span>
                         {m.is_live ? (
                           <LiveBadge minute={m.minute_display} size="sm" />
                         ) : (
                           <span className="shrink-0 text-xs tabular-nums text-faint">
-                            {m.status === "finished" ? `FT ${m.score?.home}–${m.score?.away}` : kickoffLabel(m.kickoff_time)}
+                            {m.status === "finished" ? `${t("status.ft")} ${m.score?.home}–${m.score?.away}` : kickoffLabel(m.kickoff_time)}
                           </span>
                         )}
                       </Row>
@@ -122,7 +123,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   </Group>
                 )}
                 {data && data.competitions.length > 0 && (
-                  <Group title="Competitions">
+                  <Group title={t("search.competitions")}>
                     {data.competitions.map((c) => (
                       <Row key={c.id} to={`/competition/${c.slug}`}>
                         <CompetitionBadge comp={c} size={26} />
@@ -137,7 +138,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                     to={`/search?q=${encodeURIComponent(query)}`}
                     className="mt-1 flex items-center justify-between rounded-lg px-4 py-3 text-[15px] font-semibold text-fg-2 hover:bg-fg/5 hover:text-fg"
                   >
-                    All results for “{query}” <ArrowRight size={14} />
+                    {t("search.all", { q: query })} <ArrowRight size={14} />
                   </Link>
                 )}
               </div>

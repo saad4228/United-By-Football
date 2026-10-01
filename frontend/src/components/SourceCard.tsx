@@ -1,25 +1,21 @@
 import { m } from "motion/react";
 import type { ReactNode } from "react";
 import { countryName } from "../lib/country";
+import { t, type MessageKey } from "../lib/i18n";
 import { relativeAgo } from "../lib/time";
 import type { Access, SourceLink } from "../lib/types";
 import { BoltIcon, CheckIcon, ExternalIcon, PlayIcon, ShieldIcon } from "./Icons";
 import { HealthPill } from "./Status";
 import { Button } from "./UI";
 
-const ACCESS_LABEL: Record<Access, string> = {
-  free: "Free",
-  free_account: "Free · sign-up",
-  licence: "TV licence",
-  subscription: "Subscription",
-};
+const accessLabel = (access: Access) => t(`access.${access}` as MessageKey);
 
 export function regionLabel(regions: string[] | null): string | null {
   if (!regions?.length) return null;
   const excluded = regions.filter((r) => r.startsWith("!")).map((r) => countryName(r.slice(1)));
-  if (regions.includes("*")) return excluded.length ? `Worldwide except ${excluded.join(", ")}` : "Worldwide";
+  if (regions.includes("*")) return excluded.length ? t("source.worldwideExcept", { list: excluded.join(", ") }) : t("source.worldwide");
   const names = regions.filter((r) => !r.startsWith("!")).map(countryName);
-  return names.length > 3 ? `${names.slice(0, 3).join(", ")} +${names.length - 3} more` : names.join(", ");
+  return names.length > 3 ? t("source.more", { list: names.slice(0, 3).join(", "), n: names.length - 3 }) : names.join(", ");
 }
 
 function Tag({ children, tone = "neutral" }: { children: ReactNode; tone?: "neutral" | "ok" | "strong" }) {
@@ -43,15 +39,15 @@ export function SourceCard({ link, now }: { link: SourceLink; now: number }) {
   const region = regionLabel(link.regions);
   const checked =
     link.health === "working"
-      ? `Verified ${relativeAgo(link.last_checked_at, now)}`
+      ? t("source.verified", { ago: relativeAgo(link.last_checked_at, now) })
       : link.health === "checking"
-        ? "Checking now"
-        : `Last checked ${relativeAgo(link.last_checked_at, now)}`;
+        ? t("source.checkingNow")
+        : t("source.lastChecked", { ago: relativeAgo(link.last_checked_at, now) });
 
-  let action = link.health === "working" ? "Watch now" : "Open source";
-  if (link.one_click) action = free ? "Watch free" : "Watch now";
-  else if (link.coverage === "selected" && !link.confirmed) action = "Check channel";
-  else if (link.access === "subscription") action = "Open";
+  let action = link.health === "working" ? t("source.watchNow") : t("source.openSource");
+  if (link.one_click) action = free ? t("source.watchFree") : t("source.watchNow");
+  else if (link.coverage === "selected" && !link.confirmed) action = t("source.checkChannel");
+  else if (link.access === "subscription") action = t("source.open");
 
   return (
     <m.li
@@ -75,17 +71,17 @@ export function SourceCard({ link, now }: { link: SourceLink; now: number }) {
         <div className="min-w-0 space-y-2">
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
             <span className={`text-[18px] font-bold ${offline ? "text-fg-2" : ""}`}>{title}</span>
-            {link.access && <Tag tone={free ? "ok" : "neutral"}>{ACCESS_LABEL[link.access]}</Tag>}
+            {link.access && <Tag tone={free ? "ok" : "neutral"}>{accessLabel(link.access)}</Tag>}
             {link.confirmed ? (
               <Tag tone="ok">
-                <CheckIcon size={12} /> On for this match
+                <CheckIcon size={12} /> {t("source.onForMatch")}
               </Tag>
             ) : link.coverage === "all" ? (
-              <Tag tone="strong">Every match</Tag>
+              <Tag tone="strong">{t("source.everyMatch")}</Tag>
             ) : link.coverage === "selected" ? (
-              <Tag>Selected matches</Tag>
+              <Tag>{t("source.selected")}</Tag>
             ) : official ? (
-              <Tag tone="strong">Official</Tag>
+              <Tag tone="strong">{t("source.official")}</Tag>
             ) : null}
           </div>
           {link.notes && <p className="text-[15px] text-fg-2">{link.notes}</p>}
@@ -99,13 +95,13 @@ export function SourceCard({ link, now }: { link: SourceLink; now: number }) {
                 <BoltIcon size={13} className="text-warn" /> {link.response_time_ms} ms
               </span>
             )}
-            {region && <span className={link.available === false ? "font-semibold text-fg-2" : ""}>{link.available === false ? `Only in ${region}` : region}</span>}
+            {region && <span className={link.available === false ? "font-semibold text-fg-2" : ""}>{link.available === false ? t("source.onlyIn", { region }) : region}</span>}
             {link.language && <span>{link.language}</span>}
             {link.quality && <span className="font-semibold text-fg-2">{link.quality}</span>}
           </div>
           {offline && (
             <p className="pt-1 text-[15px] text-fg-2">
-              This source is currently unavailable. Try another available source.
+              {t("source.offlineMsg")}
               {link.message && <span className="text-muted"> ({link.message})</span>}
             </p>
           )}
@@ -124,7 +120,7 @@ export function SourceCard({ link, now }: { link: SourceLink; now: number }) {
           </Button>
         ) : (
           <Button variant="secondary" disabled className="w-full sm:w-auto">
-            Unavailable
+            {t("source.unavailable")}
           </Button>
         )}
       </div>

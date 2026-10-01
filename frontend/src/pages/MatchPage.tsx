@@ -1,15 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, m } from "motion/react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
+import { AddToCalendar } from "../components/AddToCalendar";
 import { CountryPicker } from "../components/CountryPicker";
 import { ArrowLeft, ChevronRight, ClockIcon, InfoIcon } from "../components/Icons";
 import { MatchBlock, MatchCard, MatchGrid } from "../components/MatchCard";
+import { MatchDetails } from "../components/MatchDetails";
 import { SourceCard } from "../components/SourceCard";
-import { LiveBadge } from "../components/Status";
+import { LiveBadge, statusText } from "../components/Status";
 import { CompetitionBadge, EmptyState, ErrorState, SectionHeader } from "../components/UI";
 import { ApiError, api } from "../lib/api";
 import { countryName, useCountry } from "../lib/country";
 import { useDocumentMeta, useNow } from "../lib/hooks";
+import { t, tn } from "../lib/i18n";
 import { countdown, kickoffLabel, longKickoff } from "../lib/time";
 import type { Match, MatchSources } from "../lib/types";
 
@@ -17,17 +20,17 @@ function Status({ match }: { match: Match }) {
   const now = useNow(30_000);
   if (match.is_live) return <LiveBadge minute={match.minute_display} size="lg" />;
   const tag = "inline-flex h-9 items-center rounded-md border border-line-strong px-3 text-[15px] font-semibold";
-  if (match.status === "finished") return <span className={tag}>Full time</span>;
-  if (match.status !== "scheduled") return <span className={`${tag} capitalize text-warn`}>{match.status}</span>;
-  return <span className={`${tag} tabular-nums`}>Kick-off {countdown(match.kickoff_time, now)}</span>;
+  if (match.status === "finished") return <span className={tag}>{t("status.fullTime")}</span>;
+  if (match.status !== "scheduled") return <span className={`${tag} text-warn`}>{statusText(match.status)}</span>;
+  return <span className={`${tag} tabular-nums`}>{t("status.kickoffIn", { when: countdown(match.kickoff_time, now) })}</span>;
 }
 
 function Header({ match }: { match: Match }) {
   return (
     <m.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}>
       <div className="relative">
-        <MatchBlock match={match} crest={150} showScore={false} showLive={false} className="hidden h-[320px] rounded-xl sm:grid" />
-        <MatchBlock match={match} crest={96} showScore={false} showLive={false} className="h-[200px] rounded-xl sm:hidden" />
+        <MatchBlock match={match} crest={150} showScore={false} showLive={false} priority className="hidden h-[320px] rounded-xl sm:grid" />
+        <MatchBlock match={match} crest={96} showScore={false} showLive={false} priority className="h-[200px] rounded-xl sm:hidden" />
         {match.score && (
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-lg border border-line bg-bg px-5 py-2 font-display text-[44px] font-extrabold leading-none tabular-nums sm:px-7 sm:text-[64px]">
             {match.score.home}
@@ -53,7 +56,10 @@ function Header({ match }: { match: Match }) {
             {match.venue && <span>{match.venue}</span>}
           </div>
         </div>
-        <Status match={match} />
+        <div className="flex flex-wrap items-center gap-3">
+          <AddToCalendar match={match} />
+          <Status match={match} />
+        </div>
       </div>
     </m.section>
   );
@@ -61,10 +67,10 @@ function Header({ match }: { match: Match }) {
 
 function Facts({ match }: { match: Match }) {
   const facts = [
-    match.competition && { label: "Competition", value: match.competition.name },
-    { label: "Kick-off", value: longKickoff(match.kickoff_time) },
-    match.venue && { label: "Stadium", value: match.venue },
-    match.referee && { label: "Referee", value: match.referee },
+    match.competition && { label: t("match.competition"), value: match.competition.name },
+    { label: t("match.kickoff"), value: longKickoff(match.kickoff_time) },
+    match.venue && { label: t("match.stadium"), value: match.venue },
+    match.referee && { label: t("match.referee"), value: match.referee },
   ].filter(Boolean) as { label: string; value: string }[];
   return (
     <dl className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-px overflow-hidden rounded-lg border border-line bg-line">
@@ -94,18 +100,18 @@ function SourcesSection({ match, sources, isError, refetch }: {
     <section aria-labelledby="sources-heading">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <h2 id="sources-heading" className="text-[26px] font-bold leading-tight tracking-[-0.01em] sm:text-[30px]">
-          Available sources
+          {t("match.sourcesTitle")}
         </h2>
         <CountryPicker />
       </div>
       {s && s.total > 0 && (
         <div className="-mt-2 mb-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[15px] text-fg-2">
-          {s.working > 0 && <span className="flex items-center gap-2">{dot("bg-ok")}{s.working} working</span>}
-          {s.checking > 0 && <span className="flex items-center gap-2">{dot("bg-warn")}{s.checking} checking</span>}
-          {s.unverified > 0 && <span className="flex items-center gap-2">{dot("bg-faint")}{s.unverified} not verified</span>}
-          {s.offline > 0 && <span className="flex items-center gap-2">{dot("bg-off")}{s.offline} offline</span>}
+          {s.working > 0 && <span className="flex items-center gap-2">{dot("bg-ok")}{t("match.working", { n: s.working })}</span>}
+          {s.checking > 0 && <span className="flex items-center gap-2">{dot("bg-warn")}{t("match.checking", { n: s.checking })}</span>}
+          {s.unverified > 0 && <span className="flex items-center gap-2">{dot("bg-faint")}{t("match.unverified", { n: s.unverified })}</span>}
+          {s.offline > 0 && <span className="flex items-center gap-2">{dot("bg-off")}{t("match.offline", { n: s.offline })}</span>}
           <span className="flex items-center gap-2 text-faint">
-            <ClockIcon size={15} /> Re-checked automatically{match.is_live ? " every few seconds" : ""}
+            <ClockIcon size={15} /> {match.is_live ? t("match.recheckedLive") : t("match.rechecked")}
           </span>
         </div>
       )}
@@ -129,16 +135,14 @@ function SourcesSection({ match, sources, isError, refetch }: {
             </ul>
           ) : (
             <EmptyState
-              title={`Nothing for ${country ? countryName(country) : "your country"} yet`}
-              body="The sources we know of for this match are only available in other countries."
+              title={t("match.nothingFor", { country: country ? countryName(country) : t("match.yourCountry") })}
+              body={t("match.nothingForBody")}
             />
           )}
           {elsewhere.length > 0 && (
             <details className="group rounded-lg border border-line bg-surface">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 text-[16px] font-semibold text-fg-2 hover:text-fg">
-                <span>
-                  {elsewhere.length} source{elsewhere.length === 1 ? "" : "s"} in other countries
-                </span>
+                <span>{tn("match.elsewhere", elsewhere.length)}</span>
                 <ChevronRight size={18} className="transition-transform group-open:rotate-90" />
               </summary>
               <ul className="space-y-3 border-t border-line p-3">
@@ -151,18 +155,13 @@ function SourcesSection({ match, sources, isError, refetch }: {
         </div>
       ) : (
         <EmptyState
-          title={match.status === "finished" ? "This match has finished" : "No viewing sources found yet"}
-          body={
-            match.status === "finished"
-              ? "Sources are removed after the final whistle."
-              : "We're checking available sources. They usually appear closer to kick-off, and this page updates on its own."
-          }
+          title={match.status === "finished" ? t("match.finishedTitle") : t("match.noSourcesTitle")}
+          body={match.status === "finished" ? t("match.finishedBody") : t("match.noSourcesBody")}
         />
       )}
       <p className="mt-5 flex items-start gap-2 text-[14px] leading-relaxed text-faint">
         <InfoIcon size={15} className="mt-0.5 shrink-0" />
-        Sources are run by third parties. We check that each one is reachable, but can't guarantee it stays online or
-        what it shows. Availability can depend on your region and subscriptions.
+        {t("match.disclaimer")}
       </p>
     </section>
   );
@@ -203,9 +202,14 @@ export function MatchPage() {
     staleTime: 60_000,
   });
   useDocumentMeta(
-    md ? `${md.home.name} vs ${md.away.name}` : "Match",
+    md ? `${md.home.name} ${t("common.vs")} ${md.away.name}` : t("match.title"),
     md
-      ? `${md.home.name} vs ${md.away.name}, ${md.competition?.name ?? "football"}, ${kickoffLabel(md.kickoff_time)}. Live status and available viewing sources.`
+      ? t("match.metaDesc", {
+          home: md.home.name,
+          away: md.away.name,
+          competition: md.competition?.name ?? t("match.football"),
+          kickoff: kickoffLabel(md.kickoff_time),
+        })
       : undefined,
   );
   const back = () => (location.key !== "default" ? navigate(-1) : navigate("/"));
@@ -216,9 +220,9 @@ export function MatchPage() {
       <div className="container-x pt-12">
         {notFound ? (
           <EmptyState
-            title="Match not found"
-            body="It may have been removed, or the link is wrong."
-            action={<Link className="font-semibold underline underline-offset-4" to="/">Back to home</Link>}
+            title={t("match.notFound")}
+            body={t("match.notFoundBody")}
+            action={<Link className="font-semibold underline underline-offset-4" to="/">{t("common.backHome")}</Link>}
           />
         ) : (
           <ErrorState onRetry={() => match.refetch()} />
@@ -231,16 +235,17 @@ export function MatchPage() {
   return (
     <div className="container-x">
       <button type="button" onClick={back} className="mt-6 mb-6 inline-flex items-center gap-2 text-[16px] font-semibold text-fg-2 transition-colors hover:text-fg">
-        <ArrowLeft size={18} /> Back
+        <ArrowLeft size={18} /> {t("common.back")}
       </button>
       {md ? <Header match={md} /> : <MatchSkeleton />}
       {md && (
         <div className="space-y-16 pt-12">
           <SourcesSection match={md} sources={sources.data} isError={sources.isError} refetch={() => sources.refetch()} />
+          <MatchDetails match={md} />
           <Facts match={md} />
           {others.length > 0 && (
             <section>
-              <SectionHeader title={`More from ${md.competition?.name}`} action={{ to: `/competition/${md.competition?.slug}` }} />
+              <SectionHeader title={t("match.moreFrom", { competition: md.competition?.name ?? "" })} action={{ to: `/competition/${md.competition?.slug}` }} />
               <MatchGrid>
                 {others.map((x) => (
                   <MatchCard key={x.id} match={x} />

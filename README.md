@@ -41,7 +41,19 @@ Or build the frontend once (`npm run build`) and the backend serves it at **http
 
 **Admin dashboard:** `/admin`. Set `UBF_ADMIN_TOKEN` in `.env`; if you don't, a random token is printed in the server log at startup.
 
-**Tests:** `cd backend && .venv/Scripts/python -m pytest` (106 tests, no network access needed).
+**Tests:**
+
+```bash
+cd backend && .venv/Scripts/python -m pytest        # 116 backend tests, no network access needed
+cd frontend && npm run build && npm run test:e2e    # 24 browser tests: desktop, Android and iPhone sizes
+```
+
+The browser tests (Playwright) start their own backend in demo mode on port 8010 with a throwaway
+database, block every request that would leave the machine, and fail on any console or page error.
+They also run axe-core against each page type, so a serious accessibility regression fails the build.
+`PW_CHANNEL=msedge` (or `chrome`) uses an installed browser instead of Playwright's Chromium;
+Playwright's own Chromium is the most reliable, since Edge throttles background tabs. GitHub Actions
+(`.github/workflows/ci.yml`) runs both suites on every push and pull request.
 
 ### Match data (default: real)
 
@@ -62,6 +74,44 @@ How the provider keeps requests low and data correct:
 This is an undocumented public feed. It's fine for development, but ESPN can change or block it at any time, so use a licensed data provider in production. It rejects unrecognised custom user agents, so the client sends httpx's default identifier; it never pretends to be a browser.
 
 For an official second source, add a free [football-data.org](https://www.football-data.org/client/register) key with `UBF_FOOTBALL_DATA_API_KEY`. Fixtures from both providers are merged into one match per game.
+
+### Match details and league tables
+
+Open a match and, where ESPN publishes them, you get **line-ups** on a pitch (formation, shirt numbers,
+goals, cards, who came off), a **timeline** of goals, cards and substitutions with the running score,
+**team stats** and each side's **last five results**. Competition pages carry the **league table**, with
+qualification and relegation colours, group or conference splits, and your followed teams in bold.
+
+Both are fetched on demand when a page is opened, never on a schedule, and cached by how live the data
+is: 30 s during a match, 2 min in the three hours before kick-off (when line-ups drop), 5 min just after
+full time, and 6 h for older matches. Tables are cached for 5 min. A failed lookup is cached for a
+minute and the previous copy is served meanwhile, so a blip never empties the page.
+
+### Following teams, reminders and the calendar
+
+- **My teams:** follow a club or country from its page, a tile or a table row. Followed teams are stored
+  in your browser only, with no account, and their matches lead the home page and get their own page.
+- **Add to calendar:** every upcoming match offers Google Calendar or an `.ics` file with a reminder 15
+  minutes before kick-off.
+- **Subscribe:** `My teams` gives a `webcal://` feed of every fixture for the teams you follow. Calendar
+  apps re-read it on their own, so kick-off changes, results and postponements arrive automatically.
+- **Internationals:** a filter for national-team competitions (Nations League, friendlies, qualifiers),
+  which are also kept out of the "Other" bucket.
+
+### Languages and time zones
+
+The interface is available in **English, Spanish, Portuguese, French, German and Italian**, chosen from
+the globe button in the header (or the menu on a phone) and remembered in the browser. The language is
+detected from the browser on a first visit. Each language is a separate chunk, loaded only when picked.
+Dates, numbers and relative times use the viewer's regional variant of that language.
+
+Kick-off times follow a **time zone picker** in the same menu: it defaults to the device's zone and can
+be set to any IANA zone, which every date on the site then respects, including the day a match is
+grouped under. Team names, competition names and the names of countries come from the data and are not
+translated, except country names, which use the browser's own localized list.
+
+`frontend/src/lib/locales/en.ts` is the source of truth: every other locale is type-checked against it,
+so a missing or misspelled key fails `npm run build`.
 
 ### Team banners, club facts and competition logos
 
@@ -207,11 +257,16 @@ Public (rate-limited per client IP):
 
 ```
 GET /api/home                      featured match (live | next | always_on), live, competitions, teams, layout hint
-GET /api/matches                   ?status=live|upcoming|finished|all &date_from &date_to &competition &team &limit &offset
+GET /api/matches                   ?status=live|upcoming|finished|all &date_from &date_to &competition &team &teams &limit &offset
+                                   competition=internationals → national-team competitions; teams=a,b,c → My teams
 GET /api/matches/live
 GET /api/matches/upcoming          ?days &competition
 GET /api/matches/{id|slug}
 GET /api/matches/{id|slug}/sources sorted: working (fastest, official first) → checking → unverified → offline
+GET /api/matches/{id|slug}/details line-ups, timeline, team stats, recent form (from ESPN, when available)
+GET /api/matches/{id|slug}/calendar.ics  ?alarm=15     one match, with a reminder
+GET /api/calendar/teams.ics        ?teams=arsenal,real-madrid &alarm=0   subscribable fixture feed
+GET /api/competitions/{slug}/table league table: groups, qualification notes, our team links
 GET /api/links/{id}/go             click-through redirect
 GET /api/competitions · /api/competitions/{slug}
 GET /api/teams · /api/teams/{slug}
@@ -253,6 +308,9 @@ The platform is built to prefer official APIs and licensed destinations. The bun
 | Multiple sources per match; health states; redirect resolution; failed sources marked; one broken source can't break others | ✅ (tested) |
 | Modular connectors; normalization across naming differences; duplicate merge; scheduled crawling; health checks; persisted source state | ✅ (tested) |
 | Search, schedule ("View all") with date/status/competition/team filters, competition & team pages, light/dark theme, responsive with mobile bottom nav, subtle motion with reduced-motion support | ✅ |
+| Match details: line-ups on a pitch, timeline, team stats, recent form; league tables on competition pages | ✅ (tested) |
+| My teams (followed in-browser), kick-off reminders, `.ics` download and subscribable calendar feed, Internationals filter | ✅ (tested) |
+| Six languages, time zone picker, WCAG 2.1 AA checked automatically on every page type | ✅ (tested) |
 | Admin: source monitor (run/disable), live match monitor, link health, crawler logs, metrics (validation success rate, latency, click-through) | ✅ |
 
 **Not in this MVP:**
@@ -261,4 +319,6 @@ The platform is built to prefer official APIs and licensed destinations. The bun
 - **Playwright:** not wired in. A connector that needs a browser for ordinary page navigation can add it inside its own adapter.
 - **Alembic migrations:** tables are created with `create_all`. Add Alembic before the schema changes in production.
 - **Server-side rendering:** match, team and competition pages have crawlable URLs and per-page titles and descriptions, but this is a client-rendered SPA. Use SSR or prerendering if SEO matters.
-- **Phase 2/3 features:** favorites, notifications, calendar export, user-submitted sources, and languages beyond English.
+- **Accounts:** followed teams, language, time zone, country and theme live in the browser, so they don't
+  follow you to another device. Accounts and push notifications are the next step.
+- **Phase 2/3 features:** push notifications and user-submitted sources.

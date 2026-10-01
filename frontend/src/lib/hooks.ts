@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { t } from "./i18n";
 
 /** Re-renders every `intervalMs` so relative times ("12 sec ago") stay honest. */
 export function useNow(intervalMs = 1000): number {
@@ -23,7 +24,7 @@ const SITE = "United By Football";
 
 export function useDocumentMeta(title: string | null, description?: string) {
   useEffect(() => {
-    document.title = title ? `${title} · ${SITE}` : `${SITE} — Never Miss the Kickoff`;
+    document.title = title ? `${title} · ${SITE}` : `${SITE} — ${t("meta.tagline")}`;
     if (description) {
       document.querySelector('meta[name="description"]')?.setAttribute("content", description);
     }

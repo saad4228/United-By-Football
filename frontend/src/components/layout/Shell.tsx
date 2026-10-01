@@ -1,22 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, m } from "motion/react";
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { api } from "../../lib/api";
 import { useTheme } from "../../lib/hooks";
-import { CalendarIcon, CloseIcon, HomeIcon, LiveIcon, MenuIcon, MoonIcon, SearchIcon, SunIcon, UKFlag } from "../Icons";
+import { t, type MessageKey } from "../../lib/i18n";
+import { useMyTeams } from "../../lib/myteams";
+import { CalendarIcon, CloseIcon, HomeIcon, LiveIcon, MenuIcon, MoonIcon, SearchIcon, StarIcon, SunIcon } from "../Icons";
 import { CreatorAvatar } from "../CreatorAvatar";
 import { Logo } from "./Logo";
 import { SearchOverlay } from "./SearchOverlay";
+import { SettingsFields, SettingsMenu } from "./Settings";
 
 const ChromeContext = createContext<{ openSearch: () => void }>({ openSearch: () => {} });
 export const useOpenSearch = () => useContext(ChromeContext).openSearch;
 
-const NAV = [
-  { to: "/live", label: "Live" },
-  { to: "/upcoming", label: "Upcoming" },
-  { to: "/competitions", label: "Competitions" },
-  { to: "/teams", label: "Teams" },
+const NAV: { to: string; label: MessageKey }[] = [
+  { to: "/live", label: "nav.live" },
+  { to: "/upcoming", label: "nav.upcoming" },
+  { to: "/competitions", label: "nav.competitions" },
+  { to: "/teams", label: "nav.teams" },
+  { to: "/my-teams", label: "nav.myTeams" },
 ];
 
 function useLiveCount() {
@@ -24,7 +28,7 @@ function useLiveCount() {
   return q.data?.total ?? 0;
 }
 
-function NavItem({ to, label }: { to: string; label: string }) {
+function NavItem({ to, label }: { to: string; label: MessageKey }) {
   return (
     <NavLink
       to={to}
@@ -34,52 +38,11 @@ function NavItem({ to, label }: { to: string; label: string }) {
     >
       {({ isActive }) => (
         <>
-          {label}
+          {t(label)}
           <span className={`absolute inset-x-0 -bottom-[20px] h-[3px] bg-fg transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0"}`} />
         </>
       )}
     </NavLink>
-  );
-}
-
-function LanguageMenu() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!open) return;
-    const close = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
-  }, [open]);
-  return (
-    <div className="relative" ref={ref}>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
-        aria-haspopup="menu"
-        aria-label="Language: English"
-        className="flex h-11 items-center gap-2.5 rounded-lg bg-surface-3 px-3.5 text-[16px] font-semibold transition-colors hover:bg-fg/12"
-      >
-        <UKFlag /> EN
-      </button>
-      {open && (
-        <div role="menu" className="absolute right-0 top-13 z-10 w-56 rounded-lg border border-line-strong bg-surface p-1.5 shadow-xl shadow-black/40">
-          <button
-            type="button"
-            role="menuitemradio"
-            aria-checked
-            onClick={() => setOpen(false)}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-[15px] font-semibold hover:bg-fg/6"
-          >
-            <UKFlag /> English
-          </button>
-          <p className="px-3 pb-2 pt-1 text-[13px] text-faint">More languages are on the way.</p>
-        </div>
-      )}
-    </div>
   );
 }
 
@@ -91,8 +54,8 @@ function ThemeSwitch() {
       type="button"
       role="switch"
       aria-checked={!dark}
-      aria-label="Light theme"
-      title={dark ? "Switch to light theme" : "Switch to dark theme"}
+      aria-label={t("theme.light")}
+      title={dark ? t("theme.toLight") : t("theme.toDark")}
       onClick={toggle}
       className="relative h-10 w-[72px] shrink-0 rounded-full bg-surface-3 transition-colors hover:bg-fg/12"
     >
@@ -113,9 +76,9 @@ function DemoBadge() {
   return (
     <span
       className="hidden h-7 items-center rounded-md border border-warn/50 px-2 text-[13px] font-semibold text-warn min-[400px]:inline-flex"
-      title="Demo mode: fixtures, scores and sources are simulated"
+      title={t("header.demoTitle")}
     >
-      Demo
+      {t("header.demo")}
     </span>
   );
 }
@@ -136,7 +99,7 @@ function Header({ onSearch }: { onSearch: () => void }) {
             <Logo />
             <DemoBadge />
           </div>
-          <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
+          <nav aria-label={t("nav.main")} className="hidden items-center gap-7 lg:flex xl:gap-8">
             {NAV.map((n) => (
               <NavItem key={n.to} {...n} />
             ))}
@@ -144,7 +107,7 @@ function Header({ onSearch }: { onSearch: () => void }) {
         </div>
         <div className="flex items-center gap-2.5 sm:gap-3">
           <span className="hidden md:block">
-            <LanguageMenu />
+            <SettingsMenu />
           </span>
           <span className="hidden sm:block">
             <ThemeSwitch />
@@ -152,24 +115,24 @@ function Header({ onSearch }: { onSearch: () => void }) {
           <button
             type="button"
             onClick={onSearch}
-            aria-label="Search"
+            aria-label={t("nav.search")}
             className="flex h-11 items-center gap-2.5 rounded-lg border border-line-strong px-3 text-[16px] font-semibold transition-colors hover:border-fg/40 md:px-5"
           >
             <SearchIcon size={18} />
-            <span className="hidden md:inline">Search</span>
+            <span className="hidden md:inline">{t("nav.search")}</span>
           </button>
           <Link
             to="/live"
             className="hidden h-11 items-center gap-2.5 rounded-lg bg-inverse px-5 text-[16px] font-semibold text-on-inverse transition-colors hover:bg-inverse/90 sm:flex"
           >
             {live > 0 && <span className="live-dot text-live" />}
-            Live now
+            {t("header.liveNow")}
             {live > 0 && <span className="tabular-nums opacity-55">{live}</span>}
           </Link>
           <button
             type="button"
             onClick={() => setMenu((v) => !v)}
-            aria-label={menu ? "Close menu" : "Open menu"}
+            aria-label={menu ? t("header.closeMenu") : t("header.openMenu")}
             aria-expanded={menu}
             className="flex size-11 items-center justify-center rounded-lg text-fg transition-colors hover:bg-fg/8 lg:hidden"
           >
@@ -180,7 +143,7 @@ function Header({ onSearch }: { onSearch: () => void }) {
       <AnimatePresence>
         {menu && (
           <m.nav
-            aria-label="Mobile"
+            aria-label={t("nav.mobile")}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -196,18 +159,19 @@ function Header({ onSearch }: { onSearch: () => void }) {
                     `flex items-center justify-between border-b border-line py-4 text-[22px] font-bold ${isActive ? "text-fg" : "text-fg/75"}`
                   }
                 >
-                  {n.label}
+                  {t(n.label)}
                   {n.to === "/live" && live > 0 && (
                     <span className="flex items-center gap-2 text-[15px] font-semibold text-live">
-                      <span className="live-dot" /> {live} live
+                      <span className="live-dot" /> {t("header.liveCount", { n: live })}
                     </span>
                   )}
                 </NavLink>
               ))}
-              <div className="flex items-center justify-between py-4">
-                <span className="text-[17px] font-semibold text-fg-2">Light theme</span>
+              <div className="flex items-center justify-between border-b border-line py-4">
+                <span className="text-[17px] font-semibold text-fg-2">{t("theme.light")}</span>
                 <ThemeSwitch />
               </div>
+              <SettingsFields />
             </div>
           </m.nav>
         )}
@@ -217,24 +181,28 @@ function Header({ onSearch }: { onSearch: () => void }) {
 }
 
 function BottomNav({ onSearch }: { onSearch: () => void }) {
-  const item = "flex flex-1 flex-col items-center gap-1 py-2.5 text-[12px] font-semibold";
+  const { slugs } = useMyTeams();
+  const item = "flex min-w-0 flex-1 flex-col items-center gap-1 py-2.5 text-[12px] font-semibold";
   const cls = ({ isActive }: { isActive: boolean }) => `${item} ${isActive ? "text-fg" : "text-faint"}`;
   return (
     <nav
-      aria-label="Quick"
+      aria-label={t("nav.quick")}
       className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-bg/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >
       <NavLink to="/" end className={cls}>
-        <HomeIcon size={21} /> Home
+        <HomeIcon size={21} /> <span className="max-w-full truncate">{t("nav.home")}</span>
       </NavLink>
       <NavLink to="/live" className={cls}>
-        <LiveIcon size={21} /> Live
+        <LiveIcon size={21} /> <span className="max-w-full truncate">{t("nav.live")}</span>
       </NavLink>
       <NavLink to="/upcoming" className={cls}>
-        <CalendarIcon size={21} /> Upcoming
+        <CalendarIcon size={21} /> <span className="max-w-full truncate">{t("nav.upcoming")}</span>
+      </NavLink>
+      <NavLink to="/my-teams" className={cls}>
+        <StarIcon size={21} filled={slugs.length > 0} /> <span className="max-w-full truncate">{t("nav.myTeams")}</span>
       </NavLink>
       <button type="button" onClick={onSearch} className={`${item} text-faint`}>
-        <SearchIcon size={21} /> Search
+        <SearchIcon size={21} /> <span className="max-w-full truncate">{t("nav.search")}</span>
       </button>
     </nav>
   );
@@ -250,32 +218,29 @@ function Footer() {
           <div>
             <Logo />
             <p className="mt-5 max-w-sm text-[17px] text-fg-2">
-              Live football. One place. Every match, and the sources showing it, checked automatically.
+              {t("footer.tagline")}
             </p>
           </div>
           <div className={col}>
-            <span className="text-[14px] font-semibold text-faint">Explore</span>
-            <Link className={link} to="/matches">Matches</Link>
-            <Link className={link} to="/competitions">Competitions</Link>
-            <Link className={link} to="/teams">Teams</Link>
-            <Link className={link} to="/about">About</Link>
+            <span className="text-[14px] font-semibold text-faint">{t("footer.explore")}</span>
+            <Link className={link} to="/matches">{t("nav.matches")}</Link>
+            <Link className={link} to="/competitions">{t("nav.competitions")}</Link>
+            <Link className={link} to="/teams">{t("nav.teams")}</Link>
+            <Link className={link} to="/my-teams">{t("nav.myTeams")}</Link>
+            <Link className={link} to="/about">{t("nav.about")}</Link>
           </div>
           <div className={col}>
-            <span className="text-[14px] font-semibold text-faint">Legal</span>
-            <Link className={link} to="/about#terms">Terms</Link>
-            <Link className={link} to="/about#privacy">Privacy</Link>
-            <Link className={link} to="/about#sources">How sources work</Link>
+            <span className="text-[14px] font-semibold text-faint">{t("footer.legal")}</span>
+            <Link className={link} to="/about#terms">{t("footer.terms")}</Link>
+            <Link className={link} to="/about#privacy">{t("footer.privacy")}</Link>
+            <Link className={link} to="/about#sources">{t("footer.howSources")}</Link>
           </div>
         </div>
-        <p className="mt-14 max-w-3xl text-[14px] leading-relaxed text-faint">
-          United By Football is a discovery and aggregation service. It lists matches and links to viewing sources run
-          by third parties. It doesn't host, re-stream or control any broadcast, and it never bypasses DRM, logins,
-          paywalls or other access controls. Rights to football content belong to their owners.
-        </p>
+        <p className="mt-14 max-w-3xl text-[14px] leading-relaxed text-faint">{t("footer.disclaimer")}</p>
         <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-[14px] text-faint sm:flex-row sm:items-center sm:justify-between">
           <span>© 2026 United By Football</span>
           <span className="inline-flex items-center gap-2">
-            Designed &amp; built by
+            {t("footer.builtBy")}
             <Link
               to="/about#creator"
               className="inline-flex items-center gap-2 font-semibold text-fg-2 transition-colors hover:text-fg"
@@ -323,10 +288,11 @@ export function Layout() {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-lg focus:bg-inverse focus:px-4 focus:py-2 focus:text-on-inverse"
       >
-        Skip to content
+        {t("header.skip")}
       </a>
       <Header onSearch={openSearch} />
-      <main id="main">
+      {/* At least a screen tall, so the footer never shows (and then jumps) while a page loads. */}
+      <main id="main" className="min-h-[calc(100dvh-76px)]">
         <Outlet />
       </main>
       <Footer />

@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import { regionalLocale } from "./i18n";
 
 /** Countries offered in the picker: everywhere a free stream in our registry is available, plus big markets. */
 export const COUNTRY_CODES = [
@@ -24,15 +25,24 @@ const ZONES: Record<string, string> = {
 };
 
 const STORAGE_KEY = "ubf-country";
-const names = (() => {
-  try {
-    return new Intl.DisplayNames(["en"], { type: "region" });
-  } catch {
-    return null;
-  }
-})();
+const displayNames = new Map<string, Intl.DisplayNames | null>();
 
-export const countryName = (code: string) => names?.of(code) ?? code;
+/** Country name in the current language ("Germany", "Alemania", "Allemagne"). */
+export function countryName(code: string): string {
+  const locale = regionalLocale();
+  if (!displayNames.has(locale)) {
+    try {
+      displayNames.set(locale, new Intl.DisplayNames([locale], { type: "region" }));
+    } catch {
+      displayNames.set(locale, null);
+    }
+  }
+  try {
+    return displayNames.get(locale)?.of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
 
 export function detectCountry(): string | null {
   try {

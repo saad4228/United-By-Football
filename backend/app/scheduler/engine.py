@@ -28,6 +28,7 @@ from app.database.seed import seed_reference_data
 from app.database.session import Database
 from app.match.providers import build_providers
 from app.match.providers.base import FixtureProvider
+from app.match.providers.espn_details import ESPNDetails
 from app.match.sync import sync_provider
 from app.media.service import MediaService
 from app.resolver.resolver import LinkResolver
@@ -80,6 +81,7 @@ class Engine:
                     for c in self.connectors}
         self.health = HealthChecker(db, self.validator, settings, policies)
         self.media = MediaService(db, settings, self.fixtures_http)
+        self.details = ESPNDetails(self.fixtures_http)
         self._locks = {name: asyncio.Lock() for name in ("fixtures", "discovery", "health")}
         self._next_discovery: dict[str, float] = {}
         self._tasks: list[asyncio.Task] = []
