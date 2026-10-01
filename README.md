@@ -132,12 +132,13 @@ so a missing or misspelled key fails `npm run build`.
 
 ### Sources: free, official streams worldwide
 
-The **free streams** connector (`connectors/api/free_streams/registry.json`) lists free, legal ways to watch, researched for 2026-27. Each entry records the competition, the countries it's available in, the access terms (free, free sign-up, TV licence) and whether it shows every match or selected ones. Every entry cites its source so it can be re-checked each season. The list includes:
+The **free streams** connector (`connectors/api/free_streams/registry.json`) lists free, legal ways to watch, researched for 2026-27. Each entry records the competition, the countries it's available in, the access terms (free, free sign-up, TV licence) and whether it shows every match or selected ones. Every entry cites its source so it can be re-checked each season. Entries are verified before being added: a channel is only listed when its own published schedule shows full live matches, so highlights-only channels (LaLiga, Serie A, the Premier League, UEFA) and commentary-only watch-alongs are deliberately left out. The list includes:
 
 | Where | Free and official | Competitions |
 |---|---|---|
-| Brazil | CazéTV, ge tv, Canal GOAT (YouTube) | La Liga (every match), Premier League, Ligue 1, Bundesliga, Série A |
-| 55 countries incl. UK, India, Japan, France | Canal GOAT (YouTube) | Libertadores, Sudamericana |
+| Brazil | CazéTV, ge tv, Canal GOAT (YouTube) | La Liga (every match), Premier League, Ligue 1, Bundesliga, Serie A, Série A, Saudi Pro League, WSL, NWSL, Concacaf Nations League |
+| 55 territories incl. India, Pakistan, Bangladesh, Sri Lanka, Nepal, UK, Ireland, Japan, France, the Baltics and Oceania | Canal GOAT (YouTube) | Libertadores, Sudamericana |
+| Worldwide except North & Central America | Concacaf (YouTube) | Concacaf Nations League |
 | Worldwide | Barclays WSL, J.LEAGUE International (outside Japan), The AFC Hub (YouTube); NWSL+ (outside the US, every match) | WSL, J1 League, AFC Champions League, NWSL |
 | USA | CBS Sports Golazo Network | Europa & Conference League, Serie A, NWSL, WSL, Brasileirão, SPFL, Argentina, AFC, Concacaf |
 | Ireland / Turkey / Belgium / Luxembourg | Virgin Media Play, RTÉ Player / tabii / VTM GO, RTL Play / RTL Play | Champions League (selected) |
@@ -147,7 +148,7 @@ The **free streams** connector (`connectors/api/free_streams/registry.json`) lis
 How the site uses it:
 - **Your country first:** the site picks the viewer's country from the browser (timezone, then language), shows a "Watching from" picker on match pages, and orders sources so what's watchable *here* comes first. Sources only available elsewhere sit in a collapsed "in other countries" section. In production, Cloudflare's `CF-IPCountry` header is used when the browser doesn't send a country.
 - **One-click watch:** when the best source for the viewer is free, available in their country, and shows every match (or is confirmed for this one), match cards and the hero get a **Watch** button that opens the stream directly. "Selected matches" sources say so and link to the channel ("Check channel") rather than claiming the match is on.
-- **Exact YouTube videos:** set `UBF_YOUTUBE_API_KEY`, a free YouTube Data API v3 key (about 3 quota units per channel per 10 minutes). YouTube entries then link straight to the match's live or scheduled video, marked "On for this match".
+- **Exact YouTube videos:** set `UBF_YOUTUBE_API_KEY`, a free YouTube Data API v3 key (about 3 quota units per channel per 10 minutes). YouTube entries then link straight to the match's live or scheduled video, marked "On for this match", instead of to the channel. Without a key nothing breaks: those entries fall back to the channel page and say "Check channel".
 - **Geo-blocked players:** many broadcaster players refuse connections from outside their country. For these sources a timeout or refused connection shows as "Couldn't verify from our location" with an **Open source** button, not "Offline".
 
 The sample paid-broadcaster list (`connectors/api/official_broadcasters/`) is tagged as subscription with its regions. Club crests for the seeded teams come from the football-data.org crest CDN; feed teams use ESPN's crests.

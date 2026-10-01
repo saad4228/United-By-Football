@@ -39,6 +39,50 @@ def test_availability(regions, country, expected):
     assert availability(regions, country) is expected
 
 
+def test_registry_reaches_the_territories_each_deal_covers():
+    """Pins the country lists that are easy to get wrong, and were verified against the
+    rights announcements and the channels' own published schedules."""
+    reg = {s.id: s for s in load_registry()}
+
+    # CONMEBOL club competitions are free on Canal GOAT across 55 territories, which is most
+    # of South Asia, the Baltics and Oceania - not just the handful of big markets.
+    goat = reg["canalgoat-conmebol"]
+    assert len(goat.countries) == 55
+    for country in ("IN", "PK", "BD", "LK", "NP", "GB", "JP", "RO", "EE", "FJ"):
+        assert availability(",".join(goat.countries), country) is True, country
+    for country in ("BR", "US", "AR"):
+        assert availability(",".join(goat.countries), country) is False, country
+
+    # Concacaf's own channel is free worldwide except its home region, where local
+    # broadcasters hold the rights.
+    cnl = reg["concacaf-nations-league-youtube"]
+    assert availability(",".join(cnl.countries), "IN") is True
+    assert availability(",".join(cnl.countries), "GB") is True
+    for blocked in ("US", "CA", "MX"):
+        assert availability(",".join(cnl.countries), blocked) is False, blocked
+
+    # Brazilian free-to-air YouTube channels stay inside Brazil.
+    for stream_id in ("cazetv-serie-a", "canalgoat-saudi", "canalgoat-wsl", "canalgoat-nwsl"):
+        countries = ",".join(reg[stream_id].countries)
+        assert availability(countries, "BR") is True, stream_id
+        assert availability(countries, "IN") is False, stream_id
+
+
+def test_every_registry_entry_maps_to_a_competition_we_track():
+    """A typo in a competition slug would silently hide the source for every match."""
+    known_slugs = {
+        "champions-league", "premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1",
+        "europa-league", "uefa-conference-league", "uefa-nations-league", "concacaf-nations-league",
+        "international-friendly", "conmebol-libertadores", "conmebol-sudamericana", "mls",
+        "brazilian-serie-a", "saudi-pro-league", "english-women-s-super-league", "nwsl",
+        "japanese-j-league", "afc-champions-league-elite", "german-2-bundesliga", "italian-serie-b",
+        "scottish-premiership", "argentine-liga-profesional-de-futbol", "mexican-liga-bbva-mx",
+    }
+    for stream in load_registry():
+        unknown = set(stream.competitions) - known_slugs
+        assert not unknown, f"{stream.id} references unknown competition(s): {unknown}"
+
+
 def test_national_broadcasters_only_cover_their_own_team():
     rtve = FreeStream(id="rtve", name="RTVE", url="https://x", competitions=("uefa-nations-league",),
                       countries=("ES",), coverage="all", access="free", teams=("Spain",))

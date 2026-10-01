@@ -2,269 +2,851 @@
   "_note": "Free, official ways to watch, researched for the 2026-27 season. Rights change every season: re-check each entry against its 'source' before relying on it. 'competitions' uses this site's competition slugs. 'countries': ISO codes, '*' worldwide, '!XX' excludes a country. 'teams' limits an entry to matches involving those national teams. 'coverage': all | selected. 'access': free | free_account | licence.",
   "streams": [
     {
-      "id": "cazetv-laliga", "name": "CazéTV", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CazeTV/streams", "youtube_handle": "@CazeTV",
-      "competitions": ["la-liga"], "countries": ["BR"], "coverage": "all", "access": "free", "language": "Portuguese",
-      "notes": "Every La Liga match, free on YouTube in Brazil",
-      "source": "https://www.techradar.com/how-to-watch/football-free-on-cazetv"
-    },
-    {
-      "id": "cazetv-premier-league", "name": "CazéTV", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CazeTV/streams", "youtube_handle": "@CazeTV",
-      "competitions": ["premier-league"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "One Premier League match per gameweek",
-      "source": "https://www.techradar.com/how-to-watch/football/premier-league-2026-27"
-    },
-    {
-      "id": "cazetv-ligue-1", "name": "CazéTV", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CazeTV/streams", "youtube_handle": "@CazeTV",
-      "competitions": ["ligue-1"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "One or two Ligue 1 matches per matchday",
-      "source": "https://cybernews.com/stream-online/how-to-watch-ligue-1-2026-27-season-from-anywhere/"
-    },
-    {
-      "id": "cazetv-bundesliga", "name": "CazéTV", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CazeTV/streams", "youtube_handle": "@CazeTV",
-      "competitions": ["bundesliga"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "Selected Bundesliga matches",
-      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
-    },
-    {
-      "id": "cazetv-brasileirao", "name": "CazéTV", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CazeTV/streams", "youtube_handle": "@CazeTV",
-      "competitions": ["brazilian-serie-a"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "One Série A match per round",
-      "source": "https://www.minhaoperadora.com.br/?p=131324"
-    },
-    {
-      "id": "getv-brasileirao", "name": "ge tv", "platform": "YouTube",
-      "url": "https://www.youtube.com/@getv/streams", "youtube_handle": "@getv",
-      "competitions": ["brazilian-serie-a"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "Selected Série A matches (rights shared with CazéTV)",
-      "source": "https://www.buscape.com.br/tv/conteudo/futebol-ao-vivo-na-tv"
-    },
-    {
-      "id": "canalgoat-bundesliga", "name": "Canal GOAT", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CanalGOATBR/streams", "youtube_handle": "@CanalGOATBR",
-      "competitions": ["bundesliga"], "countries": ["BR"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "Selected Bundesliga matches",
-      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
-    },
-    {
-      "id": "canalgoat-conmebol", "name": "Canal GOAT", "platform": "YouTube",
-      "url": "https://www.youtube.com/@CanalGOATBR/streams", "youtube_handle": "@CanalGOATBR",
-      "competitions": ["conmebol-libertadores", "conmebol-sudamericana"],
-      "countries": ["GB", "IE", "FR", "BE", "AD", "HU", "AM", "KZ", "JP", "KR", "IN", "VN", "PH", "TH", "MY", "BN"],
-      "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "Libertadores and Sudamericana in 55 countries across Europe, Asia, Africa and Oceania",
-      "source": "https://www.sportcal.com/news/canal-goat-lands-rights-to-conmebol-club-competitions-in-55-territories/"
-    },
-    {
-      "id": "9now-premier-league", "name": "9Gem / 9Now", "platform": "9Now",
+      "id": "9now-premier-league",
+      "name": "9Gem / 9Now",
+      "platform": "9Now",
       "url": "https://www.9now.com.au/live/9gem",
-      "competitions": ["premier-league"], "countries": ["AU"], "coverage": "selected", "access": "free_account", "language": "English",
+      "competitions": [
+        "premier-league"
+      ],
+      "countries": [
+        "AU"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "English",
       "notes": "Selected Premier League matches",
       "source": "https://www.techradar.com/how-to-watch/football/premier-league-2026-27"
     },
     {
-      "id": "cctv5-premier-league", "name": "CCTV-5", "platform": "CCTV",
-      "url": "https://tv.cctv.com/live/cctv5/",
-      "competitions": ["premier-league"], "countries": ["CN"], "coverage": "selected", "access": "free", "language": "Chinese",
-      "notes": "Occasional Premier League matches",
-      "source": "https://www.techradar.com/how-to-watch/football/premier-league-2026-27"
-    },
-    {
-      "id": "virgin-ucl", "name": "Virgin Media Play", "platform": "Virgin Media",
-      "url": "https://www.virginmediatelevision.ie/player",
-      "competitions": ["champions-league"], "countries": ["IE"], "coverage": "selected", "access": "free_account", "language": "English",
-      "notes": "Up to six Champions League matches each week",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "rte-ucl", "name": "RTÉ Player", "platform": "RTÉ",
-      "url": "https://www.rte.ie/player/live",
-      "competitions": ["champions-league"], "countries": ["IE"], "coverage": "selected", "access": "free_account", "language": "English",
-      "notes": "Two Champions League matches each week",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "tabii-ucl", "name": "tabii (TRT)", "platform": "TRT",
-      "url": "https://www.tabii.com/",
-      "competitions": ["champions-league"], "countries": ["TR"], "coverage": "selected", "access": "free_account", "language": "Turkish",
-      "notes": "Selected Champions League matches on TRT 1 / TRT Spor",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "vtmgo-ucl", "name": "VTM GO", "platform": "VTM",
-      "url": "https://www.vtmgo.be/vtmgo",
-      "competitions": ["champions-league"], "countries": ["BE"], "coverage": "selected", "access": "free_account", "language": "Dutch",
-      "notes": "Selected Champions League matches",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "rtlplay-be-ucl", "name": "RTL Play", "platform": "RTL",
-      "url": "https://www.rtlplay.be/",
-      "competitions": ["champions-league"], "countries": ["BE"], "coverage": "selected", "access": "free_account", "language": "French",
-      "notes": "Selected Champions League matches",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "rtlplay-lu-ucl", "name": "RTL Play (Luxembourg)", "platform": "RTL",
-      "url": "https://play.rtl.lu/",
-      "competitions": ["champions-league"], "countries": ["LU"], "coverage": "selected", "access": "free", "language": "Luxembourgish",
-      "notes": "Selected Champions League matches",
-      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
-    },
-    {
-      "id": "ant1-uefa", "name": "ANT1+", "platform": "ANT1",
-      "url": "https://www.ant1plus.gr/",
-      "competitions": ["europa-league", "uefa-conference-league"], "countries": ["GR"], "coverage": "selected", "access": "free_account", "language": "Greek",
-      "notes": "First-pick Europa and Conference League match of each matchday",
-      "source": "https://www.uefa.com/uefaconferenceleague/news/0285-18f79eae3aac-5c7eb199a66d-1000%E2%80%93where-to-watch-the-conference-league-tv-broadcast-partners-live-streams/"
-    },
-    {
-      "id": "cbs-golazo", "name": "CBS Sports Golazo Network", "platform": "CBS Sports",
-      "url": "https://www.cbssports.com/watch/cbs-sports-golazo-network",
-      "competitions": ["europa-league", "uefa-conference-league", "serie-a", "nwsl", "english-women-s-super-league",
-                       "brazilian-serie-a", "scottish-premiership", "argentine-liga-profesional-de-futbol",
-                       "afc-champions-league-elite", "concacaf-nations-league"],
-      "countries": ["US"], "coverage": "selected", "access": "free", "language": "English",
-      "notes": "Free 24/7 soccer channel with selected live matches (also on Pluto TV)",
-      "source": "https://www.goal.com/en-us/news/live-stream-watch-cbs-sports-golazo/blt07b3add1cc444695"
-    },
-    {
-      "id": "rtve-nations-league", "name": "RTVE Play (La 1)", "platform": "RTVE",
-      "url": "https://www.rtve.es/play/videos/directo/canales-lineales/la-1/",
-      "competitions": ["uefa-nations-league"], "teams": ["Spain"], "countries": ["ES"], "coverage": "all", "access": "free", "language": "Spanish",
-      "notes": "Spain's Nations League matches",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "ard-nations-league", "name": "ARD Mediathek (Das Erste)", "platform": "ARD",
-      "url": "https://www.ardmediathek.de/live",
-      "competitions": ["uefa-nations-league"], "teams": ["Germany"], "countries": ["DE"], "coverage": "selected", "access": "free", "language": "German",
-      "notes": "Germany's matches are split between ARD and ZDF",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "zdf-nations-league", "name": "ZDF", "platform": "ZDF",
-      "url": "https://www.zdf.de/live-tv",
-      "competitions": ["uefa-nations-league"], "teams": ["Germany"], "countries": ["DE"], "coverage": "selected", "access": "free", "language": "German",
-      "notes": "Germany's matches are split between ARD and ZDF",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "tf1-nations-league", "name": "TF1+", "platform": "TF1",
-      "url": "https://www.tf1.fr/tf1/direct",
-      "competitions": ["uefa-nations-league"], "teams": ["France"], "countries": ["FR"], "coverage": "all", "access": "free_account", "language": "French",
-      "notes": "France's Nations League matches",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "rai-nations-league", "name": "RaiPlay", "platform": "RAI",
-      "url": "https://www.raiplay.it/dirette/rai1",
-      "competitions": ["uefa-nations-league"], "teams": ["Italy"], "countries": ["IT"], "coverage": "all", "access": "free_account", "language": "Italian",
-      "notes": "Italy's Nations League matches",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "rtp-nations-league", "name": "RTP Play", "platform": "RTP",
-      "url": "https://www.rtp.pt/play/direto/rtp1",
-      "competitions": ["uefa-nations-league"], "teams": ["Portugal"], "countries": ["PT"], "coverage": "selected", "access": "free", "language": "Portuguese",
-      "notes": "Portugal's Nations League matches",
-      "source": "https://publicidade.rtp.pt/wp-content/uploads/2026/08/PT_RTP-PORTUGAL-PROPOSTA-COMERCIAL-UNL-26_27.pdf"
-    },
-    {
-      "id": "yle-nations-league", "name": "Yle Areena", "platform": "Yle",
-      "url": "https://areena.yle.fi/suorat",
-      "competitions": ["uefa-nations-league"], "teams": ["Finland"], "countries": ["FI"], "coverage": "selected", "access": "free", "language": "Finnish",
-      "notes": "Finland's matches (shared with MTV Katsomo)",
-      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
-    },
-    {
-      "id": "itvx-nations-league", "name": "ITVX", "platform": "ITV",
-      "url": "https://www.itv.com/watch/channel/itv1",
-      "competitions": ["uefa-nations-league"], "teams": ["England", "Scotland", "Northern Ireland"], "countries": ["GB"],
-      "coverage": "all", "access": "free_account", "language": "English",
-      "notes": "England, Scotland and Northern Ireland matches",
-      "source": "https://techradar.com/how-to-watch/football/england-vs-spain-free-nations-league-2026-27-game"
-    },
-    {
-      "id": "wsl-youtube", "name": "Barclays WSL", "platform": "YouTube",
-      "url": "https://www.youtube.com/@BarclaysWSL/streams", "youtube_handle": "@BarclaysWSL",
-      "competitions": ["english-women-s-super-league"], "countries": ["*"], "coverage": "selected", "access": "free", "language": "English",
-      "notes": "Selected WSL matches free worldwide",
-      "source": "https://www.fourfourtwo.com/competition/watch-wsl-2026-27-free"
-    },
-    {
-      "id": "bbc-wsl", "name": "BBC iPlayer", "platform": "BBC",
-      "url": "https://www.bbc.co.uk/iplayer",
-      "competitions": ["english-women-s-super-league"], "countries": ["GB"], "coverage": "selected", "access": "licence", "language": "English",
-      "notes": "Selected WSL matches (UK TV licence required)",
-      "source": "https://www.fourfourtwo.com/competition/watch-wsl-2026-27-free"
-    },
-    {
-      "id": "nwsl-plus-intl", "name": "NWSL+", "platform": "NWSL",
-      "url": "https://plus.nwslsoccer.com/",
-      "competitions": ["nwsl"], "countries": ["*", "!US"], "coverage": "all", "access": "free_account", "language": "English",
-      "notes": "Every NWSL match outside the US",
-      "source": "https://www.fourfourtwo.com/competition/watch-nwsl-live-streams-national-womens-soccer-league-2026"
-    },
-    {
-      "id": "nwsl-plus-us", "name": "NWSL+", "platform": "NWSL",
-      "url": "https://plus.nwslsoccer.com/#us",
-      "competitions": ["nwsl"], "countries": ["US"], "coverage": "selected", "access": "free_account", "language": "English",
-      "notes": "40 matches this season in the US",
-      "source": "https://www.fourfourtwo.com/competition/watch-nwsl-live-streams-national-womens-soccer-league-2026"
-    },
-    {
-      "id": "bundesliga-youtube-2bl", "name": "Bundesliga (YouTube)", "platform": "YouTube",
-      "url": "https://www.youtube.com/@bundesliga/streams", "youtube_handle": "@bundesliga",
-      "competitions": ["german-2-bundesliga"], "countries": ["GB", "IE"], "coverage": "selected", "access": "free", "language": "English",
-      "notes": "Friday-night 2. Bundesliga matches",
-      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
-    },
-    {
-      "id": "jleague-international", "name": "J.LEAGUE International", "platform": "YouTube",
-      "url": "https://www.youtube.com/@JLEAGUEInternational/streams", "youtube_handle": "@JLEAGUEInternational",
-      "competitions": ["japanese-j-league"], "countries": ["*", "!JP"], "coverage": "selected", "access": "free", "language": "English",
-      "notes": "Up to four J1 matches per matchweek with English commentary; some territories excluded",
-      "source": "https://cybernews.com/stream-online/how-to-watch-j1-league-2026-season-streaming-guide/"
-    },
-    {
-      "id": "afc-hub", "name": "The AFC Hub", "platform": "YouTube",
-      "url": "https://www.youtube.com/@TheAFCHub/streams", "youtube_handle": "@TheAFCHub",
-      "competitions": ["afc-champions-league-elite"], "countries": ["*"], "coverage": "selected", "access": "free", "language": "English",
+      "id": "afc-hub",
+      "name": "The AFC Hub",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@TheAFCHub/streams",
+      "youtube_handle": "@TheAFCHub",
+      "competitions": [
+        "afc-champions-league-elite"
+      ],
+      "countries": [
+        "*"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
       "notes": "Official AFC streams where no local broadcaster holds the rights",
       "source": "https://football360.com.au/?p=49476"
     },
     {
-      "id": "tv-publica", "name": "TV Pública", "platform": "TV Pública",
-      "url": "https://www.tvpublica.com.ar/",
-      "competitions": ["argentine-liga-profesional-de-futbol"], "countries": ["AR"], "coverage": "selected", "access": "free", "language": "Spanish",
-      "notes": "Two Liga Profesional matches per round",
-      "source": "https://batimes.com.ar/news/sports/echoes-of-the-past-as-football-returns-to-tv-publica.phtml"
+      "id": "ant1-uefa",
+      "name": "ANT1+",
+      "platform": "ANT1",
+      "url": "https://www.ant1plus.gr/",
+      "competitions": [
+        "europa-league",
+        "uefa-conference-league"
+      ],
+      "countries": [
+        "GR"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "Greek",
+      "notes": "First-pick Europa and Conference League match of each matchday",
+      "source": "https://www.uefa.com/uefaconferenceleague/news/0285-18f79eae3aac-5c7eb199a66d-1000%E2%80%93where-to-watch-the-conference-league-tv-broadcast-partners-live-streams/"
     },
     {
-      "id": "azteca-7", "name": "Azteca 7", "platform": "TV Azteca",
+      "id": "ard-nations-league",
+      "name": "ARD Mediathek (Das Erste)",
+      "platform": "ARD",
+      "url": "https://www.ardmediathek.de/live",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Germany"
+      ],
+      "countries": [
+        "DE"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "German",
+      "notes": "Germany's matches are split between ARD and ZDF",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
+    },
+    {
+      "id": "azteca-7",
+      "name": "Azteca 7",
+      "platform": "TV Azteca",
       "url": "https://www.tvazteca.com/azteca7",
-      "competitions": ["mexican-liga-bbva-mx"], "countries": ["MX"], "coverage": "selected", "access": "free", "language": "Spanish",
+      "competitions": [
+        "mexican-liga-bbva-mx"
+      ],
+      "countries": [
+        "MX"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Spanish",
       "notes": "Free Liga MX matches for the clubs Azteca holds",
       "source": "https://www.tvazteca.com/azteca7/chismes-deportivos/donde-ver-gratis-la-liga-mx-apertura-2026-este-es-el-link-oficial/"
     },
     {
-      "id": "zack-nani-spl", "name": "Zack Nani", "platform": "Twitch",
+      "id": "bbc-wsl",
+      "name": "BBC iPlayer",
+      "platform": "BBC",
+      "url": "https://www.bbc.co.uk/iplayer",
+      "competitions": [
+        "english-women-s-super-league"
+      ],
+      "countries": [
+        "GB"
+      ],
+      "coverage": "selected",
+      "access": "licence",
+      "language": "English",
+      "notes": "Selected WSL matches (UK TV licence required)",
+      "source": "https://www.fourfourtwo.com/competition/watch-wsl-2026-27-free"
+    },
+    {
+      "id": "bundesliga-youtube-2bl",
+      "name": "Bundesliga (YouTube)",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@bundesliga/streams",
+      "youtube_handle": "@bundesliga",
+      "competitions": [
+        "german-2-bundesliga"
+      ],
+      "countries": [
+        "GB",
+        "IE"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
+      "notes": "Friday-night 2. Bundesliga matches",
+      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
+    },
+    {
+      "id": "canalgoat-bundesliga",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "bundesliga"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Selected Bundesliga matches",
+      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
+    },
+    {
+      "id": "canalgoat-concacaf",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "concacaf-nations-league"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Concacaf Nations League matches, free on YouTube in Brazil",
+      "source": "https://www.youtube.com/@CanalGOATBR/streams"
+    },
+    {
+      "id": "canalgoat-conmebol",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "conmebol-libertadores",
+        "conmebol-sudamericana"
+      ],
+      "countries": [
+        "GB",
+        "IE",
+        "FR",
+        "BE",
+        "JP",
+        "VN",
+        "AF",
+        "BD",
+        "BT",
+        "KH",
+        "LA",
+        "MV",
+        "MN",
+        "MM",
+        "NP",
+        "KP",
+        "PK",
+        "PH",
+        "KR",
+        "LK",
+        "TH",
+        "TL",
+        "MY",
+        "BN",
+        "AM",
+        "KZ",
+        "KG",
+        "TJ",
+        "TM",
+        "UZ",
+        "IN",
+        "AD",
+        "EE",
+        "LV",
+        "LT",
+        "AL",
+        "HU",
+        "LI",
+        "LU",
+        "MT",
+        "RO",
+        "SM",
+        "BY",
+        "MD",
+        "FJ",
+        "KI",
+        "MH",
+        "FM",
+        "NR",
+        "PW",
+        "PG",
+        "WS",
+        "SB",
+        "TO",
+        "TV"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Libertadores and Sudamericana free on YouTube across 55 territories in Europe, Asia and Oceania",
+      "source": "https://www.sportcal.com/news/canal-goat-lands-rights-to-conmebol-club-competitions-in-55-territories/"
+    },
+    {
+      "id": "canalgoat-nwsl",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "nwsl"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "NWSL matches, free on YouTube in Brazil",
+      "source": "https://www.youtube.com/@CanalGOATBR/streams"
+    },
+    {
+      "id": "canalgoat-saudi",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "saudi-pro-league"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Saudi Pro League matches with full coverage, free on YouTube in Brazil",
+      "source": "https://www.youtube.com/@CanalGOATBR/streams"
+    },
+    {
+      "id": "canalgoat-wsl",
+      "name": "Canal GOAT",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CanalGOATBR/streams",
+      "youtube_handle": "@CanalGOATBR",
+      "competitions": [
+        "english-women-s-super-league"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Women's Super League matches, free on YouTube in Brazil",
+      "source": "https://www.youtube.com/@CanalGOATBR/streams"
+    },
+    {
+      "id": "cazetv-brasileirao",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "brazilian-serie-a"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "One Série A match per round",
+      "source": "https://www.minhaoperadora.com.br/?p=131324"
+    },
+    {
+      "id": "cazetv-bundesliga",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "bundesliga"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Selected Bundesliga matches",
+      "source": "https://www.fourfourtwo.com/competition/watch-bundesliga-2026-27-free"
+    },
+    {
+      "id": "cazetv-laliga",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "la-liga"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "all",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Every La Liga match, free on YouTube in Brazil",
+      "source": "https://www.techradar.com/how-to-watch/football-free-on-cazetv"
+    },
+    {
+      "id": "cazetv-ligue-1",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "ligue-1"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "One or two Ligue 1 matches per matchday",
+      "source": "https://cybernews.com/stream-online/how-to-watch-ligue-1-2026-27-season-from-anywhere/"
+    },
+    {
+      "id": "cazetv-premier-league",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "premier-league"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "One Premier League match per gameweek",
+      "source": "https://www.techradar.com/how-to-watch/football/premier-league-2026-27"
+    },
+    {
+      "id": "cazetv-serie-a",
+      "name": "CazéTV",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@CazeTV/streams",
+      "youtube_handle": "@CazeTV",
+      "competitions": [
+        "serie-a"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Selected Serie A matches, free on YouTube in Brazil",
+      "source": "https://www.sportcal.com/media/cazetv-snaps-up-laliga-rights-in-brazil-until-2032/"
+    },
+    {
+      "id": "cbs-golazo",
+      "name": "CBS Sports Golazo Network",
+      "platform": "CBS Sports",
+      "url": "https://www.cbssports.com/watch/cbs-sports-golazo-network",
+      "competitions": [
+        "europa-league",
+        "uefa-conference-league",
+        "serie-a",
+        "nwsl",
+        "english-women-s-super-league",
+        "brazilian-serie-a",
+        "scottish-premiership",
+        "argentine-liga-profesional-de-futbol",
+        "afc-champions-league-elite",
+        "concacaf-nations-league"
+      ],
+      "countries": [
+        "US"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
+      "notes": "Free 24/7 soccer channel with selected live matches (also on Pluto TV)",
+      "source": "https://www.goal.com/en-us/news/live-stream-watch-cbs-sports-golazo/blt07b3add1cc444695"
+    },
+    {
+      "id": "cctv5-premier-league",
+      "name": "CCTV-5",
+      "platform": "CCTV",
+      "url": "https://tv.cctv.com/live/cctv5/",
+      "competitions": [
+        "premier-league"
+      ],
+      "countries": [
+        "CN"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Chinese",
+      "notes": "Occasional Premier League matches",
+      "source": "https://www.techradar.com/how-to-watch/football/premier-league-2026-27"
+    },
+    {
+      "id": "concacaf-nations-league-youtube",
+      "name": "Concacaf",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@Concacaf/streams",
+      "youtube_handle": "@Concacaf",
+      "competitions": [
+        "concacaf-nations-league"
+      ],
+      "countries": [
+        "*",
+        "!US",
+        "!CA",
+        "!MX"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
+      "notes": "Concacaf's own channel streams most Nations League ties free; blocked across North and Central America, where local broadcasters hold the rights",
+      "source": "https://www.techradar.com/streaming/entertainment/watch-canada-vs-mexico-live-stream-concacaf-nations-league-semi-final-2025-online-for-free"
+    },
+    {
+      "id": "destination-calcio",
+      "name": "Destination Calcio",
+      "platform": "Destination Calcio",
+      "url": "https://destinationcalcio.com/",
+      "competitions": [
+        "italian-serie-b"
+      ],
+      "countries": [
+        "GB",
+        "US"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "English",
+      "notes": "Three Serie B matches a week with English commentary",
+      "source": "https://destinationcalcio.com/essentials/best-of-italian-football-free-to-watch-in-uk-and-us-until-2027/"
+    },
+    {
+      "id": "getv-brasileirao",
+      "name": "ge tv",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@getv/streams",
+      "youtube_handle": "@getv",
+      "competitions": [
+        "brazilian-serie-a"
+      ],
+      "countries": [
+        "BR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Selected Série A matches (rights shared with CazéTV)",
+      "source": "https://www.buscape.com.br/tv/conteudo/futebol-ao-vivo-na-tv"
+    },
+    {
+      "id": "itvx-nations-league",
+      "name": "ITVX",
+      "platform": "ITV",
+      "url": "https://www.itv.com/watch/channel/itv1",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "England",
+        "Scotland",
+        "Northern Ireland"
+      ],
+      "countries": [
+        "GB"
+      ],
+      "coverage": "all",
+      "access": "free_account",
+      "language": "English",
+      "notes": "England, Scotland and Northern Ireland matches",
+      "source": "https://techradar.com/how-to-watch/football/england-vs-spain-free-nations-league-2026-27-game"
+    },
+    {
+      "id": "jleague-international",
+      "name": "J.LEAGUE International",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@JLEAGUEInternational/streams",
+      "youtube_handle": "@JLEAGUEInternational",
+      "competitions": [
+        "japanese-j-league"
+      ],
+      "countries": [
+        "*",
+        "!JP"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
+      "notes": "Up to four J1 matches per matchweek with English commentary; some territories excluded",
+      "source": "https://cybernews.com/stream-online/how-to-watch-j1-league-2026-season-streaming-guide/"
+    },
+    {
+      "id": "nwsl-plus-intl",
+      "name": "NWSL+",
+      "platform": "NWSL",
+      "url": "https://plus.nwslsoccer.com/",
+      "competitions": [
+        "nwsl"
+      ],
+      "countries": [
+        "*",
+        "!US"
+      ],
+      "coverage": "all",
+      "access": "free_account",
+      "language": "English",
+      "notes": "Every NWSL match outside the US",
+      "source": "https://www.fourfourtwo.com/competition/watch-nwsl-live-streams-national-womens-soccer-league-2026"
+    },
+    {
+      "id": "nwsl-plus-us",
+      "name": "NWSL+",
+      "platform": "NWSL",
+      "url": "https://plus.nwslsoccer.com/#us",
+      "competitions": [
+        "nwsl"
+      ],
+      "countries": [
+        "US"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "English",
+      "notes": "40 matches this season in the US",
+      "source": "https://www.fourfourtwo.com/competition/watch-nwsl-live-streams-national-womens-soccer-league-2026"
+    },
+    {
+      "id": "rai-nations-league",
+      "name": "RaiPlay",
+      "platform": "RAI",
+      "url": "https://www.raiplay.it/dirette/rai1",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Italy"
+      ],
+      "countries": [
+        "IT"
+      ],
+      "coverage": "all",
+      "access": "free_account",
+      "language": "Italian",
+      "notes": "Italy's Nations League matches",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
+    },
+    {
+      "id": "rte-ucl",
+      "name": "RTÉ Player",
+      "platform": "RTÉ",
+      "url": "https://www.rte.ie/player/live",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "IE"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "English",
+      "notes": "Two Champions League matches each week",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "rtlplay-be-ucl",
+      "name": "RTL Play",
+      "platform": "RTL",
+      "url": "https://www.rtlplay.be/",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "BE"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "French",
+      "notes": "Selected Champions League matches",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "rtlplay-lu-ucl",
+      "name": "RTL Play (Luxembourg)",
+      "platform": "RTL",
+      "url": "https://play.rtl.lu/",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "LU"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Luxembourgish",
+      "notes": "Selected Champions League matches",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "rtp-nations-league",
+      "name": "RTP Play",
+      "platform": "RTP",
+      "url": "https://www.rtp.pt/play/direto/rtp1",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Portugal"
+      ],
+      "countries": [
+        "PT"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Portuguese",
+      "notes": "Portugal's Nations League matches",
+      "source": "https://publicidade.rtp.pt/wp-content/uploads/2026/08/PT_RTP-PORTUGAL-PROPOSTA-COMERCIAL-UNL-26_27.pdf"
+    },
+    {
+      "id": "rtve-nations-league",
+      "name": "RTVE Play (La 1)",
+      "platform": "RTVE",
+      "url": "https://www.rtve.es/play/videos/directo/canales-lineales/la-1/",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Spain"
+      ],
+      "countries": [
+        "ES"
+      ],
+      "coverage": "all",
+      "access": "free",
+      "language": "Spanish",
+      "notes": "Spain's Nations League matches",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
+    },
+    {
+      "id": "tabii-ucl",
+      "name": "tabii (TRT)",
+      "platform": "TRT",
+      "url": "https://www.tabii.com/",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "TR"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "Turkish",
+      "notes": "Selected Champions League matches on TRT 1 / TRT Spor",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "tf1-nations-league",
+      "name": "TF1+",
+      "platform": "TF1",
+      "url": "https://www.tf1.fr/tf1/direct",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "France"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "coverage": "all",
+      "access": "free_account",
+      "language": "French",
+      "notes": "France's Nations League matches",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
+    },
+    {
+      "id": "tv-publica",
+      "name": "TV Pública",
+      "platform": "TV Pública",
+      "url": "https://www.tvpublica.com.ar/",
+      "competitions": [
+        "argentine-liga-profesional-de-futbol"
+      ],
+      "countries": [
+        "AR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Spanish",
+      "notes": "Two Liga Profesional matches per round",
+      "source": "https://batimes.com.ar/news/sports/echoes-of-the-past-as-football-returns-to-tv-publica.phtml"
+    },
+    {
+      "id": "virgin-ucl",
+      "name": "Virgin Media Play",
+      "platform": "Virgin Media",
+      "url": "https://www.virginmediatelevision.ie/player",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "IE"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "English",
+      "notes": "Up to six Champions League matches each week",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "vtmgo-ucl",
+      "name": "VTM GO",
+      "platform": "VTM",
+      "url": "https://www.vtmgo.be/vtmgo",
+      "competitions": [
+        "champions-league"
+      ],
+      "countries": [
+        "BE"
+      ],
+      "coverage": "selected",
+      "access": "free_account",
+      "language": "Dutch",
+      "notes": "Selected Champions League matches",
+      "source": "https://www.fourfourtwo.com/features/how-to-watch-champions-league"
+    },
+    {
+      "id": "wsl-youtube",
+      "name": "Barclays WSL",
+      "platform": "YouTube",
+      "url": "https://www.youtube.com/@BarclaysWSL/streams",
+      "youtube_handle": "@BarclaysWSL",
+      "competitions": [
+        "english-women-s-super-league"
+      ],
+      "countries": [
+        "*"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "English",
+      "notes": "Selected WSL matches free worldwide",
+      "source": "https://www.fourfourtwo.com/competition/watch-wsl-2026-27-free"
+    },
+    {
+      "id": "yle-nations-league",
+      "name": "Yle Areena",
+      "platform": "Yle",
+      "url": "https://areena.yle.fi/suorat",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Finland"
+      ],
+      "countries": [
+        "FI"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "Finnish",
+      "notes": "Finland's matches (shared with MTV Katsomo)",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
+    },
+    {
+      "id": "zack-nani-spl",
+      "name": "Zack Nani",
+      "platform": "Twitch",
       "url": "https://www.twitch.tv/zacknani",
-      "competitions": ["saudi-pro-league"], "countries": ["FR"], "coverage": "selected", "access": "free", "language": "French",
+      "competitions": [
+        "saudi-pro-league"
+      ],
+      "countries": [
+        "FR"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "French",
       "notes": "Up to three Saudi Pro League matches a week",
       "source": "https://cybernews.com/de/online-schauen/al-ettifaq-vs-al-nassr-kostenlos-schauen-saudi-pro-league-25-08-2026/"
     },
     {
-      "id": "destination-calcio", "name": "Destination Calcio", "platform": "Destination Calcio",
-      "url": "https://destinationcalcio.com/",
-      "competitions": ["italian-serie-b"], "countries": ["GB", "US"], "coverage": "selected", "access": "free_account", "language": "English",
-      "notes": "Three Serie B matches a week with English commentary",
-      "source": "https://destinationcalcio.com/essentials/best-of-italian-football-free-to-watch-in-uk-and-us-until-2027/"
+      "id": "zdf-nations-league",
+      "name": "ZDF",
+      "platform": "ZDF",
+      "url": "https://www.zdf.de/live-tv",
+      "competitions": [
+        "uefa-nations-league"
+      ],
+      "teams": [
+        "Germany"
+      ],
+      "countries": [
+        "DE"
+      ],
+      "coverage": "selected",
+      "access": "free",
+      "language": "German",
+      "notes": "Germany's matches are split between ARD and ZDF",
+      "source": "https://www.soccergraph.com/2026/09/how-to-watch-uefa-nations-league-tv-channels-live-stream.html"
     }
   ]
 }
