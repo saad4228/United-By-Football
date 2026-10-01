@@ -3,9 +3,10 @@ import { AnimatePresence, m } from "motion/react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { AddToCalendar } from "../components/AddToCalendar";
 import { CountryPicker } from "../components/CountryPicker";
-import { ArrowLeft, ChevronRight, ClockIcon, InfoIcon } from "../components/Icons";
+import { ArrowLeft, ChevronRight, InfoIcon } from "../components/Icons";
 import { MatchBlock, MatchCard, MatchGrid } from "../components/MatchCard";
 import { MatchDetails } from "../components/MatchDetails";
+import { SecretClock } from "../components/SecretClock";
 import { SourceCard } from "../components/SourceCard";
 import { LiveBadge, statusText } from "../components/Status";
 import { CompetitionBadge, EmptyState, ErrorState, SectionHeader } from "../components/UI";
@@ -111,7 +112,7 @@ function SourcesSection({ match, sources, isError, refetch }: {
           {s.unverified > 0 && <span className="flex items-center gap-2">{dot("bg-faint")}{t("match.unverified", { n: s.unverified })}</span>}
           {s.offline > 0 && <span className="flex items-center gap-2">{dot("bg-off")}{t("match.offline", { n: s.offline })}</span>}
           <span className="flex items-center gap-2 text-faint">
-            <ClockIcon size={15} /> {match.is_live ? t("match.recheckedLive") : t("match.rechecked")}
+            <SecretClock /> {match.is_live ? t("match.recheckedLive") : t("match.rechecked")}
           </span>
         </div>
       )}

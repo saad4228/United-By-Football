@@ -127,6 +127,27 @@ test("the hidden page opens from the search phrase and stays hidden otherwise", 
   await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
 });
 
+test("ten clicks on the sources clock opens the hidden page", async ({ page }) => {
+  // The clock sits in the sources summary, so pick a match that has sources.
+  const all = await (await fetch(`${test.info().project.use.baseURL}/api/matches?status=all&limit=40`)).json();
+  const withSources = all.items.find((m: { sources: { total: number } }) => m.sources.total > 0);
+  expect(withSources, "a demo match with sources").toBeTruthy();
+  await page.goto(`/match/${withSources.slug}`);
+  await expect(page.getByRole("heading", { name: "Available sources" })).toBeVisible();
+  const clock = page.locator("[data-tick]");
+  await expect(clock).toBeVisible();
+
+  // Nine deliberate clicks wind it round but must not leave the match page.
+  for (let i = 0; i < 9; i++) await clock.click();
+  await expect(clock).toHaveAttribute("data-tick", "9");
+  await expect(page).not.toHaveURL(/tabahi/);
+
+  await clock.click();
+  await expect(page).toHaveURL(/\/tabahi$/);
+  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+  await expect(page.locator("main .grid > *")).toHaveCount(9);
+});
+
 test("competition and team pages load", async ({ page }) => {
   await page.goto("/competitions");
   await page.getByRole("link", { name: /Premier League/ }).first().click();
