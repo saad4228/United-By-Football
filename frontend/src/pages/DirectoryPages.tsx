@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { Link, useParams, useSearchParams } from "react-router";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import { BallIcon, SearchIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
 import { CREATOR_PHOTO, CreatorAvatar } from "../components/CreatorAvatar";
@@ -13,6 +13,7 @@ import { ApiError, api, type MatchQuery } from "../lib/api";
 import { useCountry } from "../lib/country";
 import { useDebounced, useDocumentMeta } from "../lib/hooks";
 import { t } from "../lib/i18n";
+import { isSecretPhrase, SECRET_PATH, unlockSecret } from "../lib/secret";
 import type { CompetitionWithCounts } from "../lib/types";
 
 /** A titled grid of matches for one filter, hidden entirely when empty unless `showEmpty`. */
@@ -220,10 +221,17 @@ export function TeamPage() {
 
 export function SearchPage() {
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const q = (params.get("q") ?? "").trim();
+  const secret = isSecretPhrase(q);
+  useEffect(() => {
+    if (!secret) return;
+    unlockSecret();
+    navigate(SECRET_PATH, { replace: true });
+  }, [secret, navigate]);
   useDocumentMeta(q ? t("search.metaTitle", { q }) : t("search.title"));
   const { country } = useCountry();
-  const result = useQuery({ queryKey: ["search", q, country], queryFn: () => api.search(q, country), enabled: q.length >= 2 });
+  const result = useQuery({ queryKey: ["search", q, country], queryFn: () => api.search(q, country), enabled: q.length >= 2 && !secret });
   const data = result.data;
   return (
     <div className="container-x pt-12 sm:pt-16">

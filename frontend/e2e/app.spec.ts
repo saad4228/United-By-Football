@@ -104,6 +104,29 @@ test("search opens with the / key and finds teams", async ({ page }) => {
   await expect(dialog).toBeHidden();
 });
 
+test("the hidden page opens from the search phrase and stays hidden otherwise", async ({ page }) => {
+  // Unknown URL until it has been found.
+  await page.goto("/tabahi");
+  await expect(page.getByRole("heading", { name: "Off target" })).toBeVisible();
+
+  // The phrase must never reach the search API.
+  const searches: string[] = [];
+  page.on("request", (r) => {
+    if (r.url().includes("/api/search")) searches.push(r.url());
+  });
+
+  await page.goto("/");
+  await page.keyboard.press("/");
+  await page.getByRole("dialog", { name: "Search" }).getByRole("textbox").fill("Messi Bhai Absolute Tabahi");
+  await expect(page).toHaveURL(/\/tabahi$/);
+  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+  expect(searches.filter((u) => /messi|tabahi/i.test(u))).toEqual([]);
+
+  // Stays open on later visits.
+  await page.goto("/tabahi");
+  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+});
+
 test("competition and team pages load", async ({ page }) => {
   await page.goto("/competitions");
   await page.getByRole("link", { name: /Premier League/ }).first().click();

@@ -16,6 +16,7 @@ const NotFoundPage = lazy(() => directory().then((m) => ({ default: m.NotFoundPa
 const AboutPage = lazy(() => directory().then((m) => ({ default: m.AboutPage })));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const MyTeamsPage = lazy(() => import("./pages/MyTeamsPage").then((m) => ({ default: m.MyTeamsPage })));
+const SecretPage = lazy(() => import("./pages/SecretPage").then((m) => ({ default: m.SecretPage })));
 
 const fallback = <div className="container-x min-h-[60vh] pt-20" aria-busy="true" />;
 
@@ -40,6 +41,8 @@ export function App() {
           <Route path="teams" element={<TeamsPage />} />
           <Route path="team/:slug" element={<TeamPage />} />
           <Route path="my-teams" element={<MyTeamsPage />} />
+          {/* Hidden: renders "not found" until the phrase is typed into search. */}
+          <Route path="tabahi" element={<SecretPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="admin" element={<AdminPage />} />

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router";
 import { api } from "../../lib/api";
 import { useDebounced } from "../../lib/hooks";
 import { t } from "../../lib/i18n";
+import { isSecretPhrase, SECRET_PATH, unlockSecret } from "../../lib/secret";
 import { kickoffLabel } from "../../lib/time";
 import { ArrowRight, CloseIcon, SearchIcon } from "../Icons";
 import { LiveBadge } from "../Status";
@@ -17,12 +18,25 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
   const query = useDebounced(q.trim(), 180);
   const input = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const secret = isSecretPhrase(q);
   const results = useQuery({
     queryKey: ["search", query],
     queryFn: () => api.search(query),
-    enabled: open && query.length >= 2,
+    // The phrase is never sent to the server.
+    enabled: open && query.length >= 2 && !isSecretPhrase(query),
     staleTime: 30_000,
   });
+
+  const openSecret = () => {
+    unlockSecret();
+    setQ("");
+    onClose();
+    navigate(SECRET_PATH);
+  };
+  useEffect(() => {
+    if (open && secret) openSecret();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, secret]);
 
   useEffect(() => {
     if (!open) return;
@@ -65,6 +79,10 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                 className="flex items-center gap-3 border-b border-line px-5"
                 onSubmit={(e) => {
                   e.preventDefault();
+                  if (secret) {
+                    openSecret();
+                    return;
+                  }
                   if (q.trim()) {
                     navigate(`/search?q=${encodeURIComponent(q.trim())}`);
                     onClose();
