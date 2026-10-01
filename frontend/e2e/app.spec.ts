@@ -8,6 +8,16 @@ test("home shows the featured match, live and upcoming matches", async ({ page }
   await expect(page.getByRole("heading", { name: "Upcoming matches" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Popular teams" })).toBeVisible();
   await firstMatchHref(page, "#upcoming");
+
+  // The title is the face of the site: it opens the page even on a busy matchday.
+  const liveCount = (await (await fetch(`${test.info().project.use.baseURL}/api/matches?status=live&limit=1`)).json()).total;
+  expect(liveCount, "demo mode should have live matches").toBeGreaterThan(0);
+  const order = await page.evaluate(() => {
+    const title = document.querySelector("main h1")!;
+    const live = [...document.querySelectorAll("main h2")].find((h) => h.textContent?.includes("Live matches"))!;
+    return title.compareDocumentPosition(live) & Node.DOCUMENT_POSITION_FOLLOWING ? "title first" : "live first";
+  });
+  expect(order).toBe("title first");
 });
 
 test("a match page lists its sources and offers a calendar file", async ({ page, request }) => {

@@ -127,7 +127,6 @@ export type MatchSources = {
 export type Home = {
   server_time: string;
   demo_mode: boolean;
-  layout: "featured_first" | "live_first";
   featured: { mode: "live" | "next" | "always_on"; match: Match | null };
   live: Match[];
   next_matches: Match[];

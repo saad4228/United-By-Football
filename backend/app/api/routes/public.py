@@ -153,7 +153,6 @@ async def home(
     return HomeOut(
         server_time=now,
         demo_mode=settings.demo_mode,
-        layout="live_first" if len(live) >= 4 else "featured_first",
         featured=Featured(mode=mode, match=match_out(featured_match, summaries.get(featured_match.id))
                           if featured_match else None),
         live=[match_out(m, summaries.get(m.id)) for m in live],

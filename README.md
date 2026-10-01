@@ -256,7 +256,7 @@ Before adding a connector, check the source's terms and the rights situation in 
 Public (rate-limited per client IP):
 
 ```
-GET /api/home                      featured match (live | next | always_on), live, competitions, teams, layout hint
+GET /api/home                      featured match (live | next | always_on), live, competitions, teams
 GET /api/matches                   ?status=live|upcoming|finished|all &date_from &date_to &competition &team &teams &limit &offset
                                    competition=internationals → national-team competitions; teams=a,b,c → My teams
 GET /api/matches/live

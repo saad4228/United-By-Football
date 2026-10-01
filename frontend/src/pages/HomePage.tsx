@@ -202,23 +202,11 @@ export function HomePage() {
       </>
     );
   }
-  // On a busy matchday the live grid leads; otherwise the featured match does.
-  const liveFirst = data.layout === "live_first";
   return (
     <>
-      {liveFirst ? (
-        <>
-          <LiveSection live={data.live} />
-          <div className="mt-16">
-            <Hero home={data} />
-          </div>
-        </>
-      ) : (
-        <>
-          <Hero home={data} />
-          <LiveSection live={data.live} />
-        </>
-      )}
+      {/* The title is the face of the site: it always opens the page, however busy the matchday. */}
+      <Hero home={data} />
+      <LiveSection live={data.live} />
       <MyTeamsSection />
       <UpcomingSection />
       <PopularCompetitions comps={data.competitions} />

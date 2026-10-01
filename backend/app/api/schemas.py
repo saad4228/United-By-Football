@@ -164,7 +164,6 @@ class CompetitionWithCounts(CompetitionOut):
 class HomeOut(BaseModel):
     server_time: datetime
     demo_mode: bool
-    layout: Literal["featured_first", "live_first"]
     featured: Featured
     live: list[MatchOut]
     next_matches: list[MatchOut]
