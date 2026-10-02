@@ -17,10 +17,6 @@ Designed and built by **Mohammad Saad**.
                   CLEAN EXPERIENCE
 ```
 
-> **New to the codebase?** [`docs/CODEBASE-GUIDE.md`](docs/CODEBASE-GUIDE.md) explains every
-> part of it from first principles — what a web app is, what each file does, the five ideas
-> worth knowing, and a five-day plan for working through it.
-
 This repository is the PRD's **MVP v1**: a cinematic React frontend, a FastAPI backend with a modular connector architecture, match normalization and de-duplication, redirect resolution with SSRF protection, scheduled link health checks, and an admin dashboard.
 
 ---
