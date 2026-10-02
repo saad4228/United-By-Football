@@ -21,6 +21,17 @@ This repository is the PRD's **MVP v1**: a cinematic React frontend, a FastAPI b
 
 ## Quick start
 
+### With Docker
+
+```bash
+docker compose up --build        # http://localhost:8000
+```
+
+One image builds the frontend with Node, then hands it to the Python backend, which serves the
+site and the API together. The database lives in a named volume, so it survives restarts.
+
+### Without Docker
+
 Requirements: Python 3.11+ (tested on 3.14), Node 20+ (tested on 24).
 
 ```bash
@@ -44,8 +55,8 @@ Or build the frontend once (`npm run build`) and the backend serves it at **http
 **Tests:**
 
 ```bash
-cd backend && .venv/Scripts/python -m pytest        # 116 backend tests, no network access needed
-cd frontend && npm run build && npm run test:e2e    # 24 browser tests: desktop, Android and iPhone sizes
+cd backend && .venv/Scripts/python -m pytest        # 118 backend tests, no network access needed
+cd frontend && npm run build && npm run test:e2e    # 26 browser tests: desktop, Android and iPhone sizes
 ```
 
 The browser tests (Playwright) start their own backend in demo mode on port 8010 with a throwaway
@@ -152,6 +163,37 @@ How the site uses it:
 The sample paid-broadcaster list (`connectors/api/official_broadcasters/`) is tagged as subscription with its regions. Club crests for the seeded teams come from the football-data.org crest CDN; feed teams use ESPN's crests.
 
 ---
+
+## One source of truth for the API
+
+The frontend's types are **generated from the backend**, not written by hand:
+
+```
+backend/app/api/schemas.py  →  frontend/openapi.json  →  frontend/src/lib/api-schema.ts
+                                                              ↑
+                                              frontend/src/lib/types.ts (aliases)
+```
+
+```bash
+cd frontend && npm run types:api
+```
+
+`types.ts` is nothing but aliases into the generated file, so every component keeps importing
+the same friendly names (`Match`, `SourceLink`, `LeagueTable`) while the definitions come from
+the Python models. Rename or retype a field in FastAPI and the frontend **stops compiling**
+instead of breaking quietly for users. CI regenerates and fails if the committed output is
+stale.
+
+Generating this the first time immediately earned its keep. The API was describing several
+fields as a bare `string` when it only ever returns a fixed set of values, so those became
+`Literal` types in `schemas.py` — `status`, `access`, `coverage`, the media status and the stat
+keys. The constraint now lives in one place and reaches the browser automatically. It also
+found a live mismatch: `regions` is optional on the API but the frontend assumed it was always
+present.
+
+> `openapi-typescript` runs through `npx` rather than as a dependency. It builds its output
+> with the TypeScript compiler's AST factory, which exists in TypeScript 5 but not in the 7
+> this project uses; installed locally it resolves to the wrong one and crashes.
 
 ## Architecture
 
@@ -283,6 +325,37 @@ Interactive docs: http://127.0.0.1:8000/docs
 
 ---
 
+## Deploying
+
+The image is self-contained: one process serves the API and the built frontend, listens on
+`$PORT` when the platform sets one, and answers `/healthz` for health checks.
+
+```bash
+docker build -t ubf .
+docker run -p 8000:8000 -v ubf-data:/data --env-file backend/.env ubf
+```
+
+Anywhere that runs a container works — Render, Railway, Fly.io, Google Cloud Run, a plain VPS.
+Set at least:
+
+| Variable | Why |
+|---|---|
+| `UBF_ADMIN_TOKEN` | Protects `/admin`. A random one is generated and logged if unset |
+| `UBF_CONTACT` | Wikimedia requires a contact in the User-Agent for banner photos |
+| `UBF_PUBLIC_BASE_URL` | Used in calendar invitations |
+| `UBF_CORS_ORIGINS` | Only if the frontend is served from another domain |
+| `UBF_YOUTUBE_API_KEY` | Optional: links YouTube sources to the exact match video |
+| `UBF_TRUST_PROXY_HEADERS` | `true` behind a proxy that sets `X-Forwarded-For`, so rate limiting sees real client IPs |
+
+**Storage.** SQLite lives at `/data/ubf.db`, so mount a persistent volume there. Without one
+the database resets on every deploy — survivable, since fixtures re-sync from ESPN, but banner
+lookups and link history start over. For more than one instance, move to Postgres with
+`UBF_DATABASE_URL=postgresql+asyncpg://…` (`requirements-postgres.txt`) — the in-process cache
+and rate limiter are per-instance, so they want Redis before scaling out too.
+
+**Before going live,** read the Compliance section. Fixtures come from an undocumented ESPN
+endpoint that is fine for development but is not a licensed feed.
+
 ## Security (PRD §47)
 
 - **SSRF guard** (`resolver/ssrf.py`) on every outbound request for links *and* source listings: http/https only, no embedded credentials, ports 80/443, and any host resolving to loopback, RFC1918, link-local (incl. `169.254.169.254` metadata), CGNAT, multicast, reserved or IPv4-mapped/6to4/Teredo-wrapped private space is refused. **Every redirect hop is re-checked**, and the connected peer IP is verified after connect to narrow the DNS-rebinding window. The checker runs with `trust_env=False` so proxies can't hide the peer. For production, also run it behind an egress firewall. The only exemption is the backend's own `host:port` in demo mode (or what you list in `UBF_RESOLVER_ALLOW_HOSTS`).
@@ -314,7 +387,6 @@ The platform is built to prefer official APIs and licensed destinations. The bun
 **Not in this MVP:**
 
 - **Redis:** the cache and rate limiter are in-process. Fine for one API worker; move them to Redis before scaling out.
-- **Playwright:** not wired in. A connector that needs a browser for ordinary page navigation can add it inside its own adapter.
 - **Alembic migrations:** tables are created with `create_all`. Add Alembic before the schema changes in production.
 - **Server-side rendering:** match, team and competition pages have crawlable URLs and per-page titles and descriptions, but this is a client-rendered SPA. Use SSR or prerendering if SEO matters.
 - **Accounts:** followed teams, language, time zone, country and theme live in the browser, so they don't

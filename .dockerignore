@@ -1,0 +1,29 @@
+# Keep the build context small and secrets out of the image.
+**/.venv/
+**/node_modules/
+**/__pycache__/
+**/*.pyc
+
+# Secrets and local state
+**/.env
+**/*.env.local
+**/*.db
+**/*.db-wal
+**/*.db-shm
+
+# Build output - the image builds its own
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# Test and tooling output
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+.github/
+.git/
+.kilo/
+
+# Docs and editor files
+*.md
+.vscode/
+.idea/

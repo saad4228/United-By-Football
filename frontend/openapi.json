@@ -1,0 +1,3464 @@
+{
+  "components": {
+    "schemas": {
+      "CompetitionOut": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_major": {
+            "title": "Is Major",
+            "type": "boolean"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "national_teams": {
+            "default": false,
+            "title": "National Teams",
+            "type": "boolean"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "code",
+          "name",
+          "short_name",
+          "country",
+          "logo_url",
+          "is_major"
+        ],
+        "title": "CompetitionOut",
+        "type": "object"
+      },
+      "CompetitionWithCounts": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_major": {
+            "title": "Is Major",
+            "type": "boolean"
+          },
+          "live_count": {
+            "title": "Live Count",
+            "type": "integer"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "national_teams": {
+            "default": false,
+            "title": "National Teams",
+            "type": "boolean"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "upcoming_count": {
+            "title": "Upcoming Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "code",
+          "name",
+          "short_name",
+          "country",
+          "logo_url",
+          "is_major",
+          "live_count",
+          "upcoming_count"
+        ],
+        "title": "CompetitionWithCounts",
+        "type": "object"
+      },
+      "EventOut": {
+        "properties": {
+          "assist": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assist"
+          },
+          "kind": {
+            "enum": [
+              "goal",
+              "own_goal",
+              "penalty_goal",
+              "missed_penalty",
+              "yellow",
+              "red",
+              "sub",
+              "period"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "minute": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minute"
+          },
+          "player": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Player"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "side": {
+            "anyOf": [
+              {
+                "enum": [
+                  "home",
+                  "away"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Side"
+          }
+        },
+        "required": [
+          "kind",
+          "minute",
+          "side"
+        ],
+        "title": "EventOut",
+        "type": "object"
+      },
+      "Featured": {
+        "properties": {
+          "match": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mode": {
+            "enum": [
+              "live",
+              "next",
+              "always_on"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "mode",
+          "match"
+        ],
+        "title": "Featured",
+        "type": "object"
+      },
+      "FormGame": {
+        "properties": {
+          "date": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "home": {
+            "title": "Home",
+            "type": "boolean"
+          },
+          "opponent": {
+            "title": "Opponent",
+            "type": "string"
+          },
+          "result": {
+            "enum": [
+              "W",
+              "D",
+              "L"
+            ],
+            "title": "Result",
+            "type": "string"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          }
+        },
+        "required": [
+          "result",
+          "score",
+          "opponent",
+          "home",
+          "date"
+        ],
+        "title": "FormGame",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HomeOut": {
+        "properties": {
+          "competitions": {
+            "items": {
+              "$ref": "#/components/schemas/CompetitionWithCounts"
+            },
+            "title": "Competitions",
+            "type": "array"
+          },
+          "demo_mode": {
+            "title": "Demo Mode",
+            "type": "boolean"
+          },
+          "featured": {
+            "$ref": "#/components/schemas/Featured"
+          },
+          "live": {
+            "items": {
+              "$ref": "#/components/schemas/MatchOut"
+            },
+            "title": "Live",
+            "type": "array"
+          },
+          "next_matches": {
+            "items": {
+              "$ref": "#/components/schemas/MatchOut"
+            },
+            "title": "Next Matches",
+            "type": "array"
+          },
+          "popular_teams": {
+            "items": {
+              "$ref": "#/components/schemas/TeamOut"
+            },
+            "title": "Popular Teams",
+            "type": "array"
+          },
+          "server_time": {
+            "format": "date-time",
+            "title": "Server Time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "server_time",
+          "demo_mode",
+          "featured",
+          "live",
+          "next_matches",
+          "competitions",
+          "popular_teams"
+        ],
+        "title": "HomeOut",
+        "type": "object"
+      },
+      "LineupOut": {
+        "properties": {
+          "formation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formation"
+          },
+          "lines": {
+            "anyOf": [
+              {
+                "items": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlayerOut"
+                  },
+                  "type": "array"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lines"
+          },
+          "starters": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Starters",
+            "type": "array"
+          },
+          "subs": {
+            "items": {
+              "$ref": "#/components/schemas/PlayerOut"
+            },
+            "title": "Subs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "formation",
+          "lines",
+          "starters",
+          "subs"
+        ],
+        "title": "LineupOut",
+        "type": "object"
+      },
+      "MatchDetailsOut": {
+        "properties": {
+          "attendance": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attendance"
+          },
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "events": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/EventOut"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "form": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "items": {
+                    "$ref": "#/components/schemas/FormGame"
+                  },
+                  "type": "array"
+                },
+                "propertyNames": {
+                  "enum": [
+                    "home",
+                    "away"
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Form"
+          },
+          "lineups": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/LineupOut"
+                },
+                "propertyNames": {
+                  "enum": [
+                    "home",
+                    "away"
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lineups"
+          },
+          "stats": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/StatOut"
+            },
+            "title": "Stats",
+            "type": "array"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "MatchDetailsOut",
+        "type": "object"
+      },
+      "MatchOut": {
+        "properties": {
+          "away": {
+            "$ref": "#/components/schemas/TeamOut"
+          },
+          "competition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompetitionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "home": {
+            "$ref": "#/components/schemas/TeamOut"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "is_live": {
+            "title": "Is Live",
+            "type": "boolean"
+          },
+          "kickoff_time": {
+            "format": "date-time",
+            "title": "Kickoff Time",
+            "type": "string"
+          },
+          "minute": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minute"
+          },
+          "minute_display": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minute Display"
+          },
+          "referee": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Referee"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Score"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "sources": {
+            "$ref": "#/components/schemas/SourceSummary"
+          },
+          "status": {
+            "enum": [
+              "scheduled",
+              "live",
+              "halftime",
+              "finished",
+              "postponed",
+              "suspended",
+              "cancelled"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "venue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Venue"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "status",
+          "is_live",
+          "minute",
+          "minute_display",
+          "kickoff_time",
+          "home",
+          "away",
+          "score",
+          "competition",
+          "venue",
+          "referee",
+          "sources"
+        ],
+        "title": "MatchOut",
+        "type": "object"
+      },
+      "MatchPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MatchOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "MatchPage",
+        "type": "object"
+      },
+      "MatchSources": {
+        "properties": {
+          "checked_at": {
+            "format": "date-time",
+            "title": "Checked At",
+            "type": "string"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SourceLinkOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "match_id": {
+            "title": "Match Id",
+            "type": "integer"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/SourceSummary"
+          }
+        },
+        "required": [
+          "match_id",
+          "checked_at",
+          "summary",
+          "items"
+        ],
+        "title": "MatchSources",
+        "type": "object"
+      },
+      "MetaOut": {
+        "properties": {
+          "demo_mode": {
+            "title": "Demo Mode",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "refresh_seconds": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Refresh Seconds",
+            "type": "object"
+          },
+          "server_time": {
+            "format": "date-time",
+            "title": "Server Time",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "version",
+          "demo_mode",
+          "server_time",
+          "refresh_seconds"
+        ],
+        "title": "MetaOut",
+        "type": "object"
+      },
+      "PhotoOut": {
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          },
+          "license": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License"
+          },
+          "license_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "License Url"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "page",
+          "subject",
+          "author",
+          "license",
+          "license_url"
+        ],
+        "title": "PhotoOut",
+        "type": "object"
+      },
+      "PlayerOut": {
+        "properties": {
+          "goals": {
+            "default": 0,
+            "title": "Goals",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Number"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          },
+          "red": {
+            "default": false,
+            "title": "Red",
+            "type": "boolean"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "subbed_in": {
+            "default": false,
+            "title": "Subbed In",
+            "type": "boolean"
+          },
+          "subbed_out": {
+            "default": false,
+            "title": "Subbed Out",
+            "type": "boolean"
+          },
+          "yellow": {
+            "default": false,
+            "title": "Yellow",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "PlayerOut",
+        "type": "object"
+      },
+      "Reliability": {
+        "properties": {
+          "checks": {
+            "title": "Checks",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "uptime_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uptime Pct"
+          }
+        },
+        "required": [
+          "label",
+          "uptime_pct",
+          "checks"
+        ],
+        "title": "Reliability",
+        "type": "object"
+      },
+      "Score": {
+        "properties": {
+          "away": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Away"
+          },
+          "home": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Home"
+          }
+        },
+        "required": [
+          "home",
+          "away"
+        ],
+        "title": "Score",
+        "type": "object"
+      },
+      "SearchOut": {
+        "properties": {
+          "competitions": {
+            "items": {
+              "$ref": "#/components/schemas/CompetitionOut"
+            },
+            "title": "Competitions",
+            "type": "array"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/MatchOut"
+            },
+            "title": "Matches",
+            "type": "array"
+          },
+          "query": {
+            "title": "Query",
+            "type": "string"
+          },
+          "teams": {
+            "items": {
+              "$ref": "#/components/schemas/TeamOut"
+            },
+            "title": "Teams",
+            "type": "array"
+          }
+        },
+        "required": [
+          "query",
+          "teams",
+          "competitions",
+          "matches"
+        ],
+        "title": "SearchOut",
+        "type": "object"
+      },
+      "SourceInfo": {
+        "properties": {
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "reliability": {
+            "$ref": "#/components/schemas/Reliability"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "type",
+          "domain",
+          "reliability"
+        ],
+        "title": "SourceInfo",
+        "type": "object"
+      },
+      "SourceLinkOut": {
+        "properties": {
+          "access": {
+            "anyOf": [
+              {
+                "enum": [
+                  "free",
+                  "free_account",
+                  "licence",
+                  "subscription"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access"
+          },
+          "available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available"
+          },
+          "confirmed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed"
+          },
+          "coverage": {
+            "anyOf": [
+              {
+                "enum": [
+                  "all",
+                  "selected"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coverage"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "health": {
+            "enum": [
+              "working",
+              "checking",
+              "unverified",
+              "offline"
+            ],
+            "title": "Health",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "last_checked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Checked At"
+          },
+          "last_ok_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Ok At"
+          },
+          "link_type": {
+            "title": "Link Type",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "one_click": {
+            "default": false,
+            "title": "One Click",
+            "type": "boolean"
+          },
+          "quality": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quality"
+          },
+          "redirect_hops": {
+            "title": "Redirect Hops",
+            "type": "integer"
+          },
+          "regions": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Regions"
+          },
+          "response_time_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Time Ms"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceInfo"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "watch_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Watch Url"
+          }
+        },
+        "required": [
+          "id",
+          "health",
+          "status",
+          "error_code",
+          "message",
+          "label",
+          "link_type",
+          "language",
+          "quality",
+          "last_checked_at",
+          "last_ok_at",
+          "response_time_ms",
+          "redirect_hops",
+          "watch_url",
+          "source"
+        ],
+        "title": "SourceLinkOut",
+        "type": "object"
+      },
+      "SourcePatch": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "title": "SourcePatch",
+        "type": "object"
+      },
+      "SourceSummary": {
+        "properties": {
+          "checking": {
+            "default": 0,
+            "title": "Checking",
+            "type": "integer"
+          },
+          "offline": {
+            "default": 0,
+            "title": "Offline",
+            "type": "integer"
+          },
+          "top": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TopSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total": {
+            "default": 0,
+            "title": "Total",
+            "type": "integer"
+          },
+          "unverified": {
+            "default": 0,
+            "title": "Unverified",
+            "type": "integer"
+          },
+          "working": {
+            "default": 0,
+            "title": "Working",
+            "type": "integer"
+          }
+        },
+        "title": "SourceSummary",
+        "type": "object"
+      },
+      "StatOut": {
+        "properties": {
+          "away": {
+            "title": "Away",
+            "type": "number"
+          },
+          "home": {
+            "title": "Home",
+            "type": "number"
+          },
+          "key": {
+            "enum": [
+              "possession",
+              "shots",
+              "shots_on_target",
+              "corners",
+              "passes",
+              "pass_accuracy",
+              "fouls",
+              "offsides",
+              "saves",
+              "yellow_cards",
+              "red_cards"
+            ],
+            "title": "Key",
+            "type": "string"
+          },
+          "unit": {
+            "default": "",
+            "enum": [
+              "",
+              "%"
+            ],
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "home",
+          "away"
+        ],
+        "title": "StatOut",
+        "type": "object"
+      },
+      "TableGroup": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/TableRow"
+            },
+            "title": "Rows",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "rows"
+        ],
+        "title": "TableGroup",
+        "type": "object"
+      },
+      "TableNote": {
+        "properties": {
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "color"
+        ],
+        "title": "TableNote",
+        "type": "object"
+      },
+      "TableOut": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "groups": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/TableGroup"
+            },
+            "title": "Groups",
+            "type": "array"
+          },
+          "legend": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/TableNote"
+            },
+            "title": "Legend",
+            "type": "array"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "TableOut",
+        "type": "object"
+      },
+      "TableRow": {
+        "properties": {
+          "drawn": {
+            "title": "Drawn",
+            "type": "integer"
+          },
+          "goal_difference": {
+            "title": "Goal Difference",
+            "type": "integer"
+          },
+          "goals_against": {
+            "title": "Goals Against",
+            "type": "integer"
+          },
+          "goals_for": {
+            "title": "Goals For",
+            "type": "integer"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "lost": {
+            "title": "Lost",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TableNote"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "played": {
+            "title": "Played",
+            "type": "integer"
+          },
+          "points": {
+            "title": "Points",
+            "type": "integer"
+          },
+          "rank": {
+            "title": "Rank",
+            "type": "integer"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "team": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TeamOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "won": {
+            "title": "Won",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "rank",
+          "name",
+          "short_name",
+          "logo_url",
+          "team",
+          "played",
+          "won",
+          "drawn",
+          "lost",
+          "goals_for",
+          "goals_against",
+          "goal_difference",
+          "points"
+        ],
+        "title": "TableRow",
+        "type": "object"
+      },
+      "TeamDetailOut": {
+        "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "media": {
+            "$ref": "#/components/schemas/TeamMediaOut"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "primary_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Color"
+          },
+          "secondary_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secondary Color"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "tla": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tla"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "short_name",
+          "tla",
+          "logo_url",
+          "country",
+          "primary_color",
+          "secondary_color",
+          "media"
+        ],
+        "title": "TeamDetailOut",
+        "type": "object"
+      },
+      "TeamMediaOut": {
+        "properties": {
+          "capacity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capacity"
+          },
+          "founded": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Founded"
+          },
+          "photo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PhotoOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stadium": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stadium"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "ok",
+              "partial",
+              "none",
+              "error"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "website": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "TeamMediaOut",
+        "type": "object"
+      },
+      "TeamOut": {
+        "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "logo_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logo Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "primary_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Color"
+          },
+          "secondary_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Secondary Color"
+          },
+          "short_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Short Name"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "tla": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tla"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "short_name",
+          "tla",
+          "logo_url",
+          "country",
+          "primary_color",
+          "secondary_color"
+        ],
+        "title": "TeamOut",
+        "type": "object"
+      },
+      "TopSource": {
+        "properties": {
+          "access": {
+            "anyOf": [
+              {
+                "enum": [
+                  "free",
+                  "free_account",
+                  "licence",
+                  "subscription"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Access"
+          },
+          "available": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Available"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "one_click": {
+            "default": false,
+            "title": "One Click",
+            "type": "boolean"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          },
+          "watch_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Watch Url"
+          }
+        },
+        "required": [
+          "label",
+          "type"
+        ],
+        "title": "TopSource",
+        "type": "object"
+      },
+      "ValidateRequest": {
+        "properties": {
+          "force": {
+            "default": false,
+            "title": "Force",
+            "type": "boolean"
+          },
+          "link_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "maxItems": 500,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link Ids"
+          }
+        },
+        "title": "ValidateRequest",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "United By Football API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/admin/check": {
+      "get": {
+        "operationId": "check_api_admin_check_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Check Api Admin Check Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/links": {
+      "get": {
+        "operationId": "links_api_admin_links_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "health",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(working|checking|unverified|offline|expired)$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Health"
+            }
+          },
+          {
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Links Api Admin Links Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Links",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/matches": {
+      "get": {
+        "operationId": "admin_matches_api_admin_matches_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(live|upcoming|finished)$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Admin Matches",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/overview": {
+      "get": {
+        "operationId": "overview_api_admin_overview_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Overview Api Admin Overview Get",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Overview",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/runs": {
+      "get": {
+        "operationId": "runs_api_admin_runs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "job",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(fixtures|discovery|health)$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Job"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Runs Api Admin Runs Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Runs",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/sources": {
+      "get": {
+        "operationId": "sources_api_admin_sources_get",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "title": "Response Sources Api Admin Sources Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Sources",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/admin/sources/{key}": {
+      "patch": {
+        "operationId": "patch_source_api_admin_sources__key__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourcePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Patch Source Api Admin Sources  Key  Patch",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Patch Source",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/competitions": {
+      "get": {
+        "operationId": "competitions_api_competitions_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CompetitionWithCounts"
+                  },
+                  "title": "Response Competitions Api Competitions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Competitions"
+      }
+    },
+    "/api/competitions/{slug}": {
+      "get": {
+        "operationId": "competition_detail_api_competitions__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompetitionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Competition Detail"
+      }
+    },
+    "/api/competitions/{slug}/table": {
+      "get": {
+        "operationId": "competition_table_api_competitions__slug__table_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TableOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Competition Table"
+      }
+    },
+    "/api/home": {
+      "get": {
+        "operationId": "home_api_home_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Home"
+      }
+    },
+    "/api/links/validate": {
+      "post": {
+        "operationId": "validate_links_api_links_validate_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/ValidateRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Validate Links Api Links Validate Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Validate Links",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/matches": {
+      "get": {
+        "operationId": "matches_api_matches_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "default": "all",
+              "enum": [
+                "live",
+                "upcoming",
+                "finished",
+                "all"
+              ],
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "competition",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Competition"
+            }
+          },
+          {
+            "in": "query",
+            "name": "team",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Team"
+            }
+          },
+          {
+            "description": "Comma-separated team slugs",
+            "in": "query",
+            "name": "teams",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 2500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma-separated team slugs",
+              "title": "Teams"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 10000,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Matches"
+      }
+    },
+    "/api/matches/live": {
+      "get": {
+        "operationId": "live_matches_api_matches_live_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MatchOut"
+                  },
+                  "title": "Response Live Matches Api Matches Live Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Live Matches"
+      }
+    },
+    "/api/matches/sync": {
+      "post": {
+        "operationId": "sync_matches_api_matches_sync_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Sync Matches Api Matches Sync Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Sync Matches",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/matches/upcoming": {
+      "get": {
+        "operationId": "upcoming_matches_api_matches_upcoming_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "default": 7,
+              "maximum": 14,
+              "minimum": 1,
+              "title": "Days",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "competition",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Competition"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MatchOut"
+                  },
+                  "title": "Response Upcoming Matches Api Matches Upcoming Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upcoming Matches"
+      }
+    },
+    "/api/matches/{ref}": {
+      "get": {
+        "operationId": "match_detail_api_matches__ref__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Match Detail"
+      }
+    },
+    "/api/matches/{ref}/details": {
+      "get": {
+        "description": "Line-ups, key events, team stats and recent form, when the fixture feed has them.",
+        "operationId": "match_details_api_matches__ref__details_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchDetailsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Match Details"
+      }
+    },
+    "/api/matches/{ref}/sources": {
+      "get": {
+        "operationId": "match_sources_api_matches__ref__sources_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ref",
+            "required": true,
+            "schema": {
+              "title": "Ref",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MatchSources"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Match Sources"
+      }
+    },
+    "/api/meta": {
+      "get": {
+        "operationId": "meta_api_meta_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Meta"
+      }
+    },
+    "/api/search": {
+      "get": {
+        "operationId": "search_api_search_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 60,
+              "minLength": 1,
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Za-z]{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Search"
+      }
+    },
+    "/api/sources/run": {
+      "post": {
+        "operationId": "run_sources_api_sources_run_post",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Source"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-admin-token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response Run Sources Api Sources Run Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Run Sources",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/teams": {
+      "get": {
+        "operationId": "teams_api_teams_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "competition",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 80,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Competition"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TeamOut"
+                  },
+                  "title": "Response Teams Api Teams Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Teams"
+      }
+    },
+    "/api/teams/{slug}": {
+      "get": {
+        "operationId": "team_detail_api_teams__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeamDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Team Detail"
+      }
+    }
+  }
+}

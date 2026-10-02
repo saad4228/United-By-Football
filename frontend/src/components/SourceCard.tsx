@@ -10,7 +10,7 @@ import { Button } from "./UI";
 
 const accessLabel = (access: Access) => t(`access.${access}` as MessageKey);
 
-export function regionLabel(regions: string[] | null): string | null {
+export function regionLabel(regions: string[] | null | undefined): string | null {
   if (!regions?.length) return null;
   const excluded = regions.filter((r) => r.startsWith("!")).map((r) => countryName(r.slice(1)));
   if (regions.includes("*")) return excluded.length ? t("source.worldwideExcept", { list: excluded.join(", ") }) : t("source.worldwide");

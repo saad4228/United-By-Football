@@ -53,6 +53,11 @@ jobs:
         run: |
           npm ci
           npm run build
+      - name: API types match the backend
+        working-directory: frontend
+        run: |
+          npm run types:api
+          git diff --exit-code -- openapi.json src/lib/api-schema.ts             || (echo "::error::API types are stale - run 'npm run types:api' and commit the result" && exit 1)
       - name: Install Chromium
         working-directory: frontend
         run: npx playwright install --with-deps chromium

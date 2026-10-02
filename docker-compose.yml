@@ -1,0 +1,24 @@
+# Run the whole app with: docker compose up --build
+# Then open http://localhost:8000
+services:
+  ubf:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Everything has a sensible default; these are the ones worth setting locally.
+      UBF_ESPN_ENABLED: "true"
+      UBF_MEDIA_ENABLED: "true"
+      UBF_DEMO_MODE: "false"
+      UBF_PUBLIC_BASE_URL: "http://localhost:8000"
+      # Wikimedia asks for a contact in the User-Agent; YouTube key is optional.
+      UBF_CONTACT: "${UBF_CONTACT:-https://github.com/saad4228/United-By-Football}"
+      UBF_YOUTUBE_API_KEY: "${UBF_YOUTUBE_API_KEY:-}"
+      UBF_ADMIN_TOKEN: "${UBF_ADMIN_TOKEN:-}"
+    volumes:
+      # Keeps the database between restarts.
+      - ubf-data:/data
+    restart: unless-stopped
+
+volumes:
+  ubf-data:

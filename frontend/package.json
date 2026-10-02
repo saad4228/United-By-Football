@@ -8,7 +8,8 @@
     "build": "tsc -p tsconfig.json && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "types:api": "node scripts/gen-types.mjs"
   },
   "dependencies": {
     "@fontsource/barlow": "^5.3.0",

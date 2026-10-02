@@ -4,6 +4,15 @@ from typing import Literal
 from pydantic import BaseModel, field_validator
 
 Health = Literal["working", "checking", "unverified", "offline"]
+MatchStatus = Literal["scheduled", "live", "halftime", "finished", "postponed", "suspended", "cancelled"]
+Access = Literal["free", "free_account", "licence", "subscription"]
+Coverage = Literal["all", "selected"]
+MediaStatus = Literal["pending", "ok", "partial", "none", "error"]
+# The team stats we surface, in the order the match page shows them.
+StatKey = Literal[
+    "possession", "shots", "shots_on_target", "corners", "passes", "pass_accuracy",
+    "fouls", "offsides", "saves", "yellow_cards", "red_cards",
+]
 
 
 class TeamOut(BaseModel):
@@ -28,7 +37,7 @@ class PhotoOut(BaseModel):
 
 
 class TeamMediaOut(BaseModel):
-    status: str  # pending | ok | partial | none | error
+    status: MediaStatus
     founded: int | None = None
     stadium: str | None = None
     capacity: int | None = None
@@ -65,7 +74,7 @@ class Score(BaseModel):
 class TopSource(BaseModel):
     label: str
     type: str
-    access: str | None = None
+    access: Access | None = None
     available: bool | None = None
     one_click: bool = False
     watch_url: str | None = None
@@ -83,7 +92,7 @@ class SourceSummary(BaseModel):
 class MatchOut(BaseModel):
     id: int
     slug: str
-    status: str
+    status: MatchStatus
     is_live: bool
     minute: int | None
     minute_display: str | None
@@ -135,8 +144,8 @@ class SourceLinkOut(BaseModel):
     watch_url: str | None
     source: SourceInfo
     regions: list[str] | None = None
-    access: str | None = None
-    coverage: str | None = None
+    access: Access | None = None
+    coverage: Coverage | None = None
     notes: str | None = None
     confirmed: bool | None = None
     available: bool | None = None  # for the viewer's country; None when unknown
@@ -220,7 +229,7 @@ class EventOut(BaseModel):
 
 
 class StatOut(BaseModel):
-    key: str
+    key: StatKey
     home: float
     away: float
     unit: Literal["", "%"] = ""
