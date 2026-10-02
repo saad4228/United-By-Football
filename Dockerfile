@@ -25,8 +25,10 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-COPY backend/requirements.txt backend/requirements.txt
-RUN pip install --no-cache-dir -r backend/requirements.txt
+# The Postgres driver ships too, so UBF_DATABASE_URL can point at either SQLite or Postgres
+# without rebuilding. It is a few megabytes and saves a surprise at deploy time.
+COPY backend/requirements.txt backend/requirements-postgres.txt backend/
+RUN pip install --no-cache-dir -r backend/requirements.txt -r backend/requirements-postgres.txt
 
 COPY backend/ backend/
 # app/main.py resolves the frontend as ../../frontend/dist, so keep that shape.
