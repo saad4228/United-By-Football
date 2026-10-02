@@ -111,10 +111,10 @@ test("the hidden page opens from the search phrase and stays hidden otherwise", 
 
   await page.goto("/");
   await page.keyboard.press("/");
-  await page.getByRole("dialog", { name: "Search" }).getByRole("textbox").fill("Messi Bhai Absolute Tabahi");
+  await page.getByRole("dialog", { name: "Search" }).getByRole("textbox").fill("Secret Vault 000");
   await expect(page).toHaveURL(/\/tabahi$/);
   await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
-  expect(searches.filter((u) => /messi|tabahi/i.test(u))).toEqual([]);
+  expect(searches.filter((u) => /secret|vault/i.test(u))).toEqual([]);
 
   // Stays open on later visits.
   await page.goto("/tabahi");
