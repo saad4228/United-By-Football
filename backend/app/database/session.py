@@ -1,12 +1,40 @@
 from collections.abc import AsyncIterator
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from sqlalchemy import event, inspect, text
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
 
 from app.database.models import Base
 
+# Managed Postgres providers hand out libpq-style URLs. SQLAlchemy 2.1 reads a bare
+# "postgresql://" as the psycopg driver, which this project doesn't ship, and asyncpg rejects
+# libpq's query parameters outright. Rather than make every deployment remember to rewrite the
+# string, accept what the provider gives and normalise it here.
+_LIBPQ_ONLY = {"sslmode", "channel_binding", "target_session_attrs", "gssencmode", "options"}
+
+
+def normalize_database_url(url: str) -> str:
+    """Accept a Postgres URL in any of the forms a host might give, and return one asyncpg
+    understands. SQLite URLs and anything already explicit are passed through untouched.
+
+    asyncpg negotiates TLS on its own, so dropping `sslmode` does not make the connection
+    insecure - a server that requires TLS still gets it.
+    """
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            url = "postgresql+asyncpg://" + url[len(prefix):]
+            break
+    if not url.startswith("postgresql+asyncpg://"):
+        return url
+    parts = urlsplit(url)
+    if not parts.query:
+        return url
+    kept = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k.lower() not in _LIBPQ_ONLY]
+    return urlunsplit(parts._replace(query=urlencode(kept)))
+
 
 def create_engine(database_url: str) -> AsyncEngine:
+    database_url = normalize_database_url(database_url)
     is_sqlite = database_url.startswith("sqlite")
     engine = create_async_engine(
         database_url,
