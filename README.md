@@ -1,5 +1,7 @@
 # United By Football
 
+### ▶ [united-by-football.onrender.com](https://united-by-football.onrender.com)
+
 **Never miss the kickoff.** A football match discovery and source aggregation platform: one match → every available viewing source → one clean interface.
 
 Designed and built by **Mohammad Saad**.
@@ -55,7 +57,7 @@ Or build the frontend once (`npm run build`) and the backend serves it at **http
 **Tests:**
 
 ```bash
-cd backend && .venv/Scripts/python -m pytest        # 118 backend tests, no network access needed
+cd backend && .venv/Scripts/python -m pytest        # 127 backend tests, no network access needed
 cd frontend && npm run build && npm run test:e2e    # 26 browser tests: desktop, Android and iPhone sizes
 ```
 
@@ -346,6 +348,19 @@ Set at least:
 | `UBF_CORS_ORIGINS` | Only if the frontend is served from another domain |
 | `UBF_YOUTUBE_API_KEY` | Optional: links YouTube sources to the exact match video |
 | `UBF_TRUST_PROXY_HEADERS` | `true` behind a proxy that sets `X-Forwarded-For`, so rate limiting sees real client IPs |
+
+**Connection strings.** `UBF_DATABASE_URL` accepts whatever a provider hands you — `postgres://`,
+`postgresql://` or `postgresql+asyncpg://`. SQLAlchemy 2.1 would otherwise read the first two as
+the psycopg driver, which this image doesn't carry, and asyncpg rejects libpq query parameters
+like `sslmode`. Both are normalised at startup, so a string pasted from Supabase, Render or
+Heroku works unchanged.
+
+**The first sync is slow against a hosted database, and that is expected.** Writing the opening
+~780 fixtures means thousands of round trips, so against a managed Postgres in another region it
+can take 20–30 minutes before matches appear, during which `/api/matches` returns an empty list
+and the admin overview shows no completed fixture run. It is committing, not stuck. Later syncs
+only fetch what changed — single figures, in seconds. Team banner photos trail further behind,
+since the Wikimedia lookups are deliberately rate-limited.
 
 **Storage.** SQLite lives at `/data/ubf.db`, so mount a persistent volume there. Without one
 the database resets on every deploy — survivable, since fixtures re-sync from ESPN, but banner
