@@ -113,12 +113,12 @@ test("the hidden page opens from the search phrase and stays hidden otherwise", 
   await page.keyboard.press("/");
   await page.getByRole("dialog", { name: "Search" }).getByRole("textbox").fill("Messi Bhai Absolute Tabahi");
   await expect(page).toHaveURL(/\/tabahi$/);
-  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
   expect(searches.filter((u) => /messi|tabahi/i.test(u))).toEqual([]);
 
   // Stays open on later visits.
   await page.goto("/tabahi");
-  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
 });
 
 test("ten clicks on the sources clock opens the hidden page", async ({ page }) => {
@@ -138,8 +138,17 @@ test("ten clicks on the sources clock opens the hidden page", async ({ page }) =
 
   await clock.click();
   await expect(page).toHaveURL(/\/tabahi$/);
-  await expect(page.getByRole("heading", { name: /tabahi/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
   await expect(page.locator("main .grid > *")).toHaveCount(9);
+  // Every card points somewhere real, and external ones open safely in a new tab.
+  const hrefs = await page.locator("main .grid > a").evaluateAll((els) =>
+    els.map((e) => ({ href: e.getAttribute("href")!, rel: e.getAttribute("rel") ?? "" })),
+  );
+  expect(hrefs).toHaveLength(9);
+  for (const { href, rel } of hrefs) {
+    expect(href).toMatch(/^(https:\/\/|\/)/);
+    if (href.startsWith("https://")) expect(rel).toContain("noopener");
+  }
 });
 
 test("competition and team pages load", async ({ page }) => {

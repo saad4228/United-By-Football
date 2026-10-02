@@ -344,6 +344,23 @@ const fr: Messages = {
   "search.none": "Aucune équipe, aucun match ni aucune compétition ne correspond à « {q} ».",
   "search.all": "Tous les résultats pour « {q} »",
   "search.metaTitle": "Recherche : {q}",
+
+  // The hidden vault page.
+  "vault.eyebrow": "Vous l'avez trouvé",
+  "vault.title": "Le coffre secret",
+  "vault.intro": "Sept façons gratuites et officielles de regarder le football que presque personne ne trouve, et deux sur la fabrication de ce site.",
+  "vault.note": "Chaque chaîne a été vérifiée à partir de son propre programme publié. Les droits changent chaque saison ; si l'une a disparu, c'est le football.",
+  "vault.cazetv": "Tous les matchs de LaLiga, gratuits sur YouTube au Brésil. Un streamer a surenchéri sur la télévision traditionnelle.",
+  "vault.goat": "Libertadores et Sudamericana, gratuits dans 55 territoires — dont l'Inde, le Pakistan, le Bangladesh et le Sri Lanka.",
+  "vault.wsl": "Tous les matchs de la Women's Super League, gratuits dans le monde entier sur la chaîne de la ligue.",
+  "vault.concacaf": "La Ligue des nations, gratuite sur la chaîne de la confédération. Bloquée uniquement en Amérique du Nord et centrale.",
+  "vault.nwsl": "Tous les matchs de NWSL, gratuits hors des États-Unis. Une inscription, mais aucun paiement.",
+  "vault.jleague": "L'élite japonaise, gratuite partout sauf au Japon.",
+  "vault.golazo": "Une chaîne de football gratuite 24 h/24 aux États-Unis, sans aucun abonnement.",
+  "vault.codeTitle": "Le code",
+  "vault.code": "FastAPI et React, une architecture de connecteurs modulaire et 144 tests automatisés. Le tout en libre accès.",
+  "vault.sourcesTitle": "Comment les sources sont vérifiées",
+  "vault.sources": "Chaque lien est revérifié régulièrement, et signalé honnêtement lorsqu'il ne peut pas être vérifié.",
 };
 
 export default fr;

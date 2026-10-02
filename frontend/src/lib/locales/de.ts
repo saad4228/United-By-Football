@@ -344,6 +344,23 @@ const de: Messages = {
   "search.none": "Kein Team, Spiel oder Wettbewerb passt zu „{q}“.",
   "search.all": "Alle Ergebnisse für „{q}“",
   "search.metaTitle": "Suche: {q}",
+
+  // The hidden vault page.
+  "vault.eyebrow": "Gefunden",
+  "vault.title": "Geheimtresor",
+  "vault.intro": "Sieben kostenlose, offizielle Wege, Fußball zu schauen, die kaum jemand findet — und zwei dazu, wie diese Seite gebaut ist.",
+  "vault.note": "Jeder Kanal wurde anhand seines eigenen veröffentlichten Programms geprüft. Rechte wechseln jede Saison; wenn einer weg ist, ist das Fußball.",
+  "vault.cazetv": "Jedes LaLiga-Spiel, kostenlos auf YouTube in Brasilien. Ein Streamer hat das klassische Fernsehen überboten.",
+  "vault.goat": "Libertadores und Sudamericana, kostenlos in 55 Gebieten — darunter Indien, Pakistan, Bangladesch und Sri Lanka.",
+  "vault.wsl": "Jedes Spiel der Women's Super League, weltweit kostenlos auf dem Kanal der Liga.",
+  "vault.concacaf": "Die Nations League, kostenlos auf dem Kanal des Verbands. Nur in Nord- und Mittelamerika gesperrt.",
+  "vault.nwsl": "Jedes NWSL-Spiel, kostenlos außerhalb der USA. Registrierung nötig, Bezahlung nicht.",
+  "vault.jleague": "Japans erste Liga, überall kostenlos außer in Japan.",
+  "vault.golazo": "Ein kostenloser 24-Stunden-Fußballsender in den USA, ganz ohne Abo.",
+  "vault.codeTitle": "Der Code",
+  "vault.code": "FastAPI und React, eine modulare Connector-Architektur und 144 automatische Tests. Alles offen.",
+  "vault.sourcesTitle": "Wie Quellen geprüft werden",
+  "vault.sources": "Jeder Link wird regelmäßig neu geprüft und ehrlich gekennzeichnet, wenn er sich nicht bestätigen lässt.",
 };
 
 export default de;
