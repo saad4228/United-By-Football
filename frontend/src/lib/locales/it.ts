@@ -348,7 +348,7 @@ const it: Messages = {
   // The hidden vault page.
   "vault.eyebrow": "L'hai trovato",
   "vault.title": "Caveau segreto",
-  "vault.intro": "Sette modi gratuiti e ufficiali di guardare il calcio che quasi nessuno trova, più due su come è fatto questo sito.",
+  "vault.intro": "Nove modi gratuiti e ufficiali di guardare il calcio che quasi nessuno trova.",
   "vault.note": "Ogni canale è stato verificato sul suo palinsesto pubblicato. I diritti cambiano ogni stagione; se uno non c'è più, è il calcio.",
   "vault.cazetv": "Tutte le partite della Liga, gratis su YouTube in Brasile. Uno streamer ha superato l'offerta della TV tradizionale.",
   "vault.goat": "Libertadores e Sudamericana, gratis in 55 territori — tra cui India, Pakistan, Bangladesh e Sri Lanka.",
@@ -357,10 +357,9 @@ const it: Messages = {
   "vault.nwsl": "Tutte le partite della NWSL, gratis fuori dagli Stati Uniti. Serve registrarsi, non pagare.",
   "vault.jleague": "La massima serie giapponese, gratis ovunque tranne che in Giappone.",
   "vault.golazo": "Un canale di calcio gratuito 24 ore su 24 negli Stati Uniti, senza alcun abbonamento.",
-  "vault.codeTitle": "Il codice",
-  "vault.code": "FastAPI e React, un'architettura a connettori modulari e 144 test automatici. Tutto aperto.",
-  "vault.sourcesTitle": "Come si verificano le fonti",
-  "vault.sources": "Ogni link viene ricontrollato periodicamente, e segnalato con onestà quando non è verificabile.",
+  "vault.fta": "Le TV pubbliche europee trasmettono la propria nazionale. Apri la Nations League e scegli il tuo paese per vedere qual è la tua.",
+  "vault.uclTitle": "Champions League, gratis",
+  "vault.ucl": "Irlanda, Turchia, Belgio e Lussemburgo trasmettono in chiaro alcune partite ogni turno.",
 };
 
 export default it;

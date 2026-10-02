@@ -349,7 +349,7 @@ const pt: Messages = {
   // The hidden vault page.
   "vault.eyebrow": "Você encontrou",
   "vault.title": "Cofre secreto",
-  "vault.intro": "Sete formas gratuitas e oficiais de assistir futebol que quase ninguém encontra, e duas sobre como este site foi feito.",
+  "vault.intro": "Nove formas gratuitas e oficiais de assistir futebol que quase ninguém encontra.",
   "vault.note": "Cada canal foi verificado na própria programação publicada. Os direitos mudam a cada temporada; se algum saiu do ar, é o futebol.",
   "vault.cazetv": "Todos os jogos da LaLiga, de graça no YouTube no Brasil. Um streamer superou a TV tradicional na disputa pelos direitos.",
   "vault.goat": "Libertadores e Sudamericana, de graça em 55 territórios — entre eles Índia, Paquistão, Bangladesh e Sri Lanka.",
@@ -358,10 +358,9 @@ const pt: Messages = {
   "vault.nwsl": "Todos os jogos da NWSL, de graça fora dos Estados Unidos. Precisa de cadastro, mas não de pagamento.",
   "vault.jleague": "A elite do futebol japonês, de graça em todo lugar menos no Japão.",
   "vault.golazo": "Um canal de futebol gratuito 24 horas nos Estados Unidos, sem nenhuma assinatura.",
-  "vault.codeTitle": "O código",
-  "vault.code": "FastAPI e React, uma arquitetura de conectores em plug-in e 144 testes automatizados. Tudo aberto.",
-  "vault.sourcesTitle": "Como as fontes são verificadas",
-  "vault.sources": "Cada link é verificado de novo periodicamente, e informado com honestidade quando não dá para confirmar.",
+  "vault.fta": "As TVs públicas europeias transmitem a própria seleção. Abra a Liga das Nações e escolha seu país para ver qual é a sua.",
+  "vault.uclTitle": "Champions League, de graça",
+  "vault.ucl": "Irlanda, Turquia, Bélgica e Luxemburgo exibem jogos selecionados em TV aberta a cada rodada.",
 };
 
 export default pt;

@@ -4,8 +4,13 @@ import { SECRET_PATH, unlockSecret } from "../lib/secret";
 import { ClockIcon } from "./Icons";
 
 const CLICKS = 10;
-/** Clicks further apart than this start the count again, so it has to be deliberate. */
-const GAP_MS = 1500;
+/**
+ * Clicks further apart than this start the count again, so the sequence has to be deliberate
+ * rather than accumulated across a visit. Three seconds is still a long pause for someone
+ * clicking on purpose (real gaps are a few hundred milliseconds), while leaving enough headroom
+ * that a slow frame doesn't silently reset a genuine attempt.
+ */
+const GAP_MS = 3000;
 
 /**
  * The clock beside "Re-checked automatically" in a match's sources block. Ten clicks open the

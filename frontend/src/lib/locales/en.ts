@@ -349,7 +349,7 @@ const en = {
   // The hidden vault page.
   "vault.eyebrow": "You found it",
   "vault.title": "Secret Vault",
-  "vault.intro": "Seven free, official ways to watch football that most people never find — plus two about how this site works.",
+  "vault.intro": "Nine free, official ways to watch football that most people never find.",
   "vault.note": "Every channel here was verified against its own published schedule. Rights change each season; if one has moved on, that's football.",
   "vault.cazetv": "Every La Liga match, free on YouTube in Brazil. A streamer outbid traditional television for the rights.",
   "vault.goat": "Libertadores and Sudamericana, free across 55 territories — India, Pakistan, Bangladesh and Sri Lanka among them.",
@@ -358,10 +358,9 @@ const en = {
   "vault.nwsl": "Every NWSL match, free outside the United States. A sign-up, but no payment.",
   "vault.jleague": "Japan's top flight, free everywhere except Japan itself.",
   "vault.golazo": "A free twenty-four hour football channel in the United States, with no subscription at all.",
-  "vault.codeTitle": "The code",
-  "vault.code": "FastAPI and React, a plug-in connector architecture and 144 automated tests. All of it open.",
-  "vault.sourcesTitle": "How sources are checked",
-  "vault.sources": "Every link is re-checked on a schedule, and reported honestly when it can't be verified.",
+  "vault.fta": "Europe's free-to-air broadcasters each carry their own national team. Open the Nations League and set your country to see which one is yours.",
+  "vault.uclTitle": "Champions League, free",
+  "vault.ucl": "Ireland, Turkey, Belgium and Luxembourg show selected ties free-to-air every matchweek.",
 };
 
 export default en;

@@ -348,7 +348,7 @@ const de: Messages = {
   // The hidden vault page.
   "vault.eyebrow": "Gefunden",
   "vault.title": "Geheimtresor",
-  "vault.intro": "Sieben kostenlose, offizielle Wege, Fußball zu schauen, die kaum jemand findet — und zwei dazu, wie diese Seite gebaut ist.",
+  "vault.intro": "Neun kostenlose, offizielle Wege, Fußball zu schauen, die kaum jemand findet.",
   "vault.note": "Jeder Kanal wurde anhand seines eigenen veröffentlichten Programms geprüft. Rechte wechseln jede Saison; wenn einer weg ist, ist das Fußball.",
   "vault.cazetv": "Jedes LaLiga-Spiel, kostenlos auf YouTube in Brasilien. Ein Streamer hat das klassische Fernsehen überboten.",
   "vault.goat": "Libertadores und Sudamericana, kostenlos in 55 Gebieten — darunter Indien, Pakistan, Bangladesch und Sri Lanka.",
@@ -357,10 +357,9 @@ const de: Messages = {
   "vault.nwsl": "Jedes NWSL-Spiel, kostenlos außerhalb der USA. Registrierung nötig, Bezahlung nicht.",
   "vault.jleague": "Japans erste Liga, überall kostenlos außer in Japan.",
   "vault.golazo": "Ein kostenloser 24-Stunden-Fußballsender in den USA, ganz ohne Abo.",
-  "vault.codeTitle": "Der Code",
-  "vault.code": "FastAPI und React, eine modulare Connector-Architektur und 144 automatische Tests. Alles offen.",
-  "vault.sourcesTitle": "Wie Quellen geprüft werden",
-  "vault.sources": "Jeder Link wird regelmäßig neu geprüft und ehrlich gekennzeichnet, wenn er sich nicht bestätigen lässt.",
+  "vault.fta": "Europas öffentlich-rechtliche Sender zeigen die eigene Nationalmannschaft. Öffne die Nations League und wähle dein Land, um zu sehen, welcher es ist.",
+  "vault.uclTitle": "Champions League, kostenlos",
+  "vault.ucl": "Irland, die Türkei, Belgien und Luxemburg zeigen jede Spielwoche ausgewählte Partien frei empfangbar.",
 };
 
 export default de;

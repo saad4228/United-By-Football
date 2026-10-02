@@ -9,9 +9,9 @@ import { NotFoundPage } from "./DirectoryPages";
  * The hidden page, reached by ten clicks on a match's sources clock or by typing the phrase
  * into search.
  *
- * Seven genuinely free, official ways to watch football that are easy to miss, plus two
- * pointing at how the site itself works. Every channel here is also in the free-streams
- * registry, where it was verified against its own published schedule.
+ * Nine genuinely free, official ways to watch football that are easy to miss. Every one is
+ * also in the free-streams registry, where it was verified against the broadcaster's own
+ * published schedule.
  *
  * Brand names are proper nouns and stay untranslated, like team and competition names
  * everywhere else; the descriptions go through the locale files.
@@ -26,8 +26,10 @@ const CARDS: VaultCard[] = [
   { title: "NWSL+", blurb: "vault.nwsl", href: "https://plus.nwslsoccer.com/" },
   { title: "J.LEAGUE International", blurb: "vault.jleague", href: "https://www.youtube.com/@JLEAGUEInternational/streams" },
   { title: "CBS Sports Golazo", blurb: "vault.golazo", href: "https://www.cbssports.com/watch/cbs-sports-golazo-network" },
-  { titleKey: "vault.codeTitle", blurb: "vault.code", href: "https://github.com/saad4228/United-By-Football" },
-  { titleKey: "vault.sourcesTitle", blurb: "vault.sources", href: "/about#sources" },
+  // Both of these are several broadcasters at once, so they open the competition on this
+  // site, where the country picker shows whichever one applies to the viewer.
+  { title: "RTVE · ITVX · BBC", blurb: "vault.fta", href: "/competition/uefa-nations-league" },
+  { titleKey: "vault.uclTitle", blurb: "vault.ucl", href: "/competition/champions-league" },
 ];
 
 const CARD =
