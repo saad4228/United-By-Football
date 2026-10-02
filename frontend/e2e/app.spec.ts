@@ -100,7 +100,7 @@ test("search opens with the / key and finds teams", async ({ page }) => {
 
 test("the hidden page opens from the search phrase and stays hidden otherwise", async ({ page }) => {
   // Unknown URL until it has been found.
-  await page.goto("/tabahi");
+  await page.goto("/vault");
   await expect(page.getByRole("heading", { name: "Off target" })).toBeVisible();
 
   // The phrase must never reach the search API.
@@ -112,12 +112,12 @@ test("the hidden page opens from the search phrase and stays hidden otherwise", 
   await page.goto("/");
   await page.keyboard.press("/");
   await page.getByRole("dialog", { name: "Search" }).getByRole("textbox").fill("Secret Vault 000");
-  await expect(page).toHaveURL(/\/tabahi$/);
+  await expect(page).toHaveURL(/\/vault$/);
   await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
   expect(searches.filter((u) => /secret|vault/i.test(u))).toEqual([]);
 
   // Stays open on later visits.
-  await page.goto("/tabahi");
+  await page.goto("/vault");
   await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
 });
 
@@ -134,10 +134,10 @@ test("ten clicks on the sources clock opens the hidden page", async ({ page }) =
   // Nine deliberate clicks wind it round but must not leave the match page.
   for (let i = 0; i < 9; i++) await clock.click();
   await expect(clock).toHaveAttribute("data-tick", "9");
-  await expect(page).not.toHaveURL(/tabahi/);
+  await expect(page).not.toHaveURL(/vault/);
 
   await clock.click();
-  await expect(page).toHaveURL(/\/tabahi$/);
+  await expect(page).toHaveURL(/\/vault$/);
   await expect(page.getByRole("heading", { name: "Secret Vault" })).toBeVisible();
   await expect(page.locator("main .grid > *")).toHaveCount(9);
   // Every card points somewhere real, and external ones open safely in a new tab.

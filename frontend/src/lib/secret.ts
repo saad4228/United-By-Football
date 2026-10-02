@@ -12,7 +12,7 @@
 const PHRASE = "secretvault000";
 const STORAGE_KEY = "ubf-secret";
 
-export const SECRET_PATH = "/tabahi";
+export const SECRET_PATH = "/vault";
 
 // Keep digits: the phrase ends in numbers, and stripping them would make it unmatchable.
 const squash = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, "");

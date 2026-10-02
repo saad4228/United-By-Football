@@ -42,7 +42,7 @@ export function App() {
           <Route path="team/:slug" element={<TeamPage />} />
           <Route path="my-teams" element={<MyTeamsPage />} />
           {/* Hidden: renders "not found" until the phrase is typed into search. */}
-          <Route path="tabahi" element={<SecretPage />} />
+          <Route path="vault" element={<SecretPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="admin" element={<AdminPage />} />
