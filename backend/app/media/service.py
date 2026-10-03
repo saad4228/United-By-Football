@@ -313,6 +313,8 @@ class MediaService:
     def is_fresh(media: TeamMedia | None) -> bool:
         if media is None:
             return False
+        if media.locked:
+            return True  # curated by hand: never looked up again
         age = utcnow() - media.checked_at
         limit = {"error": RETRY_ERRORS_AFTER, "partial": RETRY_PARTIAL_AFTER}.get(media.status, FRESH_FOR)
         return age < limit
@@ -336,7 +338,7 @@ class MediaService:
                 media = await session.get(TeamMedia, team_id)
                 if team is None:
                     return None
-                if media and not force and self.is_fresh(media):
+                if media and (media.locked or (not force and self.is_fresh(media))):
                     return media
             facts: ClubFacts | None = None
             photo: Photo | None = None
@@ -411,7 +413,7 @@ class MediaService:
             return await session.scalar(
                 select(Team.id)
                 .outerjoin(TeamMedia, TeamMedia.team_id == Team.id)
-                .where(stale)
+                .where(stale, TeamMedia.locked.is_not(True))
                 .order_by(soon.desc(), Team.popularity.desc(), Team.id)
                 .limit(1)
             )

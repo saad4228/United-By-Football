@@ -156,14 +156,23 @@ export function Hero({ home }: { home: Home }) {
 
 export function HeroSkeleton() {
   return (
-    <section className="border-b border-line">
-      <div className="container-x pb-24 pt-20">
-        <div className="skeleton h-[clamp(5.5rem,13vw,13rem)] w-full max-w-4xl rounded-lg" />
-        <div className="mt-14 flex gap-10">
-          <div className="skeleton size-[108px] rounded-full" />
-          <div className="skeleton size-[108px] rounded-full" />
+    <section className="relative overflow-hidden border-b border-line" aria-label={t("hero.featured")}>
+      <Stripes className="pointer-events-none absolute inset-y-0 right-0 h-full w-full text-fg md:w-[80%]" />
+      <div className="container-x relative pb-20 pt-14 sm:pb-24 sm:pt-20">
+        {/* The headline needs nothing from the server, so it is real type from the first frame
+            and keeps its place when the match arrives underneath it. */}
+        <h1 className="display text-[clamp(2.75rem,6.4vw,6.75rem)]">
+          {t("hero.title1")}
+          <br className="hidden sm:block" /> {t("hero.title2")}
+        </h1>
+        <div className="mt-12 sm:mt-14" aria-hidden>
+          <div className="flex items-center gap-7 sm:gap-10">
+            <div className="skeleton size-[76px] rounded-full sm:size-[108px]" />
+            <div className="skeleton size-[76px] rounded-full sm:size-[108px]" />
+          </div>
+          <div className="skeleton mt-7 h-7 w-[22rem] max-w-full rounded" />
+          <div className="skeleton mt-9 h-14 w-48 rounded-lg" />
         </div>
-        <div className="skeleton mt-10 h-14 w-48 rounded-lg" />
       </div>
     </section>
   );

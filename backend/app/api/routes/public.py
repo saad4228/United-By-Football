@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import datetime, timedelta
 from typing import Literal
 
@@ -92,6 +93,18 @@ def team_slugs(raw: str | None) -> list[str] | None:
     return slugs or None
 HEALTH_ORDER = {"working": 0, "checking": 1, "unverified": 2, "offline": 3}
 
+# The home page is identical for everyone in a country and the page polls it every 15 seconds,
+# so one build is shared for a few seconds. Each of its queries is a round trip to the database;
+# this keeps all but the first visitor in a window off that path. Short enough that a goal shows
+# up well within the fixture feed's own 30 s refresh.
+HOME_CACHE_TTL = 10.0
+_home_cache: dict[str | None, tuple[float, HomeOut]] = {}
+
+
+def reset_caches() -> None:
+    """Called when an app starts, so tests and reloads never read a previous run's data."""
+    _home_cache.clear()
+
 
 @router.get("/meta", response_model=MetaOut)
 async def meta(settings: Settings = Depends(get_settings_dep)) -> MetaOut:
@@ -110,10 +123,14 @@ async def home(
     settings: Settings = Depends(get_settings_dep),
     country: str | None = Depends(viewer_country),
 ) -> HomeOut:
+    cached = _home_cache.get(country)
+    if cached and time.monotonic() - cached[0] < HOME_CACHE_TTL:
+        return cached[1]
     now = utcnow()
-    live, _ = await list_matches(session, status="live", limit=40)
+    # Neither total is used below, so neither is worth a second round trip.
+    live, _ = await list_matches(session, status="live", limit=40, with_total=False)
     upcoming, _ = await list_matches(session, status="upcoming", date_from=now - timedelta(minutes=10),
-                                     date_to=now + timedelta(hours=36), limit=80)
+                                     date_to=now + timedelta(hours=36), limit=80, with_total=False)
     featured_match, mode = None, "always_on"
     if live:
         featured_match, mode = live[0], "live"
@@ -150,7 +167,7 @@ async def home(
         for c, lc, uc in rows[:8]
     ]
     teams = (await session.scalars(select(Team).order_by(Team.popularity.desc(), Team.name).limit(12))).all()
-    return HomeOut(
+    result = HomeOut(
         server_time=now,
         demo_mode=settings.demo_mode,
         featured=Featured(mode=mode, match=match_out(featured_match, summaries.get(featured_match.id))
@@ -160,6 +177,10 @@ async def home(
         competitions=competitions,
         popular_teams=[team_out(t) for t in teams],
     )
+    if len(_home_cache) > 300:  # one entry per country; clear rather than grow without bound
+        _home_cache.clear()
+    _home_cache[country] = (time.monotonic(), result)
+    return result
 
 
 @router.get("/matches", response_model=MatchPage, dependencies=[rate_limit("matches")])
@@ -189,7 +210,7 @@ async def matches(
 async def live_matches(
     session: AsyncSession = Depends(get_session), country: str | None = Depends(viewer_country)
 ) -> list[MatchOut]:
-    items, _ = await list_matches(session, status="live", limit=100)
+    items, _ = await list_matches(session, status="live", limit=100, with_total=False)
     return await matches_out(session, items, country)
 
 
@@ -203,7 +224,7 @@ async def upcoming_matches(
 ) -> list[MatchOut]:
     now = utcnow()
     items, _ = await list_matches(session, status="upcoming", date_to=now + timedelta(days=days),
-                                  competition=competition, limit=limit)
+                                  competition=competition, limit=limit, with_total=False)
     return await matches_out(session, items, country)
 
 

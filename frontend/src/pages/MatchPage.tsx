@@ -8,6 +8,7 @@ import { MatchBlock, MatchCard, MatchGrid } from "../components/MatchCard";
 import { MatchDetails } from "../components/MatchDetails";
 import { SecretClock } from "../components/SecretClock";
 import { SourceCard } from "../components/SourceCard";
+import { WakingUp } from "../components/WakingUp";
 import { LiveBadge, statusText } from "../components/Status";
 import { CompetitionBadge, EmptyState, ErrorState, SectionHeader } from "../components/UI";
 import { ApiError, api } from "../lib/api";
@@ -171,6 +172,8 @@ function SourcesSection({ match, sources, isError, refetch }: {
 function MatchSkeleton() {
   return (
     <div className="space-y-8">
+      {/* A shared link lands here first, so it needs the same explanation as the home page. */}
+      <WakingUp className="" />
       <div className="skeleton h-[200px] rounded-xl sm:h-[320px]" />
       <div className="skeleton h-12 w-2/3 rounded-lg" />
     </div>

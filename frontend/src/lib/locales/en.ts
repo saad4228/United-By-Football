@@ -361,6 +361,10 @@ const en = {
   "vault.fta": "Europe's free-to-air broadcasters each carry their own national team. Open the Nations League and set your country to see which one is yours.",
   "vault.uclTitle": "Champions League, free",
   "vault.ucl": "Ireland, Turkey, Belgium and Luxembourg show selected ties free-to-air every matchweek.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Warming up",
+  "loading.body": "This runs on a free server that takes a nap between visitors. It's lacing its boots — a few seconds and we're on.",
 };
 
 export default en;

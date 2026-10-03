@@ -8,6 +8,7 @@ import { LeagueTable } from "../components/LeagueTable";
 import { TeamBanner, TeamBannerSkeleton } from "../components/TeamBanner";
 import { TeamCrest } from "../components/TeamCrest";
 import { TeamTile } from "../components/TeamTile";
+import { WakingUp } from "../components/WakingUp";
 import { Chips, CompetitionBadge, COMPETITION_FILTERS, EmptyState, ErrorState, filterLabel, PageTitle, SectionHeader, Stripes } from "../components/UI";
 import { ApiError, api, type MatchQuery } from "../lib/api";
 import { useCountry } from "../lib/country";
@@ -209,7 +210,16 @@ export function TeamPage() {
   const detail = team.data;
   return (
     <>
-      <div className="container-x pt-8">{detail ? <TeamBanner team={detail} /> : <TeamBannerSkeleton />}</div>
+      <div className="container-x pt-8">
+        {detail ? (
+          <TeamBanner team={detail} />
+        ) : (
+          <>
+            <WakingUp className="" />
+            <TeamBannerSkeleton />
+          </>
+        )}
+      </div>
       <div className="container-x space-y-16 pt-14">
         <MatchList title={t("comp.live")} query={{ status: "live", team: slug }} />
         <MatchList title={t("comp.upcoming")} query={{ status: "upcoming", team: slug, limit: 8 }} showEmpty emptyText={t("team.noUpcoming")} />

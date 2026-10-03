@@ -140,6 +140,8 @@ class TeamMedia(Base):
     team_id: Mapped[int] = mapped_column(ForeignKey("teams.id", ondelete="CASCADE"), primary_key=True)
     status: Mapped[str] = mapped_column(String(16))  # ok | partial | none | error
     checked_at: Mapped[datetime] = mapped_column(UTCDateTime, default=utcnow)
+    # Hand-picked entry: the automatic lookup leaves it alone, so a curated banner stays put.
+    locked: Mapped[bool | None] = mapped_column(Boolean, default=False)
     sportsdb_id: Mapped[str | None] = mapped_column(String(20))
     founded: Mapped[int | None] = mapped_column(Integer)
     stadium: Mapped[str | None] = mapped_column(String(160))

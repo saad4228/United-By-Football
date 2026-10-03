@@ -1,9 +1,10 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, BallIcon, CalendarIcon } from "../components/Icons";
 import { MatchCard, MatchGrid, MatchGridSkeleton } from "../components/MatchCard";
 import { TeamTile } from "../components/TeamTile";
+import { WakingUp } from "../components/WakingUp";
 import { Button, CompetitionBadge, CompetitionChips, DateTabs, EmptyState, ErrorState, SectionHeader } from "../components/UI";
 import { api } from "../lib/api";
 import { useCountry } from "../lib/country";
@@ -51,21 +52,40 @@ function LiveSection({ live }: { live: Match[] }) {
   );
 }
 
-function UpcomingSection() {
-  const { country } = useCountry();
-  const [offset, setOffset] = useState(0);
-  const [competition, setCompetition] = useState("");
+const DAYS = 7;
+
+/** One day of upcoming matches. Shared so a day can be prefetched under exactly the same key. */
+function upcomingOptions(offset: number, competition: string, country: string | null | undefined) {
   const from = startOfDay(new Date(), offset);
   // "Today" starts now, so matches that have already kicked off don't count as upcoming.
   const start = offset === 0 ? new Date(Date.now() - 10 * 60_000) : from;
   const end = startOfDay(new Date(), offset + 1);
-  const query = useQuery({
+  return {
     queryKey: ["upcoming", dayKey(from), competition, country],
     queryFn: () =>
       api.matches({ status: "upcoming", date_from: start.toISOString(), date_to: end.toISOString(), competition, limit: 8, country }),
+    // A day's fixture list barely moves, so coming back to a tab should cost nothing.
+    staleTime: 60_000,
+  };
+}
+
+function UpcomingSection() {
+  const { country } = useCountry();
+  const queryClient = useQueryClient();
+  const [offset, setOffset] = useState(0);
+  const [competition, setCompetition] = useState("");
+  const from = startOfDay(new Date(), offset);
+  const query = useQuery({
+    ...upcomingOptions(offset, competition, country),
     refetchInterval: 45_000,
     placeholderData: keepPreviousData,
   });
+  // Once the open day is on screen, fetch the next one quietly, so that tab opens instantly.
+  // Deliberately after the current day has landed, never alongside it.
+  useEffect(() => {
+    if (!query.data || offset + 1 >= DAYS) return;
+    void queryClient.prefetchQuery(upcomingOptions(offset + 1, competition, country));
+  }, [query.data, offset, competition, country, queryClient]);
   const label = dayLabel(from);
   const viewAll = `/upcoming?date=${dayKey(from)}${competition ? `&competition=${competition}` : ""}`;
   const total = query.data?.total ?? 0;
@@ -74,7 +94,7 @@ function UpcomingSection() {
     <section id="upcoming" className="container-x scroll-mt-24 pt-20 sm:pt-24" aria-labelledby="upcoming-heading">
       <SectionHeader id="upcoming-heading" title={t("home.upcoming")} action={{ to: viewAll }} />
       <div className="space-y-5">
-        <DateTabs value={offset} onChange={setOffset} />
+        <DateTabs value={offset} onChange={setOffset} days={DAYS} />
         <CompetitionChips value={competition} onChange={setCompetition} />
       </div>
       <div className="mt-8">
@@ -179,38 +199,42 @@ function MyTeamsSection() {
   );
 }
 
+/** Holds the live grid's place until /api/home answers, so nothing below it jumps. */
+function LiveSectionSkeleton() {
+  return (
+    <section className="container-x pt-16 sm:pt-20" aria-hidden>
+      <div className="skeleton mb-6 h-9 w-56 rounded" />
+      <MatchGridSkeleton count={4} />
+    </section>
+  );
+}
+
 export function HomePage() {
   useDocumentMeta(null);
   const { country } = useCountry();
   const home = useQuery({ queryKey: ["home", country], queryFn: () => api.home(country), refetchInterval: 15_000 });
   const data: Home | undefined = home.data;
+  const failed = home.isError && !data;
+  const waiting = !data && !failed;
 
-  if (home.isError && !data) {
-    return (
-      <div className="container-x pt-16">
-        <ErrorState onRetry={() => home.refetch()} />
-      </div>
-    );
-  }
-  if (!data) {
-    return (
-      <>
-        <HeroSkeleton />
-        <div className="container-x pt-20">
-          <MatchGridSkeleton />
-        </div>
-      </>
-    );
-  }
+  // Each section stands on its own. The day tabs and My teams used to be rendered only after
+  // /api/home had answered, so their own requests started late and the two waits ran back to
+  // back; now every request leaves at once and each part appears as it arrives.
   return (
     <>
+      {waiting && <WakingUp />}
       {/* The title is the face of the site: it always opens the page, however busy the matchday. */}
-      <Hero home={data} />
-      <LiveSection live={data.live} />
+      {data ? <Hero home={data} /> : !failed && <HeroSkeleton />}
+      {failed && (
+        <div className="container-x pt-16">
+          <ErrorState onRetry={() => home.refetch()} />
+        </div>
+      )}
+      {data ? <LiveSection live={data.live} /> : waiting && <LiveSectionSkeleton />}
       <MyTeamsSection />
       <UpcomingSection />
-      <PopularCompetitions comps={data.competitions} />
-      <PopularTeams teams={data.popular_teams} />
+      {data && <PopularCompetitions comps={data.competitions} />}
+      {data && <PopularTeams teams={data.popular_teams} />}
     </>
   );
 }

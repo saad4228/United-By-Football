@@ -360,6 +360,10 @@ const es: Messages = {
   "vault.fta": "Las televisiones públicas europeas emiten a su propia selección. Abre la Liga de Naciones y elige tu país para ver cuál te toca.",
   "vault.uclTitle": "Champions League, gratis",
   "vault.ucl": "Irlanda, Turquía, Bélgica y Luxemburgo emiten en abierto algunos partidos cada jornada.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Calentando",
+  "loading.body": "Esto corre en un servidor gratuito que echa una siesta entre visitas. Se está atando las botas: unos segundos y salimos.",
 };
 
 export default es;

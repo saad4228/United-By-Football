@@ -213,7 +213,14 @@ async def list_matches(
     teams: list[str] | None = None,
     limit: int = 50,
     offset: int = 0,
+    with_total: bool = True,
 ) -> tuple[list[Match], int]:
+    """Matches for a filter, and how many there are in all.
+
+    `with_total=False` skips the count, which is a second database round trip over the same
+    joined query. Callers that only list results should pass it: against a hosted database
+    that round trip costs as much as the query it accompanies.
+    """
     now = utcnow()
     filters = match_select()
     filters = apply_status_filter(filters, status, now)
@@ -237,7 +244,11 @@ async def list_matches(
         team_ids = select(Team.id).where(Team.slug.in_(teams))
         filters = filters.where(or_(Match.home_team_id.in_(team_ids), Match.away_team_id.in_(team_ids)))
 
-    total = await session.scalar(select(func.count()).select_from(filters.order_by(None).subquery()))
+    total = (
+        await session.scalar(select(func.count()).select_from(filters.order_by(None).subquery()))
+        if with_total
+        else 0
+    )
     order = Match.kickoff_time.desc() if status == "finished" else Match.kickoff_time.asc()
     rows = await session.scalars(filters.order_by(order, Match.id).limit(limit).offset(offset))
     matches = list(rows.unique().all())

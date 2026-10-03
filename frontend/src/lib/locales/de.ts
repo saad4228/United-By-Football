@@ -360,6 +360,10 @@ const de: Messages = {
   "vault.fta": "Europas öffentlich-rechtliche Sender zeigen die eigene Nationalmannschaft. Öffne die Nations League und wähle dein Land, um zu sehen, welcher es ist.",
   "vault.uclTitle": "Champions League, kostenlos",
   "vault.ucl": "Irland, die Türkei, Belgien und Luxemburg zeigen jede Spielwoche ausgewählte Partien frei empfangbar.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Aufwärmen",
+  "loading.body": "Läuft auf einem kostenlosen Server, der zwischen Besuchen ein Nickerchen macht. Er schnürt gerade die Schuhe — gleich geht's los.",
 };
 
 export default de;

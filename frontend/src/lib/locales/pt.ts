@@ -361,6 +361,10 @@ const pt: Messages = {
   "vault.fta": "As TVs públicas europeias transmitem a própria seleção. Abra a Liga das Nações e escolha seu país para ver qual é a sua.",
   "vault.uclTitle": "Champions League, de graça",
   "vault.ucl": "Irlanda, Turquia, Bélgica e Luxemburgo exibem jogos selecionados em TV aberta a cada rodada.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Aquecendo",
+  "loading.body": "Isto roda num servidor gratuito que tira uma soneca entre visitas. Está amarrando as chuteiras — alguns segundos e começamos.",
 };
 
 export default pt;

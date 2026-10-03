@@ -175,3 +175,23 @@ async def test_national_team_name_variants_are_tried(app):
     facts = await svc.find_club(team)
     assert seen == ["Czechia", "Czech Republic"] and facts and facts.stadium == "Eden Arena"
 
+
+
+async def test_locked_media_is_never_overwritten_or_requeued(app):
+    """A hand-picked banner stays exactly as set: no lookup, no refresh, no overwrite."""
+    requests: list = []
+    svc = service(app, wiki_handler(requests))
+    async with app.state.db.sessions() as session:
+        team = await session.scalar(select(Team).where(Team.slug == "barcelona"))
+        session.add(TeamMedia(
+            team_id=team.id, status="ok", locked=True, stadium="My ground",
+            photo_url="https://example.org/mine.jpg", photo_author="Me",
+            checked_at=utcnow() - timedelta(days=400),  # stale by every refresh rule there is
+        ))
+        await session.commit()
+
+    assert (await svc.enrich(team.id)).photo_url == "https://example.org/mine.jpg"
+    assert (await svc.enrich(team.id, force=True)).photo_url == "https://example.org/mine.jpg"
+    assert (await svc.get_or_enrich(team.id)).stadium == "My ground"
+    assert requests == [], "a locked row must not be looked up at all"
+    assert await svc.next_team() != team.id, "a locked row must not be queued for refresh"

@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app import __version__
 from app.api.routes import admin, public
+from app.api.routes.public import reset_caches
 from app.config import Settings, get_settings
 from app.database.session import Database
 from app.demo import mock_sources
@@ -28,6 +29,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI):
         db = Database(settings.database_url)
         engine = Engine(settings, db)
+        reset_caches()  # module-level, so a second app in one process starts clean
         app.state.settings, app.state.db, app.state.engine = settings, db, engine
         app.state.admin_token = settings.admin_token or secrets.token_urlsafe(18)
         if not settings.admin_token:
@@ -61,6 +63,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         response.headers.setdefault("X-Frame-Options", "DENY")
         if request.url.path.startswith("/api/"):
             response.headers.setdefault("Cache-Control", "no-store")
+        elif request.url.path.startswith("/assets/"):
+            # Vite fingerprints every built file, so a given URL can never change contents.
+            # Without this a returning visitor revalidates each one, a round trip per file.
+            response.headers.setdefault("Cache-Control", "public, max-age=31536000, immutable")
         return response
 
     app.include_router(public.router)

@@ -360,6 +360,10 @@ const fr: Messages = {
   "vault.fta": "Les chaînes publiques européennes diffusent leur propre sélection. Ouvrez la Ligue des nations et choisissez votre pays pour voir laquelle vous concerne.",
   "vault.uclTitle": "Ligue des champions, gratuite",
   "vault.ucl": "L'Irlande, la Turquie, la Belgique et le Luxembourg diffusent certains matchs en clair chaque journée.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Échauffement",
+  "loading.body": "Le site tourne sur un serveur gratuit qui fait la sieste entre deux visites. Il lace ses crampons — quelques secondes et c'est parti.",
 };
 
 export default fr;

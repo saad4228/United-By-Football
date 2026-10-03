@@ -360,6 +360,10 @@ const it: Messages = {
   "vault.fta": "Le TV pubbliche europee trasmettono la propria nazionale. Apri la Nations League e scegli il tuo paese per vedere qual è la tua.",
   "vault.uclTitle": "Champions League, gratis",
   "vault.ucl": "Irlanda, Turchia, Belgio e Lussemburgo trasmettono in chiaro alcune partite ogni turno.",
+
+  // Shown when the first load is slow, usually a sleeping free instance.
+  "loading.title": "Riscaldamento",
+  "loading.body": "Gira su un server gratuito che fa un pisolino tra una visita e l'altra. Si sta allacciando gli scarpini: ancora qualche secondo.",
 };
 
 export default it;
