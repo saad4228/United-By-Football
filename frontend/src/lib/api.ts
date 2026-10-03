@@ -11,6 +11,7 @@ import type {
   SearchResult,
   Team,
   TeamDetail,
+  Visits,
 } from "./types";
 
 export class ApiError extends Error {
@@ -57,6 +58,8 @@ export type MatchQuery = {
 
 export const api = {
   meta: () => request<Meta>("/api/meta"),
+  /** Records this page load and returns the running totals. Called once, when the page opens. */
+  visit: () => request<Visits>("/api/visit", undefined, { method: "POST" }),
   home: (country?: string | null) => request<Home>("/api/home", { country }),
   matches: (q: MatchQuery) => request<MatchPage>("/api/matches", q),
   match: (ref: string, country?: string | null) =>

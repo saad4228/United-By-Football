@@ -46,3 +46,4 @@ export type LeagueTable = S["TableOut"];
 export type Home = S["HomeOut"];
 export type SearchResult = S["SearchOut"];
 export type Meta = S["MetaOut"];
+export type Visits = S["VisitsOut"];

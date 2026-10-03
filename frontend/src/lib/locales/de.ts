@@ -43,6 +43,9 @@ const de: Messages = {
   "footer.disclaimer":
     "United By Football ist ein Such- und Aggregationsdienst. Er listet Spiele und verlinkt auf Übertragungsquellen, die von Dritten betrieben werden. Er hostet, überträgt oder kontrolliert keine Sendung und umgeht niemals DRM, Logins, Paywalls oder andere Zugangskontrollen. Die Rechte an Fußballinhalten liegen bei ihren Inhabern.",
   "footer.builtBy": "Gestaltet und entwickelt von",
+  "footer.visits_one": "{n} Besuch",
+  "footer.visits_other": "{n} Besuche",
+  "footer.visitsToday": "{n} heute",
 
   "common.viewMore": "Mehr anzeigen",
   "common.tryAgain": "Erneut versuchen",

@@ -415,6 +415,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/visit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Visit
+         * @description Record this page load and return the running totals.
+         *
+         *     The browser calls it once when the page opens, which is what makes the number mean
+         *     something: crawlers and the uptime ping never run JavaScript, so they never arrive here.
+         */
+        post: operations["visit_api_visit_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1006,6 +1029,17 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /** VisitsOut */
+        VisitsOut: {
+            /** Today Views */
+            today_views: number;
+            /** Today Visitors */
+            today_visitors: number;
+            /** Total Views */
+            total_views: number;
+            /** Total Visitors */
+            total_visitors: number;
         };
     };
     responses: never;
@@ -1791,6 +1825,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    visit_api_visit_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["VisitsOut"];
                 };
             };
         };

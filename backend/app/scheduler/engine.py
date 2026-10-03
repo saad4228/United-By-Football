@@ -22,6 +22,7 @@ from app.config import Settings
 from app.connectors.base import SourceConnector
 from app.connectors.pipeline import run_connector
 from app.connectors.registry import build_connectors, sync_sources
+from app.api.visits import prune_visitors
 from app.database.models import LIVE_STATUSES, CrawlRun, Match, MatchExternalRef, MatchStatus, Source
 from app.database.runs import finish_run, start_run
 from app.database.seed import seed_reference_data
@@ -211,9 +212,10 @@ class Engine:
             await asyncio.sleep(3600)
             try:
                 pruned = await prune_health_checks(self.db)
+                visitors = await prune_visitors(self.db)
                 async with self.db.sessions() as session:
                     await session.execute(delete(CrawlRun).where(CrawlRun.started_at < utcnow() - timedelta(days=3)))
                     await session.commit()
-                log.info("maintenance: pruned %s health checks", pruned)
+                log.info("maintenance: pruned %s health checks, %s visitor hashes", pruned, visitors)
             except Exception:
                 log.exception("maintenance loop error")

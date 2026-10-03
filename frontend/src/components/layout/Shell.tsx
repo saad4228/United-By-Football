@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { api } from "../../lib/api";
 import { useTheme } from "../../lib/hooks";
-import { t, type MessageKey } from "../../lib/i18n";
+import { t, tn, type MessageKey } from "../../lib/i18n";
 import { useMyTeams } from "../../lib/myteams";
 import { CalendarIcon, CloseIcon, HomeIcon, LiveIcon, MenuIcon, MoonIcon, SearchIcon, StarIcon, SunIcon } from "../Icons";
 import { CreatorAvatar } from "../CreatorAvatar";
@@ -208,6 +208,31 @@ function BottomNav({ onSearch }: { onSearch: () => void }) {
   );
 }
 
+/**
+ * How many times the site has been opened, and by how many people today.
+ *
+ * Counted from here rather than from the server's request log, because the log is mostly
+ * crawlers and this deployment's own uptime ping, none of which run any of this.
+ */
+function VisitCount() {
+  const visits = useQuery({
+    queryKey: ["visits"],
+    queryFn: api.visit,
+    // One page load, one count: never stale, so changing language (which remounts the tree)
+    // or returning to the tab cannot count the same visit again.
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  if (!visits.data) return null;
+  return (
+    <span className="tabular-nums">
+      {tn("footer.visits", visits.data.total_views)} · {t("footer.visitsToday", { n: visits.data.today_visitors })}
+    </span>
+  );
+}
+
 function Footer() {
   const col = "flex flex-col gap-3 text-[16px] text-fg-2";
   const link = "w-fit transition-colors hover:text-fg";
@@ -238,7 +263,10 @@ function Footer() {
         </div>
         <p className="mt-14 max-w-3xl text-[14px] leading-relaxed text-faint">{t("footer.disclaimer")}</p>
         <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-[14px] text-faint sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 United By Football</span>
+          <span className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+            <span>© 2026 United By Football</span>
+            <VisitCount />
+          </span>
           <span className="inline-flex items-center gap-2">
             {t("footer.builtBy")}
             <Link

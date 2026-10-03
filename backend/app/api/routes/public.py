@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from app import __version__
-from app.api.deps import get_engine, get_session, get_settings_dep, rate_limit
+from app.api.deps import client_ip, get_engine, get_session, get_settings_dep, rate_limit
 from app.api.queries import (
     ACCESS_RANK,
     HEALTH_OF_STATUS,
@@ -48,7 +48,9 @@ from app.api.schemas import (
     TeamDetailOut,
     TeamMediaOut,
     TeamOut,
+    VisitsOut,
 )
+from app.api.visits import record_visit
 from app.config import Settings
 from app.scheduler.engine import Engine
 from app.database.models import (
@@ -115,6 +117,17 @@ async def meta(settings: Settings = Depends(get_settings_dep)) -> MetaOut:
         server_time=utcnow(),
         refresh_seconds={"live": 12, "upcoming": 45, "sources": 10},
     )
+
+
+@router.post("/visit", response_model=VisitsOut, dependencies=[rate_limit("matches")])
+async def visit(request: Request, session: AsyncSession = Depends(get_session)) -> VisitsOut:
+    """Record this page load and return the running totals.
+
+    The browser calls it once when the page opens, which is what makes the number mean
+    something: crawlers and the uptime ping never run JavaScript, so they never arrive here.
+    """
+    return await record_visit(session, client_ip(request), request.headers.get("user-agent", ""),
+                              utcnow().date())
 
 
 @router.get("/home", response_model=HomeOut, dependencies=[rate_limit("matches")])

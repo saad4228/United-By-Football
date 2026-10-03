@@ -1,8 +1,9 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from enum import StrEnum
 
 from sqlalchemy import (
     Boolean,
+    Date,
     DateTime,
     ForeignKey,
     Integer,
@@ -281,6 +282,31 @@ class CrawlRun(Base):
     error_code: Mapped[str | None] = mapped_column(String(40))
     error: Mapped[str | None] = mapped_column(Text)
     details: Mapped[str | None] = mapped_column(Text)
+
+
+class SiteDay(Base):
+    """One row per day: page loads, and how many people they came from.
+
+    `salt` is made when the day's first visitor arrives and is cleared when that day's
+    `site_visitors` rows are pruned, so a hash can never be matched back to an address, nor
+    the same person recognised on another day.
+    """
+
+    __tablename__ = "site_days"
+
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    salt: Mapped[str | None] = mapped_column(String(32))
+    views: Mapped[int] = mapped_column(Integer, default=0)
+    visitors: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class SiteVisitor(Base):
+    """Someone seen on a given day, as a one-way hash. Kept only for a few days."""
+
+    __tablename__ = "site_visitors"
+
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    visitor: Mapped[str] = mapped_column(String(64), primary_key=True)
 
 
 class LinkClick(Base):

@@ -161,6 +161,13 @@ test("competition and team pages load", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Follow Arsenal" })).toBeVisible();
 });
 
+test("the footer shows the visit count", async ({ page }) => {
+  await page.goto("/");
+  // "12 visits · 3 today". Other tests are loading pages at the same time, so the numbers
+  // themselves are not asserted - only that the visit was counted and rendered.
+  await expect(page.locator("footer").getByText(/\d+ visits? · \d+ today/)).toBeVisible();
+});
+
 test("unknown pages show the not-found state", async ({ page }) => {
   await page.goto("/no-such-page");
   await expect(page.getByRole("heading", { name: "Off target" })).toBeVisible();

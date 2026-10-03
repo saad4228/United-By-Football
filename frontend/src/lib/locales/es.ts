@@ -43,6 +43,9 @@ const es: Messages = {
   "footer.disclaimer":
     "United By Football es un servicio de búsqueda y agregación. Muestra partidos y enlaza a fuentes de emisión gestionadas por terceros. No aloja, retransmite ni controla ninguna emisión, y nunca elude DRM, inicios de sesión, muros de pago ni otros controles de acceso. Los derechos del contenido futbolístico pertenecen a sus titulares.",
   "footer.builtBy": "Diseñado y creado por",
+  "footer.visits_one": "{n} visita",
+  "footer.visits_other": "{n} visitas",
+  "footer.visitsToday": "{n} hoy",
 
   "common.viewMore": "Ver más",
   "common.tryAgain": "Reintentar",

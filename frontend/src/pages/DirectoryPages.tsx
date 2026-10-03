@@ -357,8 +357,11 @@ export function AboutPage() {
           <h2 className={h2}>Privacy</h2>
           <p className={p}>
             There are no accounts. When you open a source we record which link was opened and when, so we can measure
-            which sources actually work. We don't record who opened it. Your IP address is held briefly in memory for
-            rate limiting and is not stored. Your theme, language, time zone, country and followed teams are saved in
+            which sources actually work. We don't record who opened it. We count visits as well: your address and
+            browser become a one-way hash, salted with a value that is made each day and deleted along with that day's
+            hashes. That is enough to tell a returning visitor from a new one within a day, and never enough to identify
+            you or to recognise you tomorrow. Your IP address is otherwise held only briefly in memory for rate limiting
+            and is not stored. Your theme, language, time zone, country and followed teams are saved in
             your browser only. A calendar subscription asks us for the teams in its link, and nothing else.
           </p>
         </section>

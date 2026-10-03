@@ -1999,6 +1999,34 @@
         ],
         "title": "ValidationError",
         "type": "object"
+      },
+      "VisitsOut": {
+        "properties": {
+          "today_views": {
+            "title": "Today Views",
+            "type": "integer"
+          },
+          "today_visitors": {
+            "title": "Today Visitors",
+            "type": "integer"
+          },
+          "total_views": {
+            "title": "Total Views",
+            "type": "integer"
+          },
+          "total_visitors": {
+            "title": "Total Visitors",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "today_visitors",
+          "today_views",
+          "total_visitors",
+          "total_views"
+        ],
+        "title": "VisitsOut",
+        "type": "object"
       }
     }
   },
@@ -3458,6 +3486,25 @@
           }
         },
         "summary": "Team Detail"
+      }
+    },
+    "/api/visit": {
+      "post": {
+        "description": "Record this page load and return the running totals.\n\nThe browser calls it once when the page opens, which is what makes the number mean\nsomething: crawlers and the uptime ping never run JavaScript, so they never arrive here.",
+        "operationId": "visit_api_visit_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VisitsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Visit"
       }
     }
   }

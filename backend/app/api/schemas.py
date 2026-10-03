@@ -187,6 +187,13 @@ class SearchOut(BaseModel):
     matches: list[MatchOut]
 
 
+class VisitsOut(BaseModel):
+    today_visitors: int
+    today_views: int
+    total_visitors: int
+    total_views: int
+
+
 class MetaOut(BaseModel):
     name: str
     version: str

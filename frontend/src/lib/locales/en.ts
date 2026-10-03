@@ -44,6 +44,9 @@ const en = {
   "footer.disclaimer":
     "United By Football is a discovery and aggregation service. It lists matches and links to viewing sources run by third parties. It doesn't host, re-stream or control any broadcast, and it never bypasses DRM, logins, paywalls or other access controls. Rights to football content belong to their owners.",
   "footer.builtBy": "Designed & built by",
+  "footer.visits_one": "{n} visit",
+  "footer.visits_other": "{n} visits",
+  "footer.visitsToday": "{n} today",
 
   "common.viewMore": "View more",
   "common.tryAgain": "Try again",

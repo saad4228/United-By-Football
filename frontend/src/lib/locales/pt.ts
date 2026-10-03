@@ -44,6 +44,9 @@ const pt: Messages = {
   "footer.disclaimer":
     "O United By Football é um serviço de descoberta e agregação. Ele lista jogos e aponta para fontes de transmissão operadas por terceiros. Não hospeda, retransmite nem controla nenhuma transmissão, e nunca contorna DRM, logins, paywalls ou outros controles de acesso. Os direitos do conteúdo de futebol pertencem aos seus titulares.",
   "footer.builtBy": "Criado e desenvolvido por",
+  "footer.visits_one": "{n} visita",
+  "footer.visits_other": "{n} visitas",
+  "footer.visitsToday": "{n} hoje",
 
   "common.viewMore": "Ver mais",
   "common.tryAgain": "Tentar de novo",
